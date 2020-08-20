@@ -43,6 +43,19 @@ public:
 	void eatFruit(Fruit* destinateFruit);
 	void turnHead(Direction direction) 
 	{
+		if (direction == Direction::down && _direction == Direction::up) {
+			return;
+		}
+		if (direction == Direction::up && _direction == Direction::down) {
+			return;
+		}
+		if (direction == Direction::left && _direction == Direction::right) {
+			return;
+		}
+		if (direction == Direction::right && _direction == Direction::left) {
+			return;
+		}
+
 		_direction = direction;
 	}
 	void move();

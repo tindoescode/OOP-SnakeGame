@@ -64,7 +64,7 @@ int main() {
 
 		snake->paint();	
 
-		Sleep(100);
+		Sleep(150);
 	}
 
 	std::cout << "Snake dead." << std::endl;
