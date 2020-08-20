@@ -91,5 +91,10 @@ void Snake::eatFruit(Fruit* destinateFruit) {
 	
 	// 
 	auto object = dynamic_cast<SnakeSegment*>(_board->addObject(ObjectType::snake_segment, x, y));
-	segments.push_front(object);
+	segments.push_back(object);
+
+	const int randomX = rand() % _board->getWidth();
+	const int randomY = rand() % _board->getHeight();
+	Fruit* fruit = dynamic_cast<Fruit*>(_board->addObject(ObjectType::fruit, randomX, randomY));
+	fruit->paint();
 }
