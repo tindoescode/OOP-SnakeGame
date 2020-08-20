@@ -52,11 +52,44 @@ void Snake::move()
 	segments.pop_back();
 }
 
-bool Snake::matchFruit() {
+Fruit* Snake::matchFruit() {
 	for (auto i : _board->objects) {
 		if (dynamic_cast<Fruit*>(i)) {
-			if (i->getX() == _x && i->getY() == _y) return true;
+			if (i->getX() == _x && i->getY() == _y) return dynamic_cast<Fruit*>(i);
 		}
 	}
-	return false;
+	return nullptr;
+}
+
+void Snake::eatFruit(Fruit* destinateFruit) {
+	int x = destinateFruit->getX(), y = destinateFruit->getY();
+
+	// Remove fruit
+	_board->deleteFruit(x, y);
+
+	switch (_direction) {
+	case Direction::up: {
+		y++;
+		break;
+	}
+	case Direction::down: {
+		y--;
+		break;
+	}
+	case Direction::left: {
+		x++;
+		break;
+	}
+	case Direction::right: {
+		x--;
+		break;
+	}
+	default: {
+		return;
+	}
+	}
+	
+	// 
+	auto object = dynamic_cast<SnakeSegment*>(_board->addObject(ObjectType::snake_segment, x, y));
+	segments.push_front(object);
 }

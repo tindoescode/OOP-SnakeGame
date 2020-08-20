@@ -3,6 +3,7 @@
 #include "SnakeSegment.h"
 
 class Board;
+class Fruit;
 
 enum class Direction {
 	idle = NULL,
@@ -36,10 +37,8 @@ public:
 		}
 		return false;
 	}
-	bool matchFruit();
-	void eatFruit() {
-
-	}
+	Fruit* matchFruit();
+	void eatFruit(Fruit* destinateFruit);
 	void turnHead(Direction direction) 
 	{
 		_direction = direction;

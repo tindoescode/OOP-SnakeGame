@@ -19,8 +19,9 @@ int main() {
 
 	// Game loop
 	char op;
+	Fruit* destinateFruit = nullptr;
+
 	while (!snake->isdead()) {
-		//board->handleKey();
 		if (_kbhit())
 		{
 			op = tolower(_getch());
@@ -28,14 +29,15 @@ int main() {
 		}
 		snake->move();
 
-		if (snake->bodyCollision()) {
-			snake->setDead();
-		}
+		//if (snake->bodyCollision()) {
+		//	snake->setDead();
+		//}
 		/*else if (snake->wallCollision()) {
 			snake->setDead();
 		}*/
-		else if(snake->matchFruit()) {
-			snake->eatFruit();
+		//else 
+		if(destinateFruit = snake->matchFruit()) {
+			snake->eatFruit(destinateFruit);
 		}
 		else if (snake->getX() > board->getWidth()) {
 			snake->setPos(0, snake->getY());
