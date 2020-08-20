@@ -48,7 +48,7 @@ void Snake::move()
 	// Delete tail object / old head object if its size was 1
 	x = segments.back()->getX(), y = segments.back()->getY();
 	
-	_board->deleteObject(x, y);
+	_board->deleteSnakeSegment(x, y);
 	segments.pop_back();
 }
 
@@ -67,30 +67,11 @@ void Snake::eatFruit(Fruit* destinateFruit) {
 	// Remove fruit
 	_board->deleteFruit(x, y);
 
-	switch (_direction) {
-	case Direction::up: {
-		y++;
-		break;
-	}
-	case Direction::down: {
-		y--;
-		break;
-	}
-	case Direction::left: {
-		x++;
-		break;
-	}
-	case Direction::right: {
-		x--;
-		break;
-	}
-	default: {
-		return;
-	}
-	}
-	
+	x = segments.front()->getX();
+	y = segments.front()->getY();
+
 	// 
-	auto object = dynamic_cast<SnakeSegment*>(_board->addObject(ObjectType::snake_segment, x, y));
+	auto object = dynamic_cast<SnakeSegment*>(_board->addObject(ObjectType::snake_segment, 0, 0));
 	segments.push_back(object);
 
 	const int randomX = rand() % _board->getWidth();

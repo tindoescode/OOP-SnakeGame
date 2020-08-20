@@ -45,9 +45,9 @@ public:
 		return object;
 	}
 
-	void deleteObject(int x, int y) {
+	void deleteSnakeSegment(int x, int y) {
 		for (auto i = objects.begin(); i != objects.end(); i++) {
-			if ((*i)->getX() == x && (*i)->getY() == y) {
+			if ((*i)->getX() == x && (*i)->getY() == y && dynamic_cast<SnakeSegment*>(*i)) {
 				delete* i;
 				objects.erase(i);
 				break;

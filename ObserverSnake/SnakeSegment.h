@@ -5,6 +5,8 @@
 
 class SnakeSegment : public Object
 {
+friend class Snake;
+
 public:
 	SnakeSegment(int x, int y) : Object(x, y) {}
 	void paint() {
