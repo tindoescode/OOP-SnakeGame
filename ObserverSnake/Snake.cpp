@@ -1,5 +1,6 @@
 #include "Snake.h"
 #include "Board.h"
+#include "Wall.h"
 
 Snake::Snake(int x, int y, Board* board) : Object(x, y) {
 	_direction = Direction::idle;
@@ -60,7 +61,14 @@ Fruit* Snake::matchFruit() {
 	}
 	return nullptr;
 }
-
+Wall* Snake::wallCollision() {
+	for (auto i : _board->objects) {
+		if (dynamic_cast<Wall*>(i)) {
+			if (i->getX() == _x && i->getY() == _y) return dynamic_cast<Wall*>(i);
+		}
+	}
+	return nullptr;
+}
 void Snake::eatFruit(Fruit* destinateFruit) {
 	int x = destinateFruit->getX(), y = destinateFruit->getY();
 
@@ -71,11 +79,16 @@ void Snake::eatFruit(Fruit* destinateFruit) {
 	y = segments.front()->getY();
 
 	// 
-	auto object = dynamic_cast<SnakeSegment*>(_board->addObject(ObjectType::snake_segment, 0, 0));
+	auto object = dynamic_cast<SnakeSegment*>(_board->addObject(ObjectType::snake_segment, -1, -1));
 	segments.push_back(object);
 
-	const int randomX = rand() % _board->getWidth();
-	const int randomY = rand() % _board->getHeight();
+	int randomX, randomY;
+
+	do {
+		randomX = rand() % _board->getWidth();
+		randomY = rand() % _board->getHeight();
+	} while (_board->isOccupied(randomX, randomY));
+
 	Fruit* fruit = dynamic_cast<Fruit*>(_board->addObject(ObjectType::fruit, randomX, randomY));
 	fruit->paint();
 }

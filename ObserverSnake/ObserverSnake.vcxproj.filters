@@ -36,6 +36,9 @@
     <ClCompile Include="Fruit.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="Wall.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Board.h">
@@ -56,5 +59,16 @@
     <ClInclude Include="Console.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Wall.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Map1.dat">
+      <Filter>Resource Files</Filter>
+    </None>
+    <None Include="Map2.dat">
+      <Filter>Resource Files</Filter>
+    </None>
   </ItemGroup>
 </Project>

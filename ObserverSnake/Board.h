@@ -1,9 +1,24 @@
 #pragma once
 #include <vector>
+#include <string>
+#include <fstream>
+
 #include "Object.h"
 #include "SnakeSegment.h"
 #include "Snake.h"
 #include "Fruit.h"
+#include "Wall.h"
+
+class FileNotFoundException : public std::exception {
+	const char* what() const noexcept {
+		return "File not found";
+	}
+};
+class NoSnakeException : public std::exception {
+	const char* what() const noexcept {
+		return "No snake position on map";
+	}
+};
 
 enum class ObjectType {
 	snake,
@@ -38,11 +53,21 @@ public:
 			object = new Fruit(x, y);
 		}
 		else if (type == ObjectType::wall) {
-			//objects.push_back(dynamic_cast<Object*>(new Wall()));
+			object = new Wall(x, y);
 		}
 		objects.push_back(object);
 
 		return object;
+	}
+	
+	void loadMap(std::string path, Snake*& snake);
+	
+	bool isOccupied(int x, int y) 
+	{
+		for (auto i : objects) {
+			if (i->getX() == x && i->getY() == y) return true;
+		}
+		return false;
 	}
 
 	void deleteSnakeSegment(int x, int y) {

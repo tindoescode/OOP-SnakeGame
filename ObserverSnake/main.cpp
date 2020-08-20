@@ -12,10 +12,18 @@ int main() {
 
 	// Create objects
 	Board* board = new Board(30, 20);
-	Snake* snake = dynamic_cast<Snake*>(board->addObject(ObjectType::snake, 10, 10));
+	//Snake* snake = dynamic_cast<Snake*>(board->addObject(ObjectType::snake, 10, 10));
+	Snake* snake = nullptr;
 
-	const int randomX = rand() % board->getWidth();
-	const int randomY = rand() % board->getHeight();
+	board->loadMap("Map2.dat", snake);
+	
+	int randomX, randomY;
+
+	do {
+		randomX = rand() % board->getWidth();
+		randomY = rand() % board->getHeight();
+	} while (board->isOccupied(randomX, randomY));
+
 	Fruit* fruit = dynamic_cast<Fruit*>(board->addObject(ObjectType::fruit, randomX, randomY));
 	fruit->paint();
 
@@ -31,17 +39,17 @@ int main() {
 		}
 		snake->move();
 
-		//if (snake->bodyCollision()) {
-		//	snake->setDead();
-		//}
-		/*else if (snake->wallCollision()) {
+		if (snake->bodyCollision()) {
 			snake->setDead();
-		}*/
-		//else 
-		if(destinateFruit = snake->matchFruit()) {
+		}
+		else if (snake->wallCollision()) {
+			snake->setDead();
+		}
+		else if (destinateFruit = snake->matchFruit()) {
 			snake->eatFruit(destinateFruit);
 		}
-		else if (snake->getX() > board->getWidth()) {
+		
+		if (snake->getX() > board->getWidth()) {
 			snake->setPos(0, snake->getY());
 		}
 		else if (snake->getX() < 0) {
@@ -58,6 +66,8 @@ int main() {
 
 		Sleep(100);
 	}
+
+	std::cout << "Snake dead." << std::endl;
 
 	delete board;
 	return 0;

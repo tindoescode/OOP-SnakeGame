@@ -4,6 +4,7 @@
 
 class Board;
 class Fruit;
+class Wall;
 
 enum class Direction {
 	idle = NULL,
@@ -29,15 +30,16 @@ public:
 	void setDead() { _dead = true; }
 	bool bodyCollision() 
 	{
-		for (auto i : segments) 
+		for (auto i = segments.begin() + 1; i != segments.end(); i++) 
 		{
-			if (_x == i->getX() && _y == i->getY()) {
+			if (_x == (*i)->getX() && _y == (*i)->getY()) {
 				return true;
 			}
 		}
 		return false;
 	}
 	Fruit* matchFruit();
+	Wall* wallCollision();
 	void eatFruit(Fruit* destinateFruit);
 	void turnHead(Direction direction) 
 	{
