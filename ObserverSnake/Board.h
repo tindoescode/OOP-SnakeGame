@@ -14,6 +14,7 @@ class FileNotFoundException : public std::exception {
 		return "File not found";
 	}
 };
+
 class NoSnakeException : public std::exception {
 	const char* what() const noexcept {
 		return "No snake position on map";
@@ -27,68 +28,25 @@ enum class ObjectType {
 	fruit
 };
 
-class Board
-{
-friend class Snake;
+class Board {
+	friend class Snake;
 private:
 	int _width;
 	int _height;
 
 	std::vector<Object*> objects;
 public:
-	Board(int width, int height) : _width(width), _height(height) {
-		Nocursortype();
-	}
+	Board(int width, int height);
 
-	Object* addObject(ObjectType type, int x, int y) {
-		Object* object;
+	Object* addObject(ObjectType type, int x, int y);
 
-		if (type == ObjectType::snake) {
-			object = new Snake(x, y, this);
-		}
-		else if (type == ObjectType::snake_segment) {
-			object = new SnakeSegment(x, y);
-		}
-		else if (type == ObjectType::fruit) {
-			object = new Fruit(x, y);
-		}
-		else if (type == ObjectType::wall) {
-			object = new Wall(x, y);
-		}
-		objects.push_back(object);
-
-		return object;
-	}
-	
 	void loadMap(std::string path, Snake*& snake);
-	
-	bool isOccupied(int x, int y) 
-	{
-		for (auto i : objects) {
-			if (i->getX() == x && i->getY() == y) return true;
-		}
-		return false;
-	}
 
-	void deleteSnakeSegment(int x, int y) {
-		for (auto i = objects.begin(); i != objects.end(); i++) {
-			if ((*i)->getX() == x && (*i)->getY() == y && dynamic_cast<SnakeSegment*>(*i)) {
-				delete* i;
-				objects.erase(i);
-				break;
-			}
-		}
-	}
-	void deleteFruit(int x, int y) {
-		for (auto i = objects.begin(); i != objects.end(); i++) {
-			if ((*i)->getX() == x && (*i)->getY() == y && dynamic_cast<Fruit*>(*i)) {
-				delete* i;
-				objects.erase(i);
-				break;
-			}
-		}
-	}
-	int getWidth() { return _width; }
-	int getHeight() { return _height; }
+	bool isOccupied(int x, int y);
+
+	void deleteSnakeSegment(int x, int y);
+	void deleteFruit(int x, int y);
+	int getWidth();
+	int getHeight();
 };
 

@@ -2,25 +2,19 @@
 #include <iostream>
 #include "Console.h"
 
-class Object
-{
+class Object {
 protected:
 	int _x;
 	int _y;
 public:
-	Object(int x, int y) : _x(x), _y(y) {};
-	~Object() {
-		gotoXY(_x, _y);
-		std::cout << " ";
-	}
+	Object(int x, int y);
+	~Object();
 
-	int getX() { return _x; }
-	int getY() { return _y; }
+	int getX();
+	int getY();
 
-	void setPos(int x, int y) {
-		_x = x;
-		_y = y;
-	}
+	void setPos(int x, int y);
+
 	virtual void paint() = 0;
 };
 

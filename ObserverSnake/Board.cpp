@@ -1,7 +1,30 @@
 #include "Board.h"
 
-void Board::loadMap(std::string path, Snake*& snake)
-{
+Board::Board(int width, int height) : _width(width), _height(height) {
+	Nocursortype();
+}
+
+Object* Board::addObject(ObjectType type, int x, int y) {
+	Object* object;
+
+	if (type == ObjectType::snake) {
+		object = new Snake(x, y, this);
+	}
+	else if (type == ObjectType::snake_segment) {
+		object = new SnakeSegment(x, y);
+	}
+	else if (type == ObjectType::fruit) {
+		object = new Fruit(x, y);
+	}
+	else if (type == ObjectType::wall) {
+		object = new Wall(x, y);
+	}
+	objects.push_back(object);
+
+	return object;
+}
+
+void Board::loadMap(std::string path, Snake*& snake) {
 	std::ifstream f;
 
 	f.open(path, std::ios::in);
@@ -50,4 +73,39 @@ void Board::loadMap(std::string path, Snake*& snake)
 	}
 
 	f.close();
+}
+
+bool Board::isOccupied(int x, int y) {
+	for (auto i : objects) {
+		if (i->getX() == x && i->getY() == y) return true;
+	}
+	return false;
+}
+
+void Board::deleteSnakeSegment(int x, int y) {
+	for (auto i = objects.begin(); i != objects.end(); i++) {
+		if ((*i)->getX() == x && (*i)->getY() == y && dynamic_cast<SnakeSegment*>(*i)) {
+			delete* i;
+			objects.erase(i);
+			break;
+		}
+	}
+}
+
+void Board::deleteFruit(int x, int y) {
+	for (auto i = objects.begin(); i != objects.end(); i++) {
+		if ((*i)->getX() == x && (*i)->getY() == y && dynamic_cast<Fruit*>(*i)) {
+			delete* i;
+			objects.erase(i);
+			break;
+		}
+	}
+}
+
+int Board::getWidth() { 
+	return _width; 
+}
+
+int Board::getHeight() { 
+	return _height; 
 }
