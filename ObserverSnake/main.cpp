@@ -17,7 +17,7 @@ int main() {
 	Snake* snake = nullptr;
 
 	// Load map (wall, snake)
-	board->loadMap("Map2.dat", snake);
+	board->loadMap("ModernMap2.dat", snake);
 	
 	// Create fruit
 	int randomX, randomY;

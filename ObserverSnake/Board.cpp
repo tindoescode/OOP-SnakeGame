@@ -24,6 +24,42 @@ Object* Board::addObject(ObjectType type, int x, int y) {
 	return object;
 }
 
+void Board::drawLines() {
+	int xPos, yPos;
+	//it will be changed when we have more information 
+	//draw line at the top of program
+	xPos = 0, yPos = 0;
+	while (xPos <= 100) {
+		gotoXY(xPos, yPos);
+		std::cout << "+";
+		xPos++;
+	}
+
+	//draw line at the bottom of program
+	xPos = 0, yPos = 30;
+	while (xPos <= 100) {
+		gotoXY(xPos, yPos);
+		std::cout << "+";
+		xPos++;
+	}
+
+	//draw line at the left of program
+	xPos = 0, yPos = 0;
+	while (yPos <= 30) {
+		gotoXY(xPos, yPos);
+		std::cout << "+";
+		yPos++;
+	}
+
+	//draw line at the right of program
+	xPos = 100, yPos = 0;
+	while (yPos <= 30) {
+		gotoXY(xPos, yPos);
+		std::cout << "+";
+		yPos++;
+	}
+}
+
 void Board::loadMap(std::string path, Snake*& snake) {
 	std::ifstream f;
 
@@ -56,9 +92,9 @@ void Board::loadMap(std::string path, Snake*& snake) {
 		h++;
 	}
 
-	// Update map width/height
-	_width = line.length();
-	_height = h;
+	// set width, height
+	_width = 100;
+	_height = 30;
 
 	for (auto i : objects) {
 		i->paint();

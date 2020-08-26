@@ -39,7 +39,8 @@ public:
 	Board(int width, int height);
 
 	Object* addObject(ObjectType type, int x, int y);
-
+	
+	void drawLines();
 	void loadMap(std::string path, Snake*& snake);
 
 	bool isOccupied(int x, int y);
