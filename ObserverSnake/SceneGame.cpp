@@ -140,12 +140,8 @@ int SceneGame::getHeight() {
 	return _height;
 }
 
-SceneGame::SceneGame() : Scene(), _width(100), _height(30), _snake(nullptr), _fruit(nullptr), _mapPath("")
-{
-	Nocursortype();
-}
-
-SceneGame::SceneGame(std::string mapPath) : Scene(), _mapPath(mapPath), _width(100), _height(30), _snake(nullptr), _fruit(nullptr)
+SceneGame::SceneGame(std::string mapPath, SceneStateMachine sceneStateMachine) 
+	: Scene(), _mapPath(mapPath), _width(100), _height(30), _snake(nullptr), _fruit(nullptr), _sceneStateMachine(sceneStateMachine)
 {
 	Nocursortype();
 }
@@ -153,11 +149,7 @@ SceneGame::SceneGame(std::string mapPath) : Scene(), _mapPath(mapPath), _width(1
 void SceneGame::OnCreate()
 {
 	// Load map (wall, snake)
-	loadMap("ModernMap2.dat", _snake);
-
-	for (auto i : objects) {
-		i->paint();
-	}
+	loadMap(_mapPath, _snake);
 }
 
 void SceneGame::OnDestroy()
@@ -169,6 +161,10 @@ void SceneGame::OnActivate()
 	// Create fruit
 	auto [X, Y] = getFreeBlock();
 	_fruit = dynamic_cast<Fruit*>(addObject(ObjectType::fruit, X, Y));
+
+	for (auto i : objects) {
+		i->paint();
+	}
 }
 
 void SceneGame::OnDeactivate()
@@ -179,56 +175,54 @@ void SceneGame::ProcessInput()
 {
 	// Game loop
 	char op;
-	Fruit* destinateFruit = nullptr;
-
-	while (!_snake->isdead()) {
-		// On keypressed
-		if (_kbhit())
-		{
-			// Create a new head segment, delete tail segment
-			op = tolower(_getch());
-			_snake->turnHead(Direction(op));
-		}
-
-		_snake->move();
-
-		// Handle collision
-		if (_snake->bodyCollision()) {
-			_snake->setDead();
-		}
-		else if (_snake->wallCollision()) {
-			_snake->setDead();
-		}
-		else if (destinateFruit = _snake->matchFruit()) {
-			_snake->eatFruit(destinateFruit);
-		}
-
-		// if _snake get over border
-		if (_snake->getX() > _width) {
-			_snake->setPos(0, _snake->getY());
-		}
-		else if (_snake->getX() < 0) {
-			_snake->setPos(_width, _snake->getY());
-		}
-		else if (_snake->getY() > _height) {
-			_snake->setPos(_snake->getX(), 0);
-		}
-		else if (_snake->getY() < 0) {
-			_snake->setPos(_snake->getX(), _height);
-		}
-
-		_snake->paint();
-		// Time for the next move
-		Sleep(70);
+	
+	if (_kbhit())
+	{
+		// Create a new head segment, delete tail segment
+		op = tolower(_getch());
+		_snake->turnHead(Direction(op));
 	}
 }
 
 void SceneGame::Update()
 {
+	_snake->move();
 }
 
 void SceneGame::LateUpdate()
 {
+	Fruit* destinateFruit = nullptr;
+
+	// Handle collision
+	if (_snake->bodyCollision()) {
+		_snake->setDead();
+	}
+	else if (_snake->wallCollision()) {
+		_snake->setDead();
+	}
+	else if (destinateFruit = _snake->matchFruit()) {
+		_snake->eatFruit(destinateFruit);
+	}
+
+	// if _snake get over border
+	if (_snake->getX() > _width) {
+		_snake->setPos(0, _snake->getY());
+	}
+	else if (_snake->getX() < 0) {
+		_snake->setPos(_width, _snake->getY());
+	}
+	else if (_snake->getY() > _height) {
+		_snake->setPos(_snake->getX(), 0);
+	}
+	else if (_snake->getY() < 0) {
+		_snake->setPos(_snake->getX(), _height);
+	}
+
+	_snake->paint();
+	// Time for the next move
+	Sleep(70);
+
+	if (_snake->isdead()) _sceneStateMachine.SwitchTo(0);
 }
 
 COORD SceneGame::getFreeBlock() {

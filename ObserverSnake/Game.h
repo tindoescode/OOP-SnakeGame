@@ -8,6 +8,7 @@ public:
 
     void ProcessInput();
     void Update();
+    void LateUpdate();
     void Draw();
     bool IsRunning() const;
 

@@ -3,6 +3,7 @@
 #include <iostream>
 #include <ctime>
 #include <conio.h>
+#include "main.h"
 
 int main() {
 	//TODO: Make creatory factory for each object
@@ -14,6 +15,7 @@ int main() {
 	while (game.IsRunning()) {
 		game.ProcessInput();
 		game.Update();
+		game.LateUpdate();
 		game.Draw();
 	}
 

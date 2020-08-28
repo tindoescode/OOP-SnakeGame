@@ -15,6 +15,7 @@ public:
 	// named methods of the active scene.
 	void ProcessInput();
 	void Update();
+	void LateUpdate();
 	void Draw();
 
 	// Adds a scene to the state machine and returns the id of that scene.

@@ -1,7 +1,7 @@
 #include "SceneStateMachine.h"
 #include "Scene.h"
 
-SceneStateMachine::SceneStateMachine() : scenes(0), curScene(0) { }
+SceneStateMachine::SceneStateMachine() : scenes(0), curScene(0), insertedSceneID(0) { }
 
 void SceneStateMachine::ProcessInput()
 {
@@ -16,6 +16,14 @@ void SceneStateMachine::Update()
     if (curScene)
     {
         curScene->Update();
+    }
+}
+
+void SceneStateMachine::LateUpdate()
+{
+    if (curScene) 
+    {
+        curScene->LateUpdate();
     }
 }
 

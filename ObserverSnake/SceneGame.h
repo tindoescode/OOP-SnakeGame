@@ -10,6 +10,7 @@
 #include "Fruit.h"
 #include "Wall.h"
 
+#include "SceneStateMachine.h"
 #include "Scene.h"
 
 class FileNotFoundException : public std::exception {
@@ -42,9 +43,11 @@ private:
 
 	Snake* _snake;
 	Fruit* _fruit;
+
+	SceneStateMachine& _sceneStateMachine;
 public:
 	SceneGame();
-	SceneGame(std::string mapPath);
+	SceneGame(std::string mapPath, SceneStateMachine sceneStateMachine);
 
 	void OnCreate() override;
 	void OnDestroy() override;

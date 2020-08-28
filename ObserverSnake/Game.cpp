@@ -3,7 +3,7 @@
 
 Game::Game() : running(true)
 {
-	std::shared_ptr<SceneGame> gameScene = std::make_shared<SceneGame>();
+	std::shared_ptr<SceneGame> gameScene = std::make_shared<SceneGame>("ModernMap2.dat", sceneStateMachine);
 
 	unsigned int gameSceneID = sceneStateMachine.Add(gameScene);
 	
@@ -21,6 +21,11 @@ void Game::ProcessInput()
 void Game::Update()
 {
 	sceneStateMachine.Update();
+}
+
+void Game::LateUpdate()
+{
+	sceneStateMachine.LateUpdate();
 }
 
 void Game::Draw()
