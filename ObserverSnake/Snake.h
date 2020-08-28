@@ -2,7 +2,7 @@
 #include <deque>
 #include "SnakeSegment.h"
 
-class Board;
+class SceneGame;
 class Fruit;
 class Wall;
 
@@ -19,10 +19,10 @@ private:
 	Direction _direction;
 	std::deque<SnakeSegment*> segments;
 	bool _dead;
-	Board* _board;
+	SceneGame* _board;
 
 public:
-	Snake(int x, int y, Board* board);
+	Snake(int x, int y, SceneGame* board);
 	void setPos(int x, int y);
 	void setDead();
 	bool bodyCollision();

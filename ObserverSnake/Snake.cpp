@@ -1,8 +1,8 @@
 #include "Snake.h"
-#include "Board.h"
+#include "SceneGame.h"
 #include "Wall.h"
 
-Snake::Snake(int x, int y, Board* board) : Object(x, y) {
+Snake::Snake(int x, int y, SceneGame* board) : Object(x, y) {
 	_direction = Direction::idle;
 	_dead = false;
 	_board = board;

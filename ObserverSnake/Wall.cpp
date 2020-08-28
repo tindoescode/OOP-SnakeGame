@@ -7,7 +7,7 @@ Wall::Wall(int x, int y) : Object(x, y) {
 void Wall::paint() {
 	TextColor(ColorCode_DarkCyan);
 	gotoXY(_x, _y);
-	std::cout << 'i';
+	std::wcout << char(178);
 }
 
 int Wall::getPoint() { 
