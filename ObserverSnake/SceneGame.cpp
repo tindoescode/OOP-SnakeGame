@@ -148,8 +148,6 @@ SceneGame::SceneGame(std::string mapPath, SceneStateMachine sceneStateMachine)
 
 void SceneGame::OnCreate()
 {
-	// Load map (wall, snake)
-	loadMap(_mapPath, _snake);
 }
 
 void SceneGame::OnDestroy()
@@ -158,6 +156,9 @@ void SceneGame::OnDestroy()
 
 void SceneGame::OnActivate()
 {
+	// Load map (wall, snake)
+	loadMap(_mapPath, _snake);
+
 	// Create fruit
 	auto [X, Y] = getFreeBlock();
 	_fruit = dynamic_cast<Fruit*>(addObject(ObjectType::fruit, X, Y));
