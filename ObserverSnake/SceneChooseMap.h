@@ -20,6 +20,8 @@ public:
 
 	void OnCreate() override;
 	void OnActivate() override;
+	void OnDeactivate() override;
+	void Update() override;
 	void OnDestroy() override;
 };
 

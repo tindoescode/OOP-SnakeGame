@@ -223,7 +223,17 @@ void SceneGame::LateUpdate()
 	// Time for the next move
 	Sleep(70);
 
-	if (_snake->isdead()) _sceneStateMachine.SwitchTo(0);
+	if (_snake->isdead()) {
+		//TODO: switch to game over scene
+
+		gotoXY(0, 0);
+		TextColor(ColorCode_White);
+		std::cout << "Missing game over scene. Continue after 5s." << std::endl;
+
+		Sleep(5000);
+
+		//_sceneStateMachine.SwitchTo(1);
+	}
 }
 
 COORD SceneGame::getFreeBlock() {

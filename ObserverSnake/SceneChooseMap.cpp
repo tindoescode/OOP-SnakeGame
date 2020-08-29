@@ -21,19 +21,21 @@ void SceneChooseMap::OnCreate()
 }
 
 void SceneChooseMap::OnActivate() {
-	if (mainMenu) {
-		while (true) {
-			mainMenu->ProcessInput();
-		}
-	}
+	
+}
+
+void SceneChooseMap::OnDeactivate()
+{
+	// Clear map
+	mainMenu->OnDeactivate();
+}
+
+void SceneChooseMap::Update() {
+	mainMenu->ProcessInput();
 }
 
 void SceneChooseMap::OnDestroy()
 {
-	gotoXY(0, 0);
-	TextColor(ColorCode_White);
-	std::cout << "OnDestroy called";
-
 	// Clear map
 	mainMenu->OnDeactivate();
 }

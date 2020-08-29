@@ -34,7 +34,7 @@ void Menu::ProcessInput() {
 
 void Menu::OnDeactivate()
 {
-	clrscr;
+	system("cls");
 }
 
 void Menu::Update(Status key) {
@@ -62,11 +62,11 @@ void Menu::Update(Status key) {
 		std::cout << "\t\t\t\t\t\t\t\t\t\t";
 
 		OnItemSelected(_selectedItem);
-		//return choose;
+		return;
 	}
 	}
 
-	// ?
+	// Init color
 	for (int i = 0; i < _items.size(); i++)
 	{
 		color[i] = MAUCHU;
