@@ -38,7 +38,7 @@ void Menu::OnDeactivate()
 }
 
 void Menu::Update(Status key) {
-	if ((int)key == 224) key = Status(_getch());
+	if ((int) key == 224) key = Status(_getch());
 	
 	switch (key)
 	{
