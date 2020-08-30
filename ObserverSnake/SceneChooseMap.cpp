@@ -2,26 +2,26 @@
 #include "MainMenu.h"
 #include "SceneStateMachine.h"
 
-SceneChooseMap::SceneChooseMap(SceneStateMachine &sceneStateMachine) : Scene(), _sceneStateMachine(sceneStateMachine), mainMenu(nullptr), switchToState(0) {}
+SceneChooseMap::SceneChooseMap(SceneStateMachine &sceneStateMachine) : Scene(), _sceneStateMachine(sceneStateMachine), mainMenu(nullptr) {}
 
-void SceneChooseMap::SetSwitchToScene(unsigned int id)
+void SceneChooseMap::SetSwitchToScene(std::vector<unsigned int> stateIds)
 {
 	// Stores the id of the scene that we will transition to.
-	switchToState = id;
+	_stateIds = stateIds;
 }
 
-void SceneChooseMap::SwitchTo()
+void SceneChooseMap::SwitchTo(unsigned int destinate)
 {
-	_sceneStateMachine.SwitchTo(switchToState);
+	_sceneStateMachine.SwitchTo(destinate);
 }
 
 void SceneChooseMap::OnCreate()
 {
-	mainMenu = new MainMenu({"Map 1", "Map 2", "Map 3"}, *this);
+	mainMenu = new MainMenu({"Classic Map 1", "Classic Map 2", "Modern Map 1", "Modern Map 2"}, *this);
 }
 
 void SceneChooseMap::OnActivate() {
-	
+	// mainMenu.show();
 }
 
 void SceneChooseMap::OnDeactivate()
