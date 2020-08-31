@@ -44,10 +44,14 @@ private:
 	Snake* _snake;
 	Fruit* _fruit;
 
+	unsigned int _escScene;
 	SceneStateMachine& _sceneStateMachine;
 public:
-	SceneGame();
 	SceneGame(std::string mapPath, SceneStateMachine sceneStateMachine);
+
+	void SetEscScene(unsigned int sceneId) {
+		_escScene = sceneId;
+	}
 
 	void OnCreate() override;
 	void OnDestroy() override;

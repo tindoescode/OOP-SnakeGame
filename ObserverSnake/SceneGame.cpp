@@ -21,37 +21,39 @@ Object* SceneGame::addObject(ObjectType type, size_t x, size_t y) {
 }
 
 void SceneGame::drawBorder() {
+	TextColor(ColorCode_Cyan);
+
 	int x, y;
 	//it will be changed when we have more information 
 	//draw line at the top of program
 	x = 0, y = 0;
-	while (x <= 100) {
+	while (x <= _width) {
 		gotoXY(x, y);
-		std::wcout << char(2500);
+		std::wcout << 'x';
 		x++;
 	}
 
 	//draw line at the bottom of program
 	x = 0, y = 30;
-	while (x <= 100) {
+	while (x <= _width) {
 		gotoXY(x, y);
-		std::wcout << char(2500);
+		std::wcout << 'x';
 		x++;
 	}
 
 	//draw line at the left of program
 	x = 0, y = 0;
-	while (y <= 30) {
+	while (y <= _height) {
 		gotoXY(x, y);
-		std::wcout << char(2502);
+		std::wcout << 'x';
 		y++;
 	}
 
 	//draw line at the right of program
 	x = 100, y = 0;
-	while (y <= 30) {
+	while (y <= _height) {
 		gotoXY(x, y);
-		std::wcout << char(2502);
+		std::wcout << 'x';
 		y++;
 	}
 }
@@ -101,8 +103,6 @@ void SceneGame::loadMap(std::string path, Snake*& snake) {
 	}
 
 	f.close();
-
-	drawBorder();
 }
 
 bool SceneGame::isOccupied(int x, int y) {
@@ -141,13 +141,16 @@ int SceneGame::getHeight() {
 }
 
 SceneGame::SceneGame(std::string mapPath, SceneStateMachine sceneStateMachine) 
-	: Scene(), _mapPath(mapPath), _width(100), _height(30), _snake(nullptr), _fruit(nullptr), _sceneStateMachine(sceneStateMachine)
+	: Scene(), _mapPath(mapPath), _width(100), _height(30), _snake(nullptr), _fruit(nullptr), _sceneStateMachine(sceneStateMachine),
+	_escScene(0)
 {
 	Nocursortype();
 }
 
 void SceneGame::OnCreate()
 {
+	// Load map (wall, snake)
+	loadMap(_mapPath, _snake);
 }
 
 void SceneGame::OnDestroy()
@@ -156,8 +159,7 @@ void SceneGame::OnDestroy()
 
 void SceneGame::OnActivate()
 {
-	// Load map (wall, snake)
-	loadMap(_mapPath, _snake);
+	drawBorder();
 
 	// Create fruit
 	auto [X, Y] = getFreeBlock();
@@ -181,6 +183,7 @@ void SceneGame::ProcessInput()
 	{
 		// Create a new head segment, delete tail segment
 		op = tolower(_getch());
+
 		_snake->turnHead(Direction(op));
 	}
 }

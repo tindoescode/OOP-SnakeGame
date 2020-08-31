@@ -3,7 +3,6 @@
 #include <iostream>
 #include <ctime>
 #include <conio.h>
-#include "main.h"
 
 int main() {
 	//TODO: Make creatory factory for each object

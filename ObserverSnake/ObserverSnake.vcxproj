@@ -150,6 +150,7 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneGameOver.cpp" />
+    <ClCompile Include="ScenePause.cpp" />
     <ClCompile Include="SceneStateMachine.cpp" />
     <ClCompile Include="Snake.cpp" />
     <ClCompile Include="SnakeSegment.cpp" />
@@ -157,7 +158,6 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
-    <ClInclude Include="main.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="SceneChooseMap.h" />
     <ClInclude Include="SceneGame.h" />
@@ -166,6 +166,7 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneGameOver.h" />
+    <ClInclude Include="ScenePause.h" />
     <ClInclude Include="SceneStateMachine.h" />
     <ClInclude Include="Snake.h" />
     <ClInclude Include="SnakeSegment.h" />

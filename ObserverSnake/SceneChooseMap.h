@@ -13,7 +13,6 @@ private:
 	SceneStateMachine& _sceneStateMachine;
 
 	std::unordered_map<std::string, unsigned int> _stateInf;
-
 public:
 	SceneChooseMap(SceneStateMachine &sceneStateMachine);
 

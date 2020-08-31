@@ -85,7 +85,8 @@ void Snake::turnHead(Direction direction) {
 		return;
 	}
 
-	_direction = direction;
+	if(!(direction != Direction::down && direction != Direction::up && direction != Direction::left && direction != Direction::right))
+		_direction = direction;
 }
 
 void Snake::move() {

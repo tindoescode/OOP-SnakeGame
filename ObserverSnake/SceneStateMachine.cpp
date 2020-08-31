@@ -84,3 +84,17 @@ void SceneStateMachine::SwitchTo(unsigned int id)
         curScene->OnActivate();
     }
 }
+
+void SceneStateMachine::SwitchTo(std::shared_ptr<Scene> next)
+{
+    if (curScene)
+    {
+        // If we have a current scene, we call its OnDeactivate method.
+        curScene->OnDeactivate();
+    }
+
+    // Setting the current scene ensures that it is updated and drawn.
+    curScene = next;
+
+    curScene->OnActivate();
+}
