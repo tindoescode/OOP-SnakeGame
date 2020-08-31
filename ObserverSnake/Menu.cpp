@@ -1,4 +1,5 @@
 #include "Menu.h"
+#include <functional>
 
 Menu::~Menu() {
 	if (color) delete color;
@@ -12,7 +13,9 @@ void Menu::Draw()
 		std::cout << i + 1 << ") " << _items[i] << std::endl;
 	}
 }
-Menu::Menu(const std::vector<std::string> items) : _selectedItem(0) {
+
+Menu::Menu(const std::vector<std::string> items, std::function<void(unsigned int listitem)> onItemSelected) 
+	: _selectedItem(0), OnItemSelected(onItemSelected) {
 	_items = items;
 
 	clrscr();
@@ -22,14 +25,17 @@ Menu::Menu(const std::vector<std::string> items) : _selectedItem(0) {
 	// ?
 	for (int i = 0; i < _items.size(); i++)	color[i] = MAUCHU;
 	color[0] = MAUNEN;
-
-	Draw();
 }
 
 void Menu::ProcessInput() {
 	int key = _getch();
 
 	Update(Status(key));
+}
+
+void Menu::OnActivate()
+{
+	Draw();
 }
 
 void Menu::OnDeactivate()

@@ -221,7 +221,7 @@ void SceneGame::LateUpdate()
 
 	_snake->paint();
 	// Time for the next move
-	Sleep(70);
+	Sleep(100);
 
 	if (_snake->isdead()) {
 		//TODO: switch to game over scene

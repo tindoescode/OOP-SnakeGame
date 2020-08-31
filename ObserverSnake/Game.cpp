@@ -18,10 +18,15 @@ Game::Game() : running(true)
 
 	//TODO: Make splash screen scene
 	//splashScense.setSwitchTo(gameSceneID)
+	//sceneStateMachine.SwitchTo(gameSceneID1);
 
-	//sceneStateMachine.SwitchTo(gameSceneID);
+	chooseMapScene->SetSwitchToScene({
+		{ "ClassicMap1", gameSceneID1 }, 
+		{ "ClassicMap2", gameSceneID2 }, 
+		{ "ModernMap1", gameSceneID3 }, 
+		{ "ModernMap2", gameSceneID4 }}
+	);
 
-	chooseMapScene->SetSwitchToScene({ gameSceneID1, gameSceneID2, gameSceneID3, gameSceneID4 });
 	sceneStateMachine.SwitchTo(chooseMapSceneID);
 }
 

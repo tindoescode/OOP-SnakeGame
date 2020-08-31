@@ -1,23 +1,24 @@
 #pragma once
 #include "Scene.h"
 #include <vector>
+#include <unordered_map>
 
-class MainMenu;
+class Menu;
 class SceneStateMachine;
 
 class SceneChooseMap : public Scene
 {
 private:
-	MainMenu* mainMenu;
+	Menu* mainMenu;
 	SceneStateMachine& _sceneStateMachine;
 
-	std::vector<unsigned int> _stateIds;
+	std::unordered_map<std::string, unsigned int> _stateInf;
 
 public:
 	SceneChooseMap(SceneStateMachine &sceneStateMachine);
 
-	void SetSwitchToScene(std::vector<unsigned int> stateIds);
-	void SwitchTo(unsigned int destinate);
+	void SetSwitchToScene(std::unordered_map<std::string, unsigned int> stateInf);
+	void SwitchTo(std::string mapName);
 
 	void OnCreate() override;
 	void OnActivate() override;

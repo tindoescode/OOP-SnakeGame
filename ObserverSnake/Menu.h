@@ -3,10 +3,13 @@
 #include <iostream>
 #include <string>
 #include <vector>
+#include <functional>
 #include <conio.h>
 
 #define MAUNEN 176
 #define MAUCHU 14
+
+class Scene;
 
 enum class Status {
 	up = 72,
@@ -20,18 +23,19 @@ enum class Status {
 
 class Menu {
 public:
-	Menu(const std::vector<std::string> items);
+	Menu(const std::vector<std::string> items, std::function<void(unsigned int listitem)> onItemSelected);
 	~Menu();
+
 	void Draw();
+	
 	void ProcessInput();
+	void OnActivate();
 	void OnDeactivate();
-
 	void Update(Status key);
-
-	// Called when item selected
-	virtual void OnItemSelected(int listitem) = 0;
-
 protected:
+	// Called when item selected
+	std::function<void(unsigned int listitem)> OnItemSelected;
+
 	std::vector<std::string> _items;
 
 	int _selectedItem;

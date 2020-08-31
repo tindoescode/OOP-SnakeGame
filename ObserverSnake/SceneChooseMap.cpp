@@ -1,27 +1,61 @@
 #include "SceneChooseMap.h"
-#include "MainMenu.h"
 #include "SceneStateMachine.h"
+#include "Menu.h"
+#include <functional>
 
 SceneChooseMap::SceneChooseMap(SceneStateMachine &sceneStateMachine) : Scene(), _sceneStateMachine(sceneStateMachine), mainMenu(nullptr) {}
 
-void SceneChooseMap::SetSwitchToScene(std::vector<unsigned int> stateIds)
+void SceneChooseMap::SetSwitchToScene(std::unordered_map<std::string, unsigned int> stateInf)
 {
 	// Stores the id of the scene that we will transition to.
-	_stateIds = stateIds;
+	_stateInf = stateInf;
 }
 
-void SceneChooseMap::SwitchTo(unsigned int destinate)
+void SceneChooseMap::SwitchTo(std::string mapName)
 {
-	_sceneStateMachine.SwitchTo(destinate);
+	auto it = _stateInf.find(mapName);
+	
+	if (it != _stateInf.end()) {
+		_sceneStateMachine.SwitchTo(it->second);
+	}
 }
 
 void SceneChooseMap::OnCreate()
 {
-	mainMenu = new MainMenu({"Classic Map 1", "Classic Map 2", "Modern Map 1", "Modern Map 2"}, *this);
+	mainMenu = new Menu(
+		{ "Classic Map 1", "Classic Map 2", "Modern Map 1", "Modern Map 2" }, 
+		std::bind(
+			[](unsigned int listitem, Scene* scene) {
+				switch (listitem) {
+				case 0: {
+					dynamic_cast<SceneChooseMap*>(scene)->SwitchTo("ClassicMap1");
+					break;
+				}
+				case 1: {
+					dynamic_cast<SceneChooseMap*>(scene)->SwitchTo("ClassicMap2");
+					break;
+				}
+				case 2: {
+					dynamic_cast<SceneChooseMap*>(scene)->SwitchTo("ModernMap1");
+					break;
+				}
+				case 3: {
+					dynamic_cast<SceneChooseMap*>(scene)->SwitchTo("ModernMap2");
+					break;
+				}
+				}
+
+				//TextColor(ColorCode_White);
+				//gotoXY(0, 0);
+				//std::cout << "Select item: " << listitem << std::endl;
+			},
+			std::placeholders::_1, (Scene*)this
+		)
+	);
 }
 
 void SceneChooseMap::OnActivate() {
-	// mainMenu.show();
+	 mainMenu->OnActivate();
 }
 
 void SceneChooseMap::OnDeactivate()
