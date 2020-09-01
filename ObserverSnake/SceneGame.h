@@ -13,6 +13,8 @@
 #include "SceneStateMachine.h"
 #include "Scene.h"
 
+class ScenePause;
+
 class FileNotFoundException : public std::exception {
 	const char* what() const noexcept {
 		return "File not found";
@@ -44,13 +46,16 @@ private:
 	Snake* _snake;
 	Fruit* _fruit;
 
-	unsigned int _escScene;
+	unsigned int _escSceneId;
+	std::shared_ptr<ScenePause> _escScene;
+
 	SceneStateMachine& _sceneStateMachine;
 public:
-	SceneGame(std::string mapPath, SceneStateMachine sceneStateMachine);
+	SceneGame(std::string mapPath, SceneStateMachine& sceneStateMachine);
 
-	void SetEscScene(unsigned int sceneId) {
-		_escScene = sceneId;
+	void SetPauseScene(unsigned int sceneId, std::shared_ptr<ScenePause> scene) {
+		_escSceneId = sceneId;
+		_escScene = scene;
 	}
 
 	void OnCreate() override;

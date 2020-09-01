@@ -38,6 +38,11 @@ Game::Game() : running(true)
 		{ "PauseScene", pauseSceneID }
 	});
 
+	gameScene1->SetPauseScene(pauseSceneID, pauseScene);
+	gameScene2->SetPauseScene(pauseSceneID, pauseScene);
+	gameScene3->SetPauseScene(pauseSceneID, pauseScene);
+	gameScene4->SetPauseScene(pauseSceneID, pauseScene);
+
 	::pauseScene = pauseScene;
 
 	sceneStateMachine.SwitchTo(chooseMapSceneID);
@@ -45,12 +50,6 @@ Game::Game() : running(true)
 
 void Game::ProcessInput()
 {
-	//Handle ESC Key
-	if (GetAsyncKeyState(VK_ESCAPE)) {
-		pauseScene->SetContinueScene(sceneStateMachine.GetCurrentScene());
-		sceneStateMachine.SwitchTo(5);
-	}
-
 	//Process Input by default
 	sceneStateMachine.ProcessInput();
 }

@@ -29,7 +29,7 @@ public:
 	void Remove(unsigned int id);
 
 	// Get current scene id
-	std::shared_ptr<Scene> GetCurrentScene() { return curScene; }
+	std::shared_ptr<Scene>& GetCurrentScene() { return curScene; }
 
 private:
 	// Stores all of the scenes associated with this state machine.

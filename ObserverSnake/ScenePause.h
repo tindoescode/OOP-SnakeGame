@@ -6,8 +6,10 @@
 class ScenePause :
     public Scene
 {
+	friend class SceneStateMachine;
 public:
 	ScenePause(SceneStateMachine& sceneStateMachine);
+	void SetContinueScene(std::shared_ptr<Scene>& prev);
 	// Called when scene initially created. Called once.
 	virtual void OnCreate();
 
@@ -23,7 +25,6 @@ public:
 	// Can be called many times in a typical game cycle.
 	virtual void OnDeactivate() override;
 	
-	void SetContinueScene(std::shared_ptr<Scene>);
 	void SetSwitchToScene(std::unordered_map<std::string, unsigned int> stateInf);
 	void SwitchTo(std::string mapName);
 
@@ -31,8 +32,8 @@ public:
 	virtual void ProcessInput() override;
 private:
 	Menu* pauseMenu;
-	std::shared_ptr<Scene> continueScene;
 
+	std::shared_ptr<Scene> continueScene;
 	SceneStateMachine& _sceneStateMachine;
 	std::unordered_map<std::string, unsigned int> _stateInf;
 };

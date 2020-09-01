@@ -1,4 +1,5 @@
 #include "SceneGame.h"
+#include "ScenePause.h"
 
 Object* SceneGame::addObject(ObjectType type, size_t x, size_t y) {
 	Object* object;
@@ -140,7 +141,7 @@ int SceneGame::getHeight() {
 	return _height;
 }
 
-SceneGame::SceneGame(std::string mapPath, SceneStateMachine sceneStateMachine) 
+SceneGame::SceneGame(std::string mapPath, SceneStateMachine& sceneStateMachine) 
 	: Scene(), _mapPath(mapPath), _width(100), _height(30), _snake(nullptr), _fruit(nullptr), _sceneStateMachine(sceneStateMachine),
 	_escScene(0)
 {
@@ -176,6 +177,12 @@ void SceneGame::OnDeactivate()
 
 void SceneGame::ProcessInput()
 {
+	//Handle ESC Key
+	if (GetAsyncKeyState(VK_ESCAPE)) {
+		_escScene->SetContinueScene(_sceneStateMachine.GetCurrentScene());
+		_sceneStateMachine.SwitchTo(_escSceneId);
+	}
+
 	// Game loop
 	char op;
 	

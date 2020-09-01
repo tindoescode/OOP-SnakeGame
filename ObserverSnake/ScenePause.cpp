@@ -3,7 +3,7 @@
 ScenePause::ScenePause(SceneStateMachine& sceneStateMachine) 
 	: Scene(), _sceneStateMachine(sceneStateMachine), pauseMenu(nullptr), continueScene(nullptr) {}
 
-void ScenePause::SetContinueScene(std::shared_ptr<Scene> prev)
+void ScenePause::SetContinueScene(std::shared_ptr<Scene> &prev)
 {
 	continueScene = prev;
 }
