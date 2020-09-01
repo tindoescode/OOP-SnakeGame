@@ -1,7 +1,7 @@
 #include "ScenePause.h"
 
 ScenePause::ScenePause(SceneStateMachine& sceneStateMachine) 
-	: Scene(), _sceneStateMachine(sceneStateMachine), pauseMenu(nullptr), continueScene(nullptr) {}
+	: Scene(), _sceneStateMachine(sceneStateMachine), pauseMenu(nullptr), continueScene(0) {}
 
 void ScenePause::SetContinueScene(std::shared_ptr<Scene> &prev)
 {

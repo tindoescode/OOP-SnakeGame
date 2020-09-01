@@ -34,6 +34,8 @@ Game::Game() : running(true)
 	pauseScene->SetSwitchToScene({
 		{ "ChooseMapScene", chooseMapSceneID},
 		{ "PauseScene", pauseSceneID }
+		// SaveScene
+		// LoadScene
 	});
 
 	gameOverScene->SetSwitchToScene({
@@ -41,6 +43,11 @@ Game::Game() : running(true)
 	});
 
 	// Game scenes need to know pauseScene, when it want to switch scene
+	gameScene1->SetPauseScene(pauseScene);
+	gameScene2->SetPauseScene(pauseScene);
+	gameScene3->SetPauseScene(pauseScene);
+	gameScene4->SetPauseScene(pauseScene);
+
 	gameScene1->SetSwitchToScene({
 		{ "SceneGameOver", gameOverSceneID},
 		{ "PauseScene", pauseSceneID }

@@ -55,6 +55,7 @@ public:
 	SceneGame(std::string mapPath, SceneStateMachine& sceneStateMachine);
 
 	void SetSwitchToScene(std::unordered_map<std::string, unsigned int> stateInf);
+	void SetPauseScene(std::shared_ptr<ScenePause> scene) { _escScene = scene; }
 	void SwitchTo(std::string mapName);
 
 	void OnCreate() override;
