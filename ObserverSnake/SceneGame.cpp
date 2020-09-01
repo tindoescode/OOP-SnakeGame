@@ -180,7 +180,7 @@ void SceneGame::ProcessInput()
 	//Handle ESC Key
 	if (GetAsyncKeyState(VK_ESCAPE)) {
 		_escScene->SetContinueScene(_sceneStateMachine.GetCurrentScene());
-		_sceneStateMachine.SwitchTo(_escSceneId);
+		SwitchTo("PauseScene");
 	}
 
 	// Game loop
@@ -234,15 +234,7 @@ void SceneGame::LateUpdate()
 	Sleep(100);
 
 	if (_snake->isdead()) {
-		//TODO: switch to game over scene
-
-		gotoXY(0, 0);
-		TextColor(ColorCode_White);
-		std::cout << "Missing game over scene. Continue after 5s." << std::endl;
-
-		Sleep(5000);
-
-		//_sceneStateMachine.SwitchTo(1);
+		SwitchTo("SceneGameOver"); // o day no can Id, de t xem lam sao kiem Id cho no
 	}
 }
 
@@ -257,4 +249,20 @@ COORD SceneGame::getFreeBlock() {
 }
 void SceneGame::Draw()
 {
+}
+
+// Cai nay de de~ dang nhan du lieu scene o Game.cpp
+void SceneGame::SetSwitchToScene(std::unordered_map<std::string, unsigned int> stateInf)
+{
+	// Stores the id of the scene that we will transition to.
+	_stateInf.merge(stateInf);
+}
+
+void SceneGame::SwitchTo(std::string mapName) // nay nhan vao mapName, la cai chuoi~ string dau tien
+{
+	auto it = _stateInf.find(mapName);
+
+	if (it != _stateInf.end()) {
+		_sceneStateMachine.SwitchTo(it->second);
+	}
 }

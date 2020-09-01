@@ -46,17 +46,16 @@ private:
 	Snake* _snake;
 	Fruit* _fruit;
 
-	unsigned int _escSceneId;
-	std::shared_ptr<ScenePause> _escScene;
+	std::unordered_map<std::string, unsigned int> _stateInf;
 
 	SceneStateMachine& _sceneStateMachine;
+
+	std::shared_ptr<ScenePause> _escScene;
 public:
 	SceneGame(std::string mapPath, SceneStateMachine& sceneStateMachine);
 
-	void SetPauseScene(unsigned int sceneId, std::shared_ptr<ScenePause> scene) {
-		_escSceneId = sceneId;
-		_escScene = scene;
-	}
+	void SetSwitchToScene(std::unordered_map<std::string, unsigned int> stateInf);
+	void SwitchTo(std::string mapName);
 
 	void OnCreate() override;
 	void OnDestroy() override;
