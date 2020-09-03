@@ -80,4 +80,8 @@ public:
 
 	int getWidth();
 	int getHeight();
+
+	std::string getMapPath() { return _mapPath; }
+	Fruit* getFruit() { return _fruit; }
+	Snake* getSnake() { return _snake; }
 };

@@ -213,6 +213,7 @@ void SceneGame::LateUpdate()
 	}
 	else if (destinateFruit = _snake->matchFruit()) {
 		_snake->eatFruit(destinateFruit);
+		_fruit = dynamic_cast<Fruit*>(objects[objects.size()-1]);
 	}
 
 	// if _snake get over border
@@ -266,3 +267,4 @@ void SceneGame::SwitchTo(std::string mapName) // nay nhan vao mapName, la cai ch
 		_sceneStateMachine.SwitchTo(it->second);
 	}
 }
+

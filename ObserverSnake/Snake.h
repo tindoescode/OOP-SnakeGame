@@ -5,7 +5,7 @@
 class SceneGame;
 class Fruit;
 class Wall;
-
+class SceneSaveGame;
 enum class Direction {
 	idle = NULL,
 	up = 'w',
@@ -15,6 +15,7 @@ enum class Direction {
 };
 
 class Snake : public Object {
+	friend class SceneSaveGame;
 private:
 	Direction _direction;
 	std::deque<SnakeSegment*> segments;
