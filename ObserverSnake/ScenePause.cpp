@@ -29,9 +29,10 @@ void ScenePause::OnCreate()
 		{ "Continue", "Save game", "Load game", "Return to choose map", "Exit" },
 		std::bind(
 			[](unsigned int listitem, Scene* scene) {
+				auto continueScene = dynamic_cast<ScenePause*>(scene)->continueScene;
 				switch (listitem) {
 				case 0: {
-					dynamic_cast<ScenePause*>(scene)->_sceneStateMachine.SwitchTo(dynamic_cast<ScenePause*>(scene)->continueScene);
+					dynamic_cast<ScenePause*>(scene)->_sceneStateMachine.SwitchTo(continueScene);
 					break;
 				}
 				case 1: {
@@ -43,6 +44,7 @@ void ScenePause::OnCreate()
 					break;
 				}
 				case 3: {
+					continueScene->OnCreate(); // reset old game sence when switching to choose map scene
 					dynamic_cast<ScenePause*>(scene)->SwitchTo("ChooseMapScene");
 					break;
 				}

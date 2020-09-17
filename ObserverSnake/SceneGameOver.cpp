@@ -32,18 +32,16 @@ void SceneGameOver::OnCreate()
 		std::bind(
 			[](unsigned int listitem, Scene* scene) {
 				switch (listitem) {
-				case 0: {
+				case 0:
 					// Play again, switch to scene choose map
 					dynamic_cast<SceneGameOver*>(scene)->SwitchTo("SceneChooseMap");  // roi bay gio t truyen SceneChooseMap voi Id cua no vao
 					//SwitchTo cua sceneStateMachine nhan Id hoac nhan tham chieu cua scene can chuyen
 
 					break;
-				}
-				case 1: {
+				case 1:
 					// Exit
 					exit(false);
 					break;
-				}
 				}
 
 				//TextColor(ColorCode_White);
@@ -51,7 +49,7 @@ void SceneGameOver::OnCreate()
 				//std::cout << "Select item: " << listitem << std::endl;
 			},
 			std::placeholders::_1, (Scene*)this
-				)
+		)
 	);
 }
 

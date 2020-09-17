@@ -150,8 +150,13 @@ SceneGame::SceneGame(std::string mapPath, SceneStateMachine& sceneStateMachine)
 
 void SceneGame::OnCreate()
 {
+	objects.clear();
+
 	// Load map (wall, snake)
 	loadMap(_mapPath, _snake);
+	// Create fruit
+	auto [X, Y] = getFreeBlock();
+	_fruit = dynamic_cast<Fruit*>(addObject(ObjectType::fruit, X, Y));
 }
 
 void SceneGame::OnDestroy()
@@ -162,10 +167,6 @@ void SceneGame::OnActivate()
 {
 	drawBorder();
 
-	// Create fruit
-	auto [X, Y] = getFreeBlock();
-	_fruit = dynamic_cast<Fruit*>(addObject(ObjectType::fruit, X, Y));
-
 	for (auto i : objects) {
 		i->paint();
 	}
@@ -173,6 +174,7 @@ void SceneGame::OnActivate()
 
 void SceneGame::OnDeactivate()
 {
+	system("cls");
 }
 
 void SceneGame::ProcessInput()
@@ -234,6 +236,8 @@ void SceneGame::LateUpdate()
 	Sleep(100);
 
 	if (_snake->isdead()) {
+		OnCreate();
+		OnActivate();
 		SwitchTo("SceneGameOver"); // o day no can Id, de t xem lam sao kiem Id cho no
 	}
 }
