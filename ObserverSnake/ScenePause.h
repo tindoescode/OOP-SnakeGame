@@ -3,6 +3,7 @@
 #include "Menu.h"
 #include "SceneStateMachine.h"
 
+class SceneSaveGame;
 class ScenePause :
     public Scene
 {
@@ -28,13 +29,20 @@ public:
 	void SetSwitchToScene(std::unordered_map<std::string, unsigned int> stateInf);
 	void SwitchTo(std::string mapName);
 
+	void SwitchTo(std::shared_ptr<Scene> scene);
+
 	// The below functions can be overridden as necessary in our scenes.
 	virtual void ProcessInput() override;
+
+	void setSaveGame(std::shared_ptr<SceneSaveGame> SaveGame) { SaveScene = SaveGame; }
+
 private:
 	Menu* pauseMenu;
 
 	std::shared_ptr<Scene> continueScene;
 	SceneStateMachine& _sceneStateMachine;
 	std::unordered_map<std::string, unsigned int> _stateInf;
+
+	std::shared_ptr<SceneSaveGame> SaveScene;
 };
 

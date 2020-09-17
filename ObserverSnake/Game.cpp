@@ -3,6 +3,7 @@
 #include "SceneChooseMap.h"
 #include "ScenePause.h"
 #include "SceneGameOver.h"
+#include "SceneSaveGame.h"
 
 Game::Game() : running(true)
 {
@@ -32,9 +33,7 @@ Game::Game() : running(true)
 	});
 
 	pauseScene->SetSwitchToScene({
-		{ "ChooseMapScene", chooseMapSceneID},
-		{ "PauseScene", pauseSceneID }
-		// SaveScene
+		{ "ChooseMapScene", chooseMapSceneID}
 		// LoadScene
 	});
 

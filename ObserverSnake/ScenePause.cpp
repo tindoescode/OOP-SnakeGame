@@ -1,4 +1,5 @@
 #include "ScenePause.h"
+#include "SceneSaveGame.h"
 
 ScenePause::ScenePause(SceneStateMachine& sceneStateMachine) 
 	: Scene(), _sceneStateMachine(sceneStateMachine), pauseMenu(nullptr), continueScene(0) {}
@@ -7,7 +8,6 @@ void ScenePause::SetContinueScene(std::shared_ptr<Scene> &prev)
 {
 	continueScene = prev;
 }
-
 void ScenePause::SetSwitchToScene(std::unordered_map<std::string, unsigned int> stateInf)
 {
 	// Stores the id of the scene that we will transition to.
@@ -23,29 +23,46 @@ void ScenePause::SwitchTo(std::string mapName)
 	}
 }
 
+void ScenePause::SwitchTo(std::shared_ptr<Scene> scene)
+{
+	_sceneStateMachine.SwitchTo(scene);
+}
+
 void ScenePause::OnCreate()
 {
 	pauseMenu = new Menu(
 		{ "Continue", "Save game", "Load game", "Return to choose map", "Exit" },
 		std::bind(
 			[](unsigned int listitem, Scene* scene) {
-				auto continueScene = dynamic_cast<ScenePause*>(scene)->continueScene;
+				auto _this = dynamic_cast<ScenePause*>(scene);
+				auto continueScene = _this->continueScene;
+				
 				switch (listitem) {
 				case 0: {
-					dynamic_cast<ScenePause*>(scene)->_sceneStateMachine.SwitchTo(continueScene);
+					auto lastGameScene = continueScene;
+
+					_this->_sceneStateMachine.SwitchTo(lastGameScene);
 					break;
 				}
 				case 1: {
-					dynamic_cast<ScenePause*>(scene)->SwitchTo("SaveGame");
+					std::shared_ptr<SceneSaveGame> saveGameScene 
+						= std::make_shared<SceneSaveGame>(_this->_sceneStateMachine);
+
+					saveGameScene->SetSwitchToScene({ 
+						{ "ContinueScene", continueScene } 
+					});
+					_this->setSaveGame(saveGameScene);
+					_this->SaveScene->SetSaveScene(continueScene);
+					_this->SwitchTo(saveGameScene);
 					break;
 				}
 				case 2: {
-					dynamic_cast<ScenePause*>(scene)->SwitchTo("LoadGame");
+					_this->SwitchTo("LoadGame");
 					break;
 				}
 				case 3: {
 					continueScene->OnCreate(); // reset old game sence when switching to choose map scene
-					dynamic_cast<ScenePause*>(scene)->SwitchTo("ChooseMapScene");
+					_this->SwitchTo("ChooseMapScene");
 					break;
 				}
 				case 4: {
