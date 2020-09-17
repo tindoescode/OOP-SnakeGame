@@ -84,6 +84,9 @@
     <ClCompile Include="PlayerScore.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="SceneShop.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h">
@@ -133,6 +136,9 @@
     </ClInclude>
     <ClInclude Include="PlayerScore.h">
       <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneShop.h">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

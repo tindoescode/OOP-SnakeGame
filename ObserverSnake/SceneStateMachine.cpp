@@ -1,7 +1,7 @@
 #include "SceneStateMachine.h"
 #include "Scene.h"
 
-SceneStateMachine::SceneStateMachine() : scenes(0), curScene(0), insertedSceneID(0) { }
+SceneStateMachine::SceneStateMachine() : scenes(0), curScene(0), insertedSceneID(0),curSceneID(0) { score = new PlayerScore; }
 
 void SceneStateMachine::ProcessInput()
 {
@@ -69,6 +69,7 @@ void SceneStateMachine::Remove(unsigned int id)
 
 void SceneStateMachine::SwitchTo(unsigned int id)
 {
+	score->setScoreForNewGame(curSceneID);
     auto it = scenes.find(id);
     if (it != scenes.end())
     {
@@ -80,9 +81,11 @@ void SceneStateMachine::SwitchTo(unsigned int id)
 
         // Setting the current scene ensures that it is updated and drawn.
         curScene = it->second;
-
+		curSceneID = id;
         curScene->OnActivate();
     }
+
+	
 }
 
 void SceneStateMachine::SwitchTo(std::shared_ptr<Scene> next)
