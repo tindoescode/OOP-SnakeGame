@@ -36,7 +36,7 @@ void clrscr();
 //screen: goto [x,y]
 void gotoXY(int column, int line);
 void TextColor(int color);
-
+void SetWindow(int Width, int Height);
 void Nocursortype();
 
 #endif

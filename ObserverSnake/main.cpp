@@ -10,6 +10,9 @@ int main() {
 	// Create time seed
 	srand(static_cast<unsigned int>(time(0)));
 
+	// Set console size
+	SetWindow(120, 30 + 1);
+
 	// Make the game loop
 	Game game;
 	while (game.IsRunning()) {
