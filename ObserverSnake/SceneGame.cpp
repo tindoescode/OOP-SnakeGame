@@ -30,9 +30,10 @@ void SceneGame::drawBorder() {
 	//it will be changed when we have more information 
 	//draw line at the top of program
 	x = 0, y = 0;
+
 	while (x <= _width) {
 		gotoXY(x, y);
-		std::wcout << 'x';
+		std::cout << char(205);
 		x++;
 	}
 
@@ -40,7 +41,7 @@ void SceneGame::drawBorder() {
 	x = 0, y = 30;
 	while (x <= _width) {
 		gotoXY(x, y);
-		std::wcout << 'x';
+		std::cout << char(205);
 		x++;
 	}
 
@@ -48,7 +49,7 @@ void SceneGame::drawBorder() {
 	x = 0, y = 0;
 	while (y <= _height) {
 		gotoXY(x, y);
-		std::wcout << 'x';
+		std::cout << char(186);
 		y++;
 	}
 
@@ -56,9 +57,26 @@ void SceneGame::drawBorder() {
 	x = 100, y = 0;
 	while (y <= _height) {
 		gotoXY(x, y);
-		std::wcout << 'x';
+		std::cout << char(186);
 		y++;
 	}
+
+	// top left
+	gotoXY(0, 0);
+	std::cout << char(201);
+
+	// top right
+	gotoXY(_width, 0);
+	std::cout << char(187);
+
+	// bottom left
+	gotoXY(0, _height);
+	std::cout << char(200);
+
+	// bottom right
+	gotoXY(_width, _height);
+	std::cout << char(188);
+
 }
 
 void SceneGame::loadMap(std::string path, Snake*& snake) {
@@ -259,8 +277,8 @@ void SceneGame::LateUpdate()
 COORD SceneGame::getFreeBlock() {
 	short X, Y;
 	do {
-		X = 1 + rand() % _width;
-		Y = 1 + rand() % _height;
+		X = 1 + rand() % (_width - 1);
+		Y = 1 + rand() % (_height - 1);
 	} while (freeBlock[X * MAX_X + Y] == 1);
 
 	return { X, Y };

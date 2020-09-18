@@ -8,7 +8,7 @@ void Wall::paint() {
 	TextColor(ColorCode_Grey);
 	gotoXY(_x, _y);
 
-	std::wcout << 'H';
+	std::cout << char(219);
 }
 
 int Wall::getPoint() { 
