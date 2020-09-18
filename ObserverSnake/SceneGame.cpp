@@ -5,7 +5,7 @@ Object* SceneGame::addObject(ObjectType type, size_t x, size_t y) {
 	Object* object;
 
 	if (type == ObjectType::snake) {
-		object = new Snake(x, y, this);
+		object = new Snake(x, y, this); // pass scene game so snake can interact with scene game's objects
 	}
 	else if (type == ObjectType::snake_segment) {
 		object = new SnakeSegment(x, y);
@@ -17,6 +17,8 @@ Object* SceneGame::addObject(ObjectType type, size_t x, size_t y) {
 		object = new Wall(x, y);
 	}
 	objects.push_back(object);
+	
+	setOccupiedBlock(x, y);
 
 	return object;
 }
@@ -118,6 +120,7 @@ void SceneGame::deleteSnakeSegment(int x, int y) {
 		if ((*i)->getX() == x && (*i)->getY() == y && dynamic_cast<SnakeSegment*>(*i)) {
 			delete* i;
 			objects.erase(i);
+			setOccupiedBlock(x, y, 0);
 			break;
 		}
 	}
@@ -127,7 +130,8 @@ void SceneGame::deleteFruit(int x, int y) {
 	for (auto i = objects.begin(); i != objects.end(); i++) {
 		if ((*i)->getX() == x && (*i)->getY() == y && dynamic_cast<Fruit*>(*i)) {
 			delete* i;
-			objects.erase(i);
+			objects.erase(i);			
+			setOccupiedBlock(x, y, 0);
 			break;
 		}
 	}
@@ -141,7 +145,14 @@ int SceneGame::getHeight() {
 	return _height;
 }
 
-SceneGame::SceneGame(std::string mapPath, SceneStateMachine& sceneStateMachine) 
+void SceneGame::setOccupiedBlock(int x, int y, unsigned int occupied)
+{
+	if(x * MAX_X + y >= 0 && x * MAX_X + y < MAX_X * MAX_Y)
+	
+	freeBlock.set(x * MAX_X + y, occupied);
+}
+
+SceneGame::SceneGame(std::string mapPath, SceneStateMachine& sceneStateMachine)
 	: Scene(), _mapPath(mapPath), _width(100), _height(30), _snake(nullptr), _fruit(nullptr), _sceneStateMachine(sceneStateMachine),
 	_escScene(0)
 {
@@ -232,21 +243,8 @@ void SceneGame::LateUpdate()
 		_sceneStateMachine.player->addScore(_sceneStateMachine.curSceneID);
 	}
 
-	// if _snake get over border
-	if (_snake->getX() > _width) {
-		_snake->setPos(0, _snake->getY());
-	}
-	else if (_snake->getX() < 0) {
-		_snake->setPos(_width, _snake->getY());
-	}
-	else if (_snake->getY() > _height) {
-		_snake->setPos(_snake->getX(), 0);
-	}
-	else if (_snake->getY() < 0) {
-		_snake->setPos(_snake->getX(), _height);
-	}
-
 	_snake->paint();
+
 	// Time for the next move
 	Sleep(100);
 
@@ -260,9 +258,9 @@ void SceneGame::LateUpdate()
 COORD SceneGame::getFreeBlock() {
 	short X, Y;
 	do {
-		X = rand() % _width;
-		Y = rand() % _height;
-	} while (isOccupied(X, Y));
+		X = 1 + rand() % _width;
+		Y = 1 + rand() % _height;
+	} while (freeBlock[X * MAX_X + Y] == 1);
 
 	return { X, Y };
 }

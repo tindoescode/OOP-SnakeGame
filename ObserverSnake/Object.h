@@ -8,7 +8,7 @@ protected:
 	int _y;
 public:
 	Object(int x, int y);
-	~Object();
+	virtual ~Object();
 
 	int getX();
 	int getY();

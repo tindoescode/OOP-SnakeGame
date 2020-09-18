@@ -1,6 +1,5 @@
 #include "Object.h"
 
-
 Object::Object(int x, int y) : _x(x), _y(y) {};
 
 Object::~Object() {

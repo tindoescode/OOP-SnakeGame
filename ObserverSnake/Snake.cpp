@@ -9,7 +9,7 @@ Snake::Snake(int x, int y, SceneGame* board) : Object(x, y) {
 
 	// Initialize with a segment (assume it is snake's head)
 	segments.push_back(dynamic_cast<SnakeSegment*>(_board->addObject(ObjectType::snake_segment, x, y)));
-};
+}
 
 void Snake::setPos(int x, int y) {
 	segments.front()->setPos(x, y);
@@ -57,7 +57,7 @@ void Snake::eatFruit(Fruit* destinateFruit) {
 	y = segments.front()->getY();
 
 	// 
-	auto object = dynamic_cast<SnakeSegment*>(_board->addObject(ObjectType::snake_segment, -1, -1));
+	auto object = dynamic_cast<SnakeSegment*>(_board->addObject(ObjectType::snake_segment, 120, 120));
 	segments.push_back(object);
 
 	int randomX, randomY;
@@ -112,6 +112,20 @@ void Snake::move() {
 	}	
 	}
 	
+	// if _snake get over border
+	if (x == _board->_width) {
+		x = 1;
+	}
+	else if (x == 0) {
+		x = _board->_width - 1;
+	}
+	else if (y == _board->_height) {
+		y = 1;
+	}
+	else if (y == 0) {
+		y = _board->_height - 1;
+	}
+
 	// Add new head object
 	auto object = dynamic_cast<SnakeSegment*>(_board->addObject(ObjectType::snake_segment, x, y));
 	segments.push_front(object);
@@ -130,7 +144,8 @@ void Snake::move() {
 void Snake::paint() {
 	TextColor(ColorCode_Green);
 
-	segments.front()->paint();
+	if(segments.front()->getX() != 0 && segments.front()->getY() != 0)
+		segments.front()->paint();
 }
 
 bool Snake::isdead() { 

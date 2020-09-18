@@ -151,6 +151,7 @@
     <ClCompile Include="Object.cpp" />
     <ClCompile Include="Scene.cpp" />
     <ClCompile Include="SceneGameOver.cpp" />
+    <ClCompile Include="SceneMainMenu.cpp" />
     <ClCompile Include="ScenePause.cpp" />
     <ClCompile Include="SceneSaveGame.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
@@ -172,6 +173,7 @@
     <ClInclude Include="Object.h" />
     <ClInclude Include="Scene.h" />
     <ClInclude Include="SceneGameOver.h" />
+    <ClInclude Include="SceneMainMenu.h" />
     <ClInclude Include="ScenePause.h" />
     <ClInclude Include="SceneSaveGame.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>

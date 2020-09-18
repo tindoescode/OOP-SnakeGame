@@ -25,7 +25,7 @@ void SceneGameOver::OnCreate()
 {
 	gotoXY(0, 0);
 	TextColor(ColorCode_Cyan);
-	std::cout << "Do you want to play again?" << std::endl;
+	std::cout << "Game Over. Do you want to play again?" << std::endl;
 
 	gameOverMenu = new Menu(
 		{ "Yes", "Exit" },

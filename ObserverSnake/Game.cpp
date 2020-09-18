@@ -5,6 +5,7 @@
 #include "SceneGameOver.h"
 #include "SceneSaveGame.h"
 #include"SceneShop.h"
+
 Game::Game() : running(true)
 {
 	std::shared_ptr<SceneGame> gameScene1 = std::make_shared<SceneGame>("ClassicMap1.dat", sceneStateMachine);

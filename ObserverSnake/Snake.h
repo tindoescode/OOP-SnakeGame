@@ -24,6 +24,7 @@ private:
 
 public:
 	Snake(int x, int y, SceneGame* board);
+
 	void setPos(int x, int y);
 	void setDead();
 	bool bodyCollision();

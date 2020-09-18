@@ -3,6 +3,7 @@
 #include <string>
 #include <fstream>
 #include <conio.h>
+#include <bitset>
 
 #include "Object.h"
 #include "SnakeSegment.h"
@@ -34,6 +35,11 @@ enum class ObjectType {
 	fruit
 };
 
+enum {
+	MAX_X = 120,
+	MAX_Y = 120
+};
+
 class SceneGame : public Scene {
 	friend class Snake;
 private:
@@ -51,6 +57,10 @@ private:
 	SceneStateMachine& _sceneStateMachine;
 
 	std::shared_ptr<ScenePause> _escScene;
+
+	std::bitset<MAX_X * MAX_Y> freeBlock;
+
+	void setOccupiedBlock(int x, int y, unsigned int occupied = 1);
 public:
 	SceneGame(std::string mapPath, SceneStateMachine& sceneStateMachine);
 
@@ -84,4 +94,6 @@ public:
 	std::string getMapPath() { return _mapPath; }
 	Fruit* getFruit() { return _fruit; }
 	Snake* getSnake() { return _snake; }
+
+	void registerPlayer(std::shared_ptr<Player> player, std::shared_ptr<Snake> snake); //TODO: controller for both
 };
