@@ -142,7 +142,7 @@
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Menu.cpp" />
-    <ClCompile Include="PlayerScore.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneChooseMap.cpp" />
     <ClCompile Include="SceneGame.cpp" />
     <ClCompile Include="Console.cpp" />
@@ -155,6 +155,7 @@
     <ClCompile Include="SceneSaveGame.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="SceneShop.cpp" />
     <ClCompile Include="SceneStateMachine.cpp" />
     <ClCompile Include="Snake.cpp" />
     <ClCompile Include="SnakeSegment.cpp" />
@@ -163,7 +164,7 @@
   <ItemGroup>
     <ClInclude Include="Game.h" />
     <ClInclude Include="Menu.h" />
-    <ClInclude Include="PlayerScore.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="SceneChooseMap.h" />
     <ClInclude Include="SceneGame.h" />
     <ClInclude Include="Console.h" />
@@ -175,6 +176,7 @@
     <ClInclude Include="SceneSaveGame.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="SceneShop.h" />
     <ClInclude Include="SceneStateMachine.h" />
     <ClInclude Include="Snake.h" />
     <ClInclude Include="SnakeSegment.h" />

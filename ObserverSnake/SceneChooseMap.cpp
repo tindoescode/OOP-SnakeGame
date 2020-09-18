@@ -23,7 +23,7 @@ void SceneChooseMap::SwitchTo(std::string mapName)
 void SceneChooseMap::OnCreate()
 {
 	mainMenu = new Menu(
-		{ "Classic Map 1", "Classic Map 2", "Modern Map 1", "Modern Map 2" }, 
+		{ "Classic Map 1", "Classic Map 2", "Modern Map 1", "Modern Map 2","Shop" }, 
 		std::bind(
 			[](unsigned int listitem, Scene* scene) {
 				switch (listitem) {
@@ -41,6 +41,10 @@ void SceneChooseMap::OnCreate()
 				}
 				case 3: {
 					dynamic_cast<SceneChooseMap*>(scene)->SwitchTo("ModernMap2");
+					break;
+				}
+				case 4: {
+					dynamic_cast<SceneChooseMap*>(scene)->SwitchTo("ShopScene");
 					break;
 				}
 				}

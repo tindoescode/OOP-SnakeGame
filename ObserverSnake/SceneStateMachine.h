@@ -1,12 +1,13 @@
 #pragma once
 #include <memory>
 #include <unordered_map>
-
+#include"Player.h"
 class Scene;
 class SceneGame;
 
 class SceneStateMachine
 {
+	friend class SceneGame;
 public:
 	SceneStateMachine();
 
@@ -41,5 +42,11 @@ private:
 	// Stores our current scene id. This is incremented whenever 
 	// a scene is added.
 	unsigned int insertedSceneID;
+
+	//save id of curScene
+	int curSceneID;
+
+	//use to save current score and total score of each map
+	Player* player;
 };
 
