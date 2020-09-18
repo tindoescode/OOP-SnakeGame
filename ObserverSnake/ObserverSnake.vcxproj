@@ -142,7 +142,7 @@
   <ItemGroup>
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="Menu.cpp" />
-    <ClCompile Include="PlayerScore.cpp" />
+    <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneChooseMap.cpp" />
     <ClCompile Include="SceneGame.cpp" />
     <ClCompile Include="Console.cpp" />
@@ -164,7 +164,7 @@
   <ItemGroup>
     <ClInclude Include="Game.h" />
     <ClInclude Include="Menu.h" />
-    <ClInclude Include="PlayerScore.h" />
+    <ClInclude Include="Player.h" />
     <ClInclude Include="SceneChooseMap.h" />
     <ClInclude Include="SceneGame.h" />
     <ClInclude Include="Console.h" />

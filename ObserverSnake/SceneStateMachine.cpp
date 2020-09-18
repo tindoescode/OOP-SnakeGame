@@ -1,7 +1,7 @@
 #include "SceneStateMachine.h"
 #include "Scene.h"
 
-SceneStateMachine::SceneStateMachine() : scenes(0), curScene(0), insertedSceneID(0),curSceneID(0) { score = new PlayerScore; }
+SceneStateMachine::SceneStateMachine() : scenes(0), curScene(0), insertedSceneID(0),curSceneID(0) { player = new Player; }
 
 void SceneStateMachine::ProcessInput()
 {
@@ -69,7 +69,7 @@ void SceneStateMachine::Remove(unsigned int id)
 
 void SceneStateMachine::SwitchTo(unsigned int id)
 {
-	score->setScoreForNewGame(curSceneID);
+	player->resetScore(curSceneID);
     auto it = scenes.find(id);
     if (it != scenes.end())
     {

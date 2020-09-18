@@ -1,7 +1,7 @@
 #pragma once
 #include <memory>
 #include <unordered_map>
-#include"PlayerScore.h"
+#include"Player.h"
 class Scene;
 class SceneGame;
 
@@ -47,6 +47,6 @@ private:
 	int curSceneID;
 
 	//use to save current score and total score of each map
-	PlayerScore* score;
+	Player* player;
 };
 

@@ -205,7 +205,7 @@ void SceneGame::Update()
 void SceneGame::LateUpdate()
 {
 	//show current score
-	_sceneStateMachine.score->showCurrentScore(_sceneStateMachine.curSceneID);
+	_sceneStateMachine.player->showCurrentScore(_sceneStateMachine.curSceneID);
 
 	Fruit* destinateFruit = nullptr;
 
@@ -214,22 +214,22 @@ void SceneGame::LateUpdate()
 		_snake->setDead();
 
 		//get current score to calculate total score and reset current score = 0 if snake die
-		_sceneStateMachine.score->sumScore(_sceneStateMachine.curSceneID);
-		_sceneStateMachine.score->setScoreForNewGame(_sceneStateMachine.curSceneID);
+		_sceneStateMachine.player->saveScore(_sceneStateMachine.curSceneID);
+		_sceneStateMachine.player->resetScore(_sceneStateMachine.curSceneID);
 	}
 	else if (_snake->wallCollision()) {
 		_snake->setDead();
 
 		//get current score to calculate total score and reset current score = 0 if snake die
-		_sceneStateMachine.score->sumScore(_sceneStateMachine.curSceneID);
-		_sceneStateMachine.score->setScoreForNewGame(_sceneStateMachine.curSceneID);
+		_sceneStateMachine.player->saveScore(_sceneStateMachine.curSceneID);
+		_sceneStateMachine.player->resetScore(_sceneStateMachine.curSceneID);
 	}
 	else if (destinateFruit = _snake->matchFruit()) {
 		_snake->eatFruit(destinateFruit);
 		_fruit = dynamic_cast<Fruit*>(objects[objects.size()-1]);
 
 		//plus 1 score if snake eat fruit
-		_sceneStateMachine.score->addScore(_sceneStateMachine.curSceneID);
+		_sceneStateMachine.player->addScore(_sceneStateMachine.curSceneID);
 	}
 
 	// if _snake get over border
