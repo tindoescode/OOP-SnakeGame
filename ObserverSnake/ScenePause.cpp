@@ -31,7 +31,7 @@ void ScenePause::SwitchTo(std::shared_ptr<Scene> scene)
 void ScenePause::OnCreate()
 {
 	pauseMenu = new Menu(
-		{ "Continue", "Save game", "Load game", "Return to choose map", "Exit" },
+		{ L"Continue", L"Save game", L"Load game", L"Return to choose map", L"Exit" },
 		std::bind(
 			[](unsigned int listitem, Scene* scene) {
 				auto _this = dynamic_cast<ScenePause*>(scene);
@@ -61,7 +61,7 @@ void ScenePause::OnCreate()
 					break;
 				}
 				case 2: {
-					_this->SwitchTo("LoadGame");
+					_this->SwitchTo("LoadGameScene");
 					break;
 				}
 				case 3: {

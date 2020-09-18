@@ -1,7 +1,7 @@
 #include "SceneGame.h"
 #include "ScenePause.h"
 
-Object* SceneGame::addObject(ObjectType type, size_t x, size_t y) {
+Object* SceneGame::addObject(ObjectType type, int x, int y) {
 	Object* object;
 
 	if (type == ObjectType::snake) {
@@ -79,7 +79,7 @@ void SceneGame::loadMap(std::string path, Snake*& snake) {
 	int h = 0;
 	while (std::getline(f, line))
 	{
-		for (size_t i = 0; i < line.length(); i++)
+		for (int i = 0; i < line.length(); i++)
 		{
 			if (line[i] == 'i') // wall
 			{
@@ -109,10 +109,7 @@ void SceneGame::loadMap(std::string path, Snake*& snake) {
 }
 
 bool SceneGame::isOccupied(int x, int y) {
-	for (auto i : objects) {
-		if (i->getX() == x && i->getY() == y) return true;
-	}
-	return false;
+	return freeBlock[y * MAX_X + x];
 }
 
 void SceneGame::deleteSnakeSegment(int x, int y) {
@@ -147,14 +144,17 @@ int SceneGame::getHeight() {
 
 void SceneGame::setOccupiedBlock(int x, int y, unsigned int occupied)
 {
-	if(x * MAX_X + y >= 0 && x * MAX_X + y < MAX_X * MAX_Y)
+	// see that Y is row, and X is column in console.
+	auto index = y * MAX_X + x; // stand for bitmap index
+
+	if (index < 0 || index >= MAX_X * MAX_Y) return;
 	
-	freeBlock.set(x * MAX_X + y, occupied);
+ 	freeBlock.set(y * MAX_X + x, occupied);
 }
 
 SceneGame::SceneGame(std::string mapPath, SceneStateMachine& sceneStateMachine)
 	: Scene(), _mapPath(mapPath), _width(100), _height(30), _snake(nullptr), _fruit(nullptr), _sceneStateMachine(sceneStateMachine),
-	_escScene(0)
+	_pauseScene(0)
 {
 	Nocursortype();
 }
@@ -162,6 +162,7 @@ SceneGame::SceneGame(std::string mapPath, SceneStateMachine& sceneStateMachine)
 void SceneGame::OnCreate()
 {
 	objects.clear();
+	freeBlock.reset();
 
 	// Load map (wall, snake)
 	loadMap(_mapPath, _snake);
@@ -192,7 +193,7 @@ void SceneGame::ProcessInput()
 {
 	//Handle ESC Key
 	if (GetAsyncKeyState(VK_ESCAPE)) {
-		_escScene->SetContinueScene(_sceneStateMachine.GetCurrentScene());
+		_pauseScene->SetContinueScene(_sceneStateMachine.GetCurrentScene());
 		SwitchTo("PauseScene");
 	}
 

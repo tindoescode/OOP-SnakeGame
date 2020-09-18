@@ -23,7 +23,7 @@ void SceneChooseMap::SwitchTo(std::string mapName)
 void SceneChooseMap::OnCreate()
 {
 	mainMenu = new Menu(
-		{ "Classic Map 1", "Classic Map 2", "Modern Map 1", "Modern Map 2","Shop" }, 
+		{ L"Classic Map 1", L"Classic Map 2", L"Modern Map 1", L"Modern Map 2", L"Shop" }, 
 		std::bind(
 			[](unsigned int listitem, Scene* scene) {
 				switch (listitem) {

@@ -27,7 +27,7 @@ void Player::saveScore(int i) {
 
 void Player::showCurrentScore(int i) {
 	gotoXY(103, 3);
-	std::cout << "Total Scoce: " << totalScore[i];
+	std::wcout << "Total Score: " << totalScore[i];
 	gotoXY(103, 4);
-	std::cout << "Your Score: " << currentScore[i];
+	std::wcout << "Your Score: " << currentScore[i];
 }

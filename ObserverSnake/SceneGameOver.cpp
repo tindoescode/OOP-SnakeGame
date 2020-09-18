@@ -23,12 +23,8 @@ void SceneGameOver::SwitchTo(std::string mapName) // nay nhan vao mapName, la ca
 // Khi no duoc tao ra, ham nay chay cung voi constructor
 void SceneGameOver::OnCreate()
 {
-	gotoXY(0, 0);
-	TextColor(ColorCode_Cyan);
-	std::cout << "Game Over. Do you want to play again?" << std::endl;
-
 	gameOverMenu = new Menu(
-		{ "Yes", "Exit" },
+		{ L"Yes", L"Exit" },
 		std::bind(
 			[](unsigned int listitem, Scene* scene) {
 				switch (listitem) {
@@ -55,6 +51,10 @@ void SceneGameOver::OnCreate()
 
 // Con may cai nay phai co de handle action cua menu
 void SceneGameOver::OnActivate() {
+	gotoXY(30, 8);
+	TextColor(ColorCode_Cyan);
+	std::wcout << L"Game Over. Do you want to play again?" << std::endl;
+
 	gameOverMenu->OnActivate();
 }
 

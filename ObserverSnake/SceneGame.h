@@ -36,38 +36,54 @@ enum class ObjectType {
 };
 
 enum {
-	MAX_X = 120,
-	MAX_Y = 120
+	MAX_X = 130,
+	MAX_Y = 130
 };
 
 class SceneGame : public Scene {
 	friend class Snake;
 private:
+	// Game description
+	unsigned int _currentRound; // start from 1
+	unsigned int _lastRound;
+	
+	// Path to map (maybe contains 10 rounds/map)
+	std::vector<std::string> _maps;
+
+	// Current map attributes
 	int _width;
 	int _height;
-
 	std::string _mapPath;
+
+	// Map objects
 	std::vector<Object*> objects;
 
 	Snake* _snake;
 	Fruit* _fruit;
 
+	// State switching
 	std::unordered_map<std::string, unsigned int> _stateInf;
-
 	SceneStateMachine& _sceneStateMachine;
 
-	std::shared_ptr<ScenePause> _escScene;
+	// Pause scene
+	std::shared_ptr<ScenePause> _pauseScene;
 
+	// Checking for free block
 	std::bitset<MAX_X * MAX_Y> freeBlock;
 
+	// Set block occupied
 	void setOccupiedBlock(int x, int y, unsigned int occupied = 1);
+
+	void drawBorder();
 public:
 	SceneGame(std::string mapPath, SceneStateMachine& sceneStateMachine);
-
+	
+	// Scene switching
 	void SetSwitchToScene(std::unordered_map<std::string, unsigned int> stateInf);
-	void SetPauseScene(std::shared_ptr<ScenePause> scene) { _escScene = scene; }
+	void SetPauseScene(std::shared_ptr<ScenePause> scene) { _pauseScene = scene; }
 	void SwitchTo(std::string mapName);
 
+	// Callbacks
 	void OnCreate() override;
 	void OnDestroy() override;
 
@@ -76,11 +92,13 @@ public:
 	void ProcessInput() override;
 	void Update() override;
 	void LateUpdate() override;
-	COORD getFreeBlock();
+	
 	void Draw() override;
 
-	Object* addObject(ObjectType type, size_t x, size_t y);
-	void drawBorder();
+	// Addition functions
+	COORD getFreeBlock();
+	Object* addObject(ObjectType type, int x, int y);
+
 	void loadMap(std::string path, Snake*& snake);
 
 	bool isOccupied(int x, int y);

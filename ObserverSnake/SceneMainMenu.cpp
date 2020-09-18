@@ -23,7 +23,7 @@ void SceneMainMenu::SwitchTo(std::string mapName)
 void SceneMainMenu::OnCreate()
 {
 	mainMenu = new Menu(
-		{ "Single player", "Shop" },
+		{ L"Single player", L"Shop" },
 		std::bind(
 			[](unsigned int listitem, SceneMainMenu* scene) {
 				switch (listitem) {

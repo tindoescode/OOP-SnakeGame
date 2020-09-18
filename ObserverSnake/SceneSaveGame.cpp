@@ -1,7 +1,7 @@
 #include "SceneSaveGame.h"
 #include <fstream>
 #include <filesystem>
-#include"SceneGame.h"
+#include "SceneGame.h"
 
 SceneSaveGame::SceneSaveGame(SceneStateMachine& sceneStateMachine)
 	: Scene(), _sceneStateMachine(sceneStateMachine), _currentGameScene(0){}

@@ -3,8 +3,10 @@
 Object::Object(int x, int y) : _x(x), _y(y) {};
 
 Object::~Object() {
-	gotoXY(_x, _y);
-	std::cout << " ";
+	if (_x != -1 && _y != -1) {
+		gotoXY(_x, _y);
+		std::wcout << " ";
+	}
 }
 
 int Object::getX() { 

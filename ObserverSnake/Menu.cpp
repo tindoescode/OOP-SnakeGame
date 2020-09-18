@@ -7,18 +7,18 @@ Menu::~Menu() {
 void Menu::Draw()
 {
 	for (int i = 0; i < _items.size(); i++)
-	{
+	{	
 		TextColor(color[i]);
 		gotoXY(30, 10 + i);
-		std::cout << i + 1 << ") " << _items[i] << std::endl;
+		std::wcout << i + 1 << ") " << _items[i] << std::endl;
 	}
 }
 
-Menu::Menu(const std::vector<std::string> items, std::function<void(unsigned int listitem)> onItemSelected) 
+Menu::Menu(const std::vector<std::wstring> items, std::function<void(unsigned int listitem)> onItemSelected) 
 	: _selectedItem(0), OnItemSelected(onItemSelected) {
 	_items = items;
 
-	clrscr();
+	//clrscr();
 
 	color = new int[ _items.size() ];
 
@@ -65,7 +65,7 @@ void Menu::Update(Status key) {
 		TextColor(ColorCode_Back);
 
 		//cls khong clear dc mau nen` 
-		std::cout << "\t\t\t\t\t\t\t\t\t\t";
+		std::wcout << L"\t\t\t\t\t\t\t\t\t\t";
 
 		OnItemSelected(_selectedItem);
 		return;

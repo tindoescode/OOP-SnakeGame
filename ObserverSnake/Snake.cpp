@@ -48,23 +48,20 @@ Wall* Snake::wallCollision() {
 }
 
 void Snake::eatFruit(Fruit* destinateFruit) {
-	int x = destinateFruit->getX(), y = destinateFruit->getY();
+	const int x = destinateFruit->getX(), y = destinateFruit->getY();
 
 	// Remove fruit
 	_board->deleteFruit(x, y);
 
-	x = segments.front()->getX();
-	y = segments.front()->getY();
-
-	// 
+	// The size is automatically add on the next move.
 	auto object = dynamic_cast<SnakeSegment*>(_board->addObject(ObjectType::snake_segment, -1, -1));
 	segments.push_back(object);
 
 	int randomX, randomY;
 
 	do {
-		randomX = rand() % _board->getWidth();
-		randomY = rand() % _board->getHeight();
+		randomX = 1 + rand() % _board->getWidth();
+		randomY = 1 + rand() % _board->getHeight();
 	} while (_board->isOccupied(randomX, randomY));
 
 	Fruit* fruit = dynamic_cast<Fruit*>(_board->addObject(ObjectType::fruit, randomX, randomY));
@@ -90,6 +87,7 @@ void Snake::turnHead(Direction direction) {
 }
 
 void Snake::move() {
+	if (_direction == Direction::idle) return;
 	//new head
 	int x = segments.front()->getX(), y = segments.front()->getY();
 

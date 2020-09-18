@@ -1,4 +1,4 @@
-#include "Wall.h"
+﻿#include "Wall.h"
 
 Wall::Wall(int x, int y) : Object(x, y) { 
 	_point = 0; 
@@ -7,7 +7,9 @@ Wall::Wall(int x, int y) : Object(x, y) {
 void Wall::paint() {
 	TextColor(ColorCode_DarkCyan);
 	gotoXY(_x, _y);
-	std::wcout << char(178);
+
+
+	wprintf(L"▩");
 }
 
 int Wall::getPoint() { 

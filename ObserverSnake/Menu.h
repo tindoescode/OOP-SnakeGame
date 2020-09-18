@@ -23,7 +23,7 @@ enum class Status {
 
 class Menu {
 public:
-	Menu(const std::vector<std::string> items, std::function<void(unsigned int listitem)> onItemSelected);
+	Menu(const std::vector<std::wstring> items, std::function<void(unsigned int listitem)> onItemSelected);
 	~Menu();
 
 	void Draw();
@@ -36,7 +36,7 @@ protected:
 	// Called when item selected
 	std::function<void(unsigned int listitem)> OnItemSelected;
 
-	std::vector<std::string> _items;
+	std::vector<std::wstring> _items;
 
 	int _selectedItem;
 	int* color;

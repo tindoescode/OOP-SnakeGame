@@ -22,7 +22,12 @@ void SceneShop::SwitchTo(std::string mapName)
 void SceneShop::OnCreate()
 {
 	mainMenu = new Menu(
-		{ "10 Score: Snake's Color is Red", "20 Score: Snake's Color is Blue", "30 Score: Snake's Color is Cyan", "20 Score: Snake's Speed x2","20 Score: Snake's Speed x3","Back to ChooseMapMenu" },
+		{ L"10 Score: Snake's Color is Red", 
+		L"20 Score: Snake's Color is Blue", 
+		L"30 Score: Snake's Color is Cyan", 
+		L"20 Score: Snake's Speed x2",
+		L"20 Score: Snake's Speed x3",
+		L"Back to ChooseMapMenu" },
 		std::bind(
 			[](unsigned int listitem, Scene* scene) {
 				switch (listitem) {

@@ -7,7 +7,7 @@ Fruit::Fruit(int x, int y) : Object(x, y) {
 void Fruit::paint() {
 	TextColor(ColorCode_Red);
 	gotoXY(_x, _y);
-	std::cout << '#';
+	std::wcout << L'#';
 }
 
 int Fruit::getPoint() { 
