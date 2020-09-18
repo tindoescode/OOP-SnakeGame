@@ -5,11 +5,10 @@ Wall::Wall(int x, int y) : Object(x, y) {
 }
 
 void Wall::paint() {
-	TextColor(ColorCode_DarkCyan);
+	TextColor(ColorCode_Grey);
 	gotoXY(_x, _y);
 
-
-	wprintf(L"▩");
+	std::wcout << 'H';
 }
 
 int Wall::getPoint() { 

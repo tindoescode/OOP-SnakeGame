@@ -3,8 +3,9 @@
 #include <iostream>
 #include <ctime>
 #include <conio.h>
-#include <fcntl.h>
+
 #include <io.h>
+#include <fcntl.h>
 
 int main() {
 	//TODO: Make creatory factory for each object
