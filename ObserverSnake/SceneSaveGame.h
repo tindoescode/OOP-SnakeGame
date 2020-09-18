@@ -6,9 +6,6 @@
 class Object;
 class SeceneGame;
 
-
-static int NumOfSaves = 0;
-
 class SceneSaveGame :
 	public Scene
 {
@@ -16,7 +13,7 @@ class SceneSaveGame :
 	friend class ScenePause;
 public:
 	SceneSaveGame(SceneStateMachine& sceneStateMachine);
-	void SetSaveScene(std::shared_ptr<Scene>& prev);
+	void SetSaveGameScene(std::shared_ptr<Scene>& prev);
 	// Called when scene initially created. Called once.
 	virtual void OnCreate();
 
@@ -31,9 +28,8 @@ public:
 
 private:
 	// We want to go back to pauseScene after saving data
-	std::shared_ptr<SceneGame> _saveScene;
 	SceneStateMachine& _sceneStateMachine;
 	std::unordered_map<std::string, std::shared_ptr<Scene>> _stateInf;
 	
-	
+	std::shared_ptr<SceneGame> _currentGameScene;
 };

@@ -34,7 +34,7 @@ public:
 	// The below functions can be overridden as necessary in our scenes.
 	virtual void ProcessInput() override;
 
-	void setSaveGame(std::shared_ptr<SceneSaveGame> SaveGame) { SaveScene = SaveGame; }
+	void setSaveGameScene(std::shared_ptr<SceneSaveGame> currentGameScene) { _currentGameScene = currentGameScene; }
 
 private:
 	Menu* pauseMenu;
@@ -43,6 +43,6 @@ private:
 	SceneStateMachine& _sceneStateMachine;
 	std::unordered_map<std::string, unsigned int> _stateInf;
 
-	std::shared_ptr<SceneSaveGame> SaveScene;
+	std::shared_ptr<SceneSaveGame> _currentGameScene;
 };
 

@@ -51,8 +51,12 @@ void ScenePause::OnCreate()
 					saveGameScene->SetSwitchToScene({ 
 						{ "ContinueScene", continueScene } 
 					});
-					_this->setSaveGame(saveGameScene);
-					_this->SaveScene->SetSaveScene(continueScene);
+
+					//_this->_currentGameScene = saveGameScene;
+					//_this->_currentGameScene->SetSaveGameScene(continueScene);
+
+					saveGameScene->SetSaveGameScene(continueScene);
+
 					_this->SwitchTo(saveGameScene);
 					break;
 				}
