@@ -55,6 +55,9 @@ private:
 	int _height;
 	std::string _mapPath;
 
+	// Position of the map on console screen
+	COORD _position;
+
 	// Map objects
 	std::vector<Object*> objects;
 
@@ -74,7 +77,9 @@ private:
 	// Set block occupied
 	void setOccupiedBlock(int x, int y, unsigned int occupied = 1);
 
+	// Some drawing
 	void drawBorder();
+	
 public:
 	SceneGame(std::string mapPath, SceneStateMachine& sceneStateMachine);
 	
@@ -98,7 +103,6 @@ public:
 	// Addition functions
 	COORD getFreeBlock();
 	Object* addObject(ObjectType type, int x, int y);
-
 	void loadMap(std::string path, Snake*& snake);
 
 	bool isOccupied(int x, int y);

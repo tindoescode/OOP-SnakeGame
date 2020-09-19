@@ -106,17 +106,17 @@ void Snake::move() {
 	}
 	
 	// if _snake get over border
-	if (x == _board->_width) {
-		x = 1;
+	if (x == _board->_position.X + _board->_width) {
+		x = _board->_position.X + 1;
 	}
-	else if (x == 0) {
-		x = _board->_width - 1;
+	else if (x == _board->_position.X) {
+		x = _board->_position.X + _board->_width - 1;
 	}
-	else if (y == _board->_height) {
-		y = 1;
+	else if (y == _board->_position.Y + _board->_height) {
+		y = _board->_position.Y + 1;
 	}
-	else if (y == 0) {
-		y = _board->_height - 1;
+	else if (y == _board->_position.Y) {
+		y = _board->_position.Y + _board->_height - 1;
 	}
 
 	// Add new head object

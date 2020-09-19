@@ -49,7 +49,7 @@ void Menu::Update(Status key) {
 	switch (key)
 	{
 	case Status::up: {
-		_selectedItem = (_selectedItem == 0) ? _items.size() - 1 : _selectedItem - 1;
+		_selectedItem = (_selectedItem == 0) ? unsigned int (_items.size() - 1) : unsigned int(_selectedItem - 1);
 
 		break;
 	}
@@ -62,7 +62,7 @@ void Menu::Update(Status key) {
 
 	case Status::enter: {
 		gotoXY(0, _selectedItem + 10);
-		TextColor(ColorCode_Back);
+		TextColor(ColorCode_Black);
 
 		//cls khong clear dc mau nen` 
 		std::wcout << L"\t\t\t\t\t\t\t\t\t\t";

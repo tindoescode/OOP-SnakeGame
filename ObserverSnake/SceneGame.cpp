@@ -32,15 +32,15 @@ void SceneGame::drawBorder() {
 	x = 0, y = 0;
 
 	while (x <= _width) {
-		gotoXY(x, y);
+		gotoXY(_position.X + x, _position.Y + y);
 		std::cout << char(205);
 		x++;
 	}
 
 	//draw line at the bottom of program
-	x = 0, y = 30;
+	x = 0, y = _height;
 	while (x <= _width) {
-		gotoXY(x, y);
+		gotoXY(_position.X + x, _position.Y + y);
 		std::cout << char(205);
 		x++;
 	}
@@ -48,33 +48,33 @@ void SceneGame::drawBorder() {
 	//draw line at the left of program
 	x = 0, y = 0;
 	while (y <= _height) {
-		gotoXY(x, y);
+		gotoXY(_position.X + x, _position.Y + y);
 		std::cout << char(186);
 		y++;
 	}
 
 	//draw line at the right of program
-	x = 100, y = 0;
+	x = _width, y = 0;
 	while (y <= _height) {
-		gotoXY(x, y);
+		gotoXY(_position.X + x, _position.Y + y);
 		std::cout << char(186);
 		y++;
 	}
 
 	// top left
-	gotoXY(0, 0);
+	gotoXY(_position.X + 0, _position.Y + 0);
 	std::cout << char(201);
 
 	// top right
-	gotoXY(_width, 0);
+	gotoXY(_position.X + _width, _position.Y + 0);
 	std::cout << char(187);
 
 	// bottom left
-	gotoXY(0, _height);
+	gotoXY(_position.X, _position.Y + _height);
 	std::cout << char(200);
 
 	// bottom right
-	gotoXY(_width, _height);
+	gotoXY(_position.X + _width, _position.Y + _height);
 	std::cout << char(188);
 
 }
@@ -94,26 +94,29 @@ void SceneGame::loadMap(std::string path, Snake*& snake) {
 	}
 
 	std::string line;
-	int h = 0;
+	int height = 0;
+	int maxWidth = 0;
+
 	while (std::getline(f, line))
 	{
+		if (maxWidth < line.length()) maxWidth = unsigned int (line.length());
 		for (int i = 0; i < line.length(); i++)
 		{
 			if (line[i] == 'i') // wall
 			{
-				addObject(ObjectType::wall, i, h);
+				addObject(ObjectType::wall, _position.X + i, _position.Y + height);
 			}
 			else if (line[i] == '>') // start
 			{
-				snake = dynamic_cast<Snake*>(addObject(ObjectType::snake, i, h));
+				snake = dynamic_cast<Snake*>(addObject(ObjectType::snake, _position.X + i, _position.Y + height));
 			}
 		}
-		h++;
+		height++;
 	}
 
 	// set width, height
-	_width = 100;
-	_height = 30;
+	_width = maxWidth;
+	_height = height;
 
 	try {
 		if (!snake) throw NoSnakeException();
@@ -172,7 +175,7 @@ void SceneGame::setOccupiedBlock(int x, int y, unsigned int occupied)
 
 SceneGame::SceneGame(std::string mapPath, SceneStateMachine& sceneStateMachine)
 	: Scene(), _mapPath(mapPath), _width(100), _height(30), _snake(nullptr), _fruit(nullptr), _sceneStateMachine(sceneStateMachine),
-	_pauseScene(0)
+	_pauseScene(0), _position({10, 5})
 {
 	Nocursortype();
 }
