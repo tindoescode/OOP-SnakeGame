@@ -32,7 +32,7 @@ void SceneGame::drawBorder() {
 	x = 0, y = 0;
 
 	while (x <= _width) {
-		gotoXY(_position.X + x, _position.Y + y);
+		gotoXY(_position.X + x, _position.Y + y - 1);
 		std::cout << char(205);
 		x++;
 	}
@@ -40,7 +40,7 @@ void SceneGame::drawBorder() {
 	//draw line at the bottom of program
 	x = 0, y = _height;
 	while (x <= _width) {
-		gotoXY(_position.X + x, _position.Y + y);
+		gotoXY(_position.X + x, _position.Y + y + 1);
 		std::cout << char(205);
 		x++;
 	}
@@ -48,7 +48,7 @@ void SceneGame::drawBorder() {
 	//draw line at the left of program
 	x = 0, y = 0;
 	while (y <= _height) {
-		gotoXY(_position.X + x, _position.Y + y);
+		gotoXY(_position.X + x - 1, _position.Y + y);
 		std::cout << char(186);
 		y++;
 	}
@@ -56,25 +56,25 @@ void SceneGame::drawBorder() {
 	//draw line at the right of program
 	x = _width, y = 0;
 	while (y <= _height) {
-		gotoXY(_position.X + x, _position.Y + y);
+		gotoXY(_position.X + x + 1, _position.Y + y);
 		std::cout << char(186);
 		y++;
 	}
 
 	// top left
-	gotoXY(_position.X + 0, _position.Y + 0);
+	gotoXY(_position.X - 1, _position.Y - 1);
 	std::cout << char(201);
 
 	// top right
-	gotoXY(_position.X + _width, _position.Y + 0);
+	gotoXY(_position.X + _width + 1, _position.Y - 1);
 	std::cout << char(187);
 
 	// bottom left
-	gotoXY(_position.X, _position.Y + _height);
+	gotoXY(_position.X - 1, _position.Y + _height + 1);
 	std::cout << char(200);
 
 	// bottom right
-	gotoXY(_position.X + _width, _position.Y + _height);
+	gotoXY(_position.X + _width + 1, _position.Y + _height + 1);
 	std::cout << char(188);
 
 }
@@ -116,7 +116,7 @@ void SceneGame::loadMap(std::string path, Snake*& snake) {
 
 	// set width, height
 	_width = maxWidth;
-	_height = height;
+	_height = height - 1;
 
 	try {
 		if (!snake) throw NoSnakeException();
@@ -280,8 +280,8 @@ void SceneGame::LateUpdate()
 COORD SceneGame::getFreeBlock() {
 	short X, Y;
 	do {
-		X = 1 + rand() % (_width - 1);
-		Y = 1 + rand() % (_height - 1);
+		X = _position.X + 1 + rand() % (_width - 1);
+		Y = _position.Y + 1 + rand() % (_height - 1);
 	} while (freeBlock[X * MAX_X + Y] == 1);
 
 	return { X, Y };
