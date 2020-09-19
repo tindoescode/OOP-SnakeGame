@@ -1,6 +1,7 @@
 #include "Snake.h"
 #include "SceneGame.h"
 #include "Wall.h"
+#include "Gate.h"
 
 Snake::Snake(int x, int y, SceneGame* board) : Object(x, y) {
 	_direction = Direction::idle;
@@ -19,6 +20,14 @@ void Snake::setDead() {
 	_dead = true; 
 }
 
+bool Snake::gateCollision() {
+	for (auto i : _board->objects) {
+		if (dynamic_cast<Gate*>(i)) {
+			if (i->getX() == _x && i->getY() == _y) return true;
+		}
+	}
+	return false;
+}
 bool Snake::bodyCollision() {
 	for (auto i = segments.begin() + 1; i != segments.end(); i++)
 	{
@@ -56,11 +65,6 @@ void Snake::eatFruit(Fruit* destinateFruit) {
 	// The size is automatically add on the next move.
 	auto object = dynamic_cast<SnakeSegment*>(_board->addObject(ObjectType::snake_segment, -1, -1));
 	segments.push_back(object);
-
-	auto [X, Y] = _board->getFreeBlock();
-
-	Fruit* fruit = dynamic_cast<Fruit*>(_board->addObject(ObjectType::fruit, X, Y));
-	fruit->paint();
 }
 
 void Snake::turnHead(Direction direction) {

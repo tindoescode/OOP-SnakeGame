@@ -16,6 +16,9 @@ Object* SceneGame::addObject(ObjectType type, int x, int y) {
 	else if (type == ObjectType::wall) {
 		object = new Wall(x, y);
 	}
+	else if (type == ObjectType::gate) {
+		object = new Gate(x, y);
+	}
 	objects.push_back(object);
 	
 	setOccupiedBlock(x, y);
@@ -110,6 +113,10 @@ void SceneGame::loadMap(std::string path, Snake*& snake) {
 			{
 				snake = dynamic_cast<Snake*>(addObject(ObjectType::snake, _position.X + i, _position.Y + height));
 			}
+			else if (line[i] == 'G') //gate
+			{
+				_gate = dynamic_cast<Gate*>(addObject(ObjectType::gate, _position.X + i, _position.Y + height));
+			}
 		}
 		height++;
 	}
@@ -173,12 +180,18 @@ void SceneGame::setOccupiedBlock(int x, int y, unsigned int occupied)
  	freeBlock.set(y * MAX_X + x, occupied);
 }
 
-SceneGame::SceneGame(std::string mapPath, SceneStateMachine& sceneStateMachine)
-	: Scene(), _mapPath(mapPath), _width(100), _height(30), _snake(nullptr), _fruit(nullptr), _sceneStateMachine(sceneStateMachine),
-	_pauseScene(0), _position({10, 5})
+//SceneGame::SceneGame(std::string mapPath, SceneStateMachine& sceneStateMachine)
+//	: Scene(), _mapPath(mapPath), _width(100), _height(30), _snake(nullptr), _fruit(nullptr), _sceneStateMachine(sceneStateMachine),
+//	_pauseScene(0), _position({10, 5}), _currentRound(1)
+//{
+//	freeBlock.reset();
+//}
+
+SceneGame::SceneGame(std::vector<std::string> maps, SceneStateMachine& sceneStateMachine) : Scene(), _maps(maps), _width(100), _height(30), _snake(nullptr), _fruit(nullptr), _sceneStateMachine(sceneStateMachine),
+_pauseScene(0), _position({ 10, 5 }), _currentRound(1), _gate(nullptr)
 {
-	freeBlock.reset();
-	Nocursortype();
+	freeBlock.reset();	
+	_lastRound = (unsigned int)maps.size();
 }
 
 void SceneGame::OnCreate()
@@ -186,6 +199,7 @@ void SceneGame::OnCreate()
 	objects.clear();
 	freeBlock.reset();
 
+	_mapPath = _maps[_currentRound - 1];
 	// Load map (wall, snake)
 	loadMap(_mapPath, _snake);
 	// Create fruit
@@ -199,10 +213,14 @@ void SceneGame::OnDestroy()
 
 void SceneGame::OnActivate()
 {
+	TextColor(ColorCode_DarkYellow);
+	gotoXY(5, 0);
+	std::cout << "Round " << _currentRound << ", Destination: " << _currentRound * 100 << " points to next round";
+		
 	drawBorder();
 
 	for (auto i : objects) {
-		i->paint();
+		if(!dynamic_cast<Gate*>(i)) i->paint();
 	}
 }
 
@@ -239,32 +257,53 @@ void SceneGame::Update()
 void SceneGame::LateUpdate()
 {
 	//show current score
-	_sceneStateMachine.player->showCurrentScore(_sceneStateMachine.curSceneID);
+	_sceneStateMachine.player->showCurrentScore();
 
 	Fruit* destinateFruit = nullptr;
 
 	// Handle collision
 	if (isOccupied(_snake->getX(), _snake->getY())) {
+		if (_snake->gateCollision() && _sceneStateMachine.player->getTotalScore() >= _currentRound * 100) {
+			// get to next round
+			gotoXY(0, 0);
+			TextColor(ColorCode_Cyan);
+			std::cout << "Get to next round!!!";
+		}
 		if (_snake->bodyCollision()) {
 			_snake->setDead();
 
 			//get current score to calculate total score and reset current score = 0 if snake die
-			_sceneStateMachine.player->saveScore(_sceneStateMachine.curSceneID);
-			_sceneStateMachine.player->resetScore(_sceneStateMachine.curSceneID);
+			_sceneStateMachine.player->saveScore();
+			_sceneStateMachine.player->resetScore();
 		}
 		else if (_snake->wallCollision()) {
 			_snake->setDead();
 
 			//get current score to calculate total score and reset current score = 0 if snake die
-			_sceneStateMachine.player->saveScore(_sceneStateMachine.curSceneID);
-			_sceneStateMachine.player->resetScore(_sceneStateMachine.curSceneID);
+			_sceneStateMachine.player->saveScore();
+			_sceneStateMachine.player->resetScore();
 		}
 		else if (destinateFruit = _snake->matchFruit()) {
+			// Remove that fruit and plus one more snake segment
 			_snake->eatFruit(destinateFruit);
-			_fruit = dynamic_cast<Fruit*>(objects[objects.size() - 1]);
 
 			//plus 1 score if snake eat fruit
-			_sceneStateMachine.player->addScore(_sceneStateMachine.curSceneID);
+			_sceneStateMachine.player->addScore();
+
+			// Generate a new fruit or a gate when it gets enough points
+			if (_sceneStateMachine.player->getTotalScore() >= _currentRound * 100) {
+				// Add a gate instead
+
+				_gate->paint();
+			}
+			else {
+				// Add a fruit
+				auto [X, Y] = getFreeBlock();
+
+				_fruit = dynamic_cast<Fruit*>(addObject(ObjectType::fruit, X, Y));
+				_fruit->paint();
+			}
+
 		}
 	}
 

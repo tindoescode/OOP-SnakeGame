@@ -69,7 +69,7 @@ void SceneStateMachine::Remove(unsigned int id)
 
 void SceneStateMachine::SwitchTo(unsigned int id)
 {
-	player->resetScore(curSceneID);
+	player->resetScore();
     auto it = scenes.find(id);
     if (it != scenes.end())
     {

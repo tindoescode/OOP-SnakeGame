@@ -1,33 +1,30 @@
 #include"Player.h"
 
 Player::Player() {
-	for (int i = 0; i < 4; i++) {
-		currentScore[i] = 0;
-		totalScore[i] = 0;
-	}
+	currentScore = 0;
+	totalScore = 0;
 }
-void Player::resetScore(int i) {
-	if (i >= 4)	return;
-	currentScore[i] = 0;
+void Player::resetScore() {
+	currentScore = 0;
 }
-void Player::addScore(int i) {
-	currentScore[i]++;
-	totalScore[i]++;
+void Player::addScore() {
+	currentScore += 10;
+	totalScore += 10;
 }
-int Player::getCurrentScore(int i) {
-	return currentScore[i];
+unsigned int Player::getCurrentScore() {
+	return currentScore;
 }
-int Player::getTotalScore(int i) {
-	return totalScore[i];
+unsigned int Player::getTotalScore() {
+	return totalScore;
 }
 
-void Player::saveScore(int i) {
-	totalScore[i] += currentScore[i];
+void Player::saveScore() {
+	totalScore += currentScore;
 }
 
-void Player::showCurrentScore(int i) {
+void Player::showCurrentScore() {
 	gotoXY(103, 3);
-	std::wcout << "Total Score: " << totalScore[i];
+	std::wcout << "Total Score: " << totalScore;
 	gotoXY(103, 4);
-	std::wcout << "Your Score: " << currentScore[i];
+	std::wcout << "Your Score: " << currentScore;
 }

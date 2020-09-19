@@ -10,6 +10,7 @@
 #include "Snake.h"
 #include "Fruit.h"
 #include "Wall.h"
+#include "Gate.h"
 
 #include "SceneStateMachine.h"
 #include "Scene.h"
@@ -32,7 +33,8 @@ enum class ObjectType {
 	snake,
 	snake_segment,
 	wall,
-	fruit
+	fruit,
+	gate
 };
 
 enum {
@@ -63,6 +65,7 @@ private:
 
 	Snake* _snake;
 	Fruit* _fruit;
+	Gate* _gate;
 
 	// State switching
 	std::unordered_map<std::string, unsigned int> _stateInf;
@@ -82,6 +85,7 @@ private:
 	
 public:
 	SceneGame(std::string mapPath, SceneStateMachine& sceneStateMachine);
+	SceneGame(std::vector<std::string> maps, SceneStateMachine& sceneStateMachine);
 	
 	// Scene switching
 	void SetSwitchToScene(std::unordered_map<std::string, unsigned int> stateInf);

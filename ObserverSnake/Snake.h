@@ -27,6 +27,7 @@ public:
 
 	void setPos(int x, int y);
 	void setDead();
+	bool gateCollision();
 	bool bodyCollision();
 	Fruit* matchFruit();
 	Wall* wallCollision();
