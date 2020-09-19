@@ -177,6 +177,7 @@ SceneGame::SceneGame(std::string mapPath, SceneStateMachine& sceneStateMachine)
 	: Scene(), _mapPath(mapPath), _width(100), _height(30), _snake(nullptr), _fruit(nullptr), _sceneStateMachine(sceneStateMachine),
 	_pauseScene(0), _position({10, 5})
 {
+	freeBlock.reset();
 	Nocursortype();
 }
 
@@ -272,7 +273,6 @@ void SceneGame::LateUpdate()
 
 	if (_snake->isdead()) {
 		OnCreate();
-		OnActivate();
 		SwitchTo("SceneGameOver"); // o day no can Id, de t xem lam sao kiem Id cho no
 	}
 }
@@ -280,9 +280,12 @@ void SceneGame::LateUpdate()
 COORD SceneGame::getFreeBlock() {
 	short X, Y;
 	do {
-		X = _position.X + 1 + rand() % (_width - 1);
-		Y = _position.Y + 1 + rand() % (_height - 1);
-	} while (freeBlock[X * MAX_X + Y] == 1);
+		X = _position.X + rand() % (_width);
+		Y = _position.Y + rand() % (_height);
+	} while (freeBlock.test(Y * short(MAX_X) + X));
+
+	gotoXY(0, 0);
+	std::cout << "Debug: Block spawns at " << X << " : " << Y;
 
 	return { X, Y };
 }
