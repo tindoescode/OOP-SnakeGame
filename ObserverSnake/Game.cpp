@@ -92,6 +92,11 @@ Game::Game() : running(true)
 		{ "SceneGameOver", gameOverSceneID},
 		{ "PauseScene", pauseSceneID }
 	});
+
+	gameOverScene->SetSwitchToScene({
+		{ "SceneGame", gameSceneID1}
+	});
+
 	sceneStateMachine.SwitchTo(gameScene1);
 }
 

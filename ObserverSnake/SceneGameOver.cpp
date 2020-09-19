@@ -26,11 +26,11 @@ void SceneGameOver::OnCreate()
 	gameOverMenu = new Menu(
 		{ L"Yes", L"Exit" },
 		std::bind(
-			[](unsigned int listitem, Scene* scene) {
+			[](unsigned int listitem, SceneGameOver* scene) {
 				switch (listitem) {
 				case 0:
 					// Play again, switch to scene choose map
-					dynamic_cast<SceneGameOver*>(scene)->SwitchTo("SceneChooseMap");  // roi bay gio t truyen SceneChooseMap voi Id cua no vao
+					scene->SwitchTo("SceneGame");  // roi bay gio t truyen SceneChooseMap voi Id cua no vao
 					//SwitchTo cua sceneStateMachine nhan Id hoac nhan tham chieu cua scene can chuyen
 
 					break;
@@ -39,12 +39,8 @@ void SceneGameOver::OnCreate()
 					exit(false);
 					break;
 				}
-
-				//TextColor(ColorCode_White);
-				//gotoXY(0, 0);
-				//std::cout << "Select item: " << listitem << std::endl;
 			},
-			std::placeholders::_1, (Scene*)this
+			std::placeholders::_1, this
 		)
 	);
 }

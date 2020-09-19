@@ -1,6 +1,7 @@
 #pragma once
 #include <deque>
 #include "SnakeSegment.h"
+#include "Gate.h"
 
 class SceneGame;
 class Fruit;
@@ -27,13 +28,20 @@ public:
 
 	void setPos(int x, int y);
 	void setDead();
-	bool gateCollision();
+
+	GateCollisionType gateCollision(unsigned int score);
 	bool bodyCollision();
 	Fruit* matchFruit();
 	Wall* wallCollision();
+
 	void eatFruit(Fruit* destinateFruit);
 	void turnHead(Direction direction);
+
 	void move();
+	
+	// Enlonger n segments
+	void enlonger(int n);
+
 	void paint();
 	bool isdead();
 };

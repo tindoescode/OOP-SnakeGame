@@ -2,6 +2,8 @@
 
 Gate::Gate(int x, int y) : Object(x, y) {
 	_point = 0;
+	_width = 3;
+	_height = 3;
 }
 
 void Gate::paint() {

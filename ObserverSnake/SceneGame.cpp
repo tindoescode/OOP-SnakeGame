@@ -21,7 +21,12 @@ Object* SceneGame::addObject(ObjectType type, int x, int y) {
 	}
 	objects.push_back(object);
 	
-	setOccupiedBlock(x, y);
+	// Set coordinate occupied
+	for (int i = 0; i < object->getWidth(); i++) {
+		for (int j = 0; j < object->getHeight(); j++) {
+			setOccupiedBlock(x + i, y + j);
+		}
+	}
 
 	return object;
 }
@@ -263,20 +268,29 @@ void SceneGame::LateUpdate()
 
 	// Handle collision
 	if (isOccupied(_snake->getX(), _snake->getY())) {
-		if (_snake->gateCollision() && _sceneStateMachine.player->getTotalScore() >= _currentRound * 100) {
-			// get to next round
-			gotoXY(0, 0);
-			TextColor(ColorCode_Cyan);
-			std::cout << "Get to next round!!!";
-		}
-		if (_snake->bodyCollision()) {
-			_snake->setDead();
+		const unsigned int score = _sceneStateMachine.player->getCurrentScore();
 
-			//get current score to calculate total score and reset current score = 0 if snake die
-			_sceneStateMachine.player->saveScore();
-			_sceneStateMachine.player->resetScore();
+		if (_snake->gateCollision(score) == GateCollisionType::door) {
+			// get to next round
+			_currentRound++;
+
+			if (_currentRound > _lastRound) {
+				gotoXY(0, 0);
+				std::cout << "Chuc mung, ve nuoc.";
+				Sleep(10000);
+
+				// Luu vao bang xep hang cac kieu
+
+				exit(0);
+			}
+			clrscr();
+			OnCreate();
+			OnActivate();
+			
+			const int plusSize = _sceneStateMachine.player->getCurrentScore() / 10;
+			_snake->enlonger(plusSize);
 		}
-		else if (_snake->wallCollision()) {
+		if (_snake->bodyCollision() || _snake->wallCollision() || _snake->gateCollision(score) == GateCollisionType::border) {
 			_snake->setDead();
 
 			//get current score to calculate total score and reset current score = 0 if snake die
@@ -313,6 +327,7 @@ void SceneGame::LateUpdate()
 	Sleep(100);
 
 	if (_snake->isdead()) {
+		_currentRound = 1;
 		OnCreate();
 		SwitchTo("SceneGameOver"); // o day no can Id, de t xem lam sao kiem Id cho no
 	}

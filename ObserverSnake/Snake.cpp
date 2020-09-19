@@ -19,14 +19,16 @@ void Snake::setPos(int x, int y) {
 void Snake::setDead() { 
 	_dead = true; 
 }
-
-bool Snake::gateCollision() {
+GateCollisionType Snake::gateCollision(unsigned int score) {
+	if (score < _board->_currentRound * 100) return GateCollisionType::none;
 	for (auto i : _board->objects) {
 		if (dynamic_cast<Gate*>(i)) {
-			if (i->getX() == _x && i->getY() == _y) return true;
+			if ((i->getX() <= _x && i->getX() + 2 >= _x) && i->getY() - 1 == _y) return GateCollisionType::border; // top
+			if ((i->getX() <= _x && i->getX() + 2 >= _x) && i->getY() + 1 == _y) return GateCollisionType::border; // bottom
+			if (i->getX() == _x && i->getY() == _y) return GateCollisionType::door;
 		}
 	}
-	return false;
+	return GateCollisionType::none;
 }
 bool Snake::bodyCollision() {
 	for (auto i = segments.begin() + 1; i != segments.end(); i++)
@@ -136,6 +138,14 @@ void Snake::move() {
 	
 	_board->deleteSnakeSegment(x, y);
 	segments.pop_back();
+}
+
+void Snake::enlonger(int n)
+{
+	for (int i = 0; i < n; i++) {
+		auto object = dynamic_cast<SnakeSegment*>(_board->addObject(ObjectType::snake_segment, -1, -1));
+		segments.push_back(object);
+	}
 }
 
 void Snake::paint() {
