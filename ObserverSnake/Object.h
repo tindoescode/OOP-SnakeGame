@@ -23,5 +23,8 @@ public:
 	void setPos(int x, int y);
 
 	virtual void paint() = 0;
+
+	// use by snake to boost progress
+	virtual void operate() {};
 };
 

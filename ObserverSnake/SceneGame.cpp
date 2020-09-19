@@ -1,23 +1,23 @@
 #include "SceneGame.h"
 #include "ScenePause.h"
 
-Object* SceneGame::addObject(ObjectType type, int x, int y) {
-	Object* object;
+std::shared_ptr<Object> SceneGame::addObject(ObjectType type, int x, int y) {
+	std::shared_ptr<Object> object;
 
 	if (type == ObjectType::snake) {
-		object = new Snake(x, y, this); // pass scene game so snake can interact with scene game's objects
+		object = std::make_shared<Snake>(x, y, shared_from_this()); // pass scene game so snake can interact with scene game's objects
 	}
 	else if (type == ObjectType::snake_segment) {
-		object = new SnakeSegment(x, y);
+		object = std::make_shared<SnakeSegment>(x, y);
 	}
 	else if (type == ObjectType::fruit) {
-		object = new Fruit(x, y);
+		object = std::make_shared<Fruit>(x, y);
 	}
 	else if (type == ObjectType::wall) {
-		object = new Wall(x, y);
+		object = std::make_shared<Wall>(x, y);
 	}
 	else if (type == ObjectType::gate) {
-		object = new Gate(x, y);
+		object = std::make_shared<Gate>(x, y);
 	}
 	objects.push_back(object);
 	
@@ -87,10 +87,10 @@ void SceneGame::drawBorder() {
 
 }
 
-void SceneGame::loadMap(std::string path, Snake*& snake) {
+void SceneGame::loadMap() {
 	std::ifstream f;
 
-	f.open(path, std::ios::in);
+	f.open(_mapPath, std::ios::in);
 
 	//TODO: make it library
 	try {
@@ -116,11 +116,11 @@ void SceneGame::loadMap(std::string path, Snake*& snake) {
 			}
 			else if (line[i] == '>') // start
 			{
-				snake = dynamic_cast<Snake*>(addObject(ObjectType::snake, _position.X + i, _position.Y + height));
+				_snake = std::dynamic_pointer_cast<Snake>(addObject(ObjectType::snake, _position.X + i, _position.Y + height));
 			}
 			else if (line[i] == 'G') //gate
 			{
-				_gate = dynamic_cast<Gate*>(addObject(ObjectType::gate, _position.X + i, _position.Y + height));
+				_gate = std::dynamic_pointer_cast<Gate>(addObject(ObjectType::gate, _position.X + i, _position.Y + height));
 			}
 		}
 		height++;
@@ -131,7 +131,7 @@ void SceneGame::loadMap(std::string path, Snake*& snake) {
 	_height = height - 1;
 
 	try {
-		if (!snake) throw NoSnakeException();
+		if (!_snake) throw NoSnakeException();
 	}
 	catch (std::exception& ex) {
 		system("cls");
@@ -147,8 +147,7 @@ bool SceneGame::isOccupied(int x, int y) {
 
 void SceneGame::deleteSnakeSegment(int x, int y) {
 	for (auto i = objects.begin(); i != objects.end(); i++) {
-		if ((*i)->getX() == x && (*i)->getY() == y && dynamic_cast<SnakeSegment*>(*i)) {
-			delete* i;
+		if ((*i)->getX() == x && (*i)->getY() == y && std::dynamic_pointer_cast<SnakeSegment>(*i)) {
 			objects.erase(i);
 			setOccupiedBlock(x, y, 0);
 			break;
@@ -158,8 +157,7 @@ void SceneGame::deleteSnakeSegment(int x, int y) {
 
 void SceneGame::deleteFruit(int x, int y) {
 	for (auto i = objects.begin(); i != objects.end(); i++) {
-		if ((*i)->getX() == x && (*i)->getY() == y && dynamic_cast<Fruit*>(*i)) {
-			delete* i;
+		if ((*i)->getX() == x && (*i)->getY() == y && std::dynamic_pointer_cast<Fruit>(*i)) {
 			objects.erase(i);			
 			setOccupiedBlock(x, y, 0);
 			break;
@@ -185,13 +183,6 @@ void SceneGame::setOccupiedBlock(int x, int y, unsigned int occupied)
  	freeBlock.set(y * MAX_X + x, occupied);
 }
 
-//SceneGame::SceneGame(std::string mapPath, SceneStateMachine& sceneStateMachine)
-//	: Scene(), _mapPath(mapPath), _width(100), _height(30), _snake(nullptr), _fruit(nullptr), _sceneStateMachine(sceneStateMachine),
-//	_pauseScene(0), _position({10, 5}), _currentRound(1)
-//{
-//	freeBlock.reset();
-//}
-
 SceneGame::SceneGame(std::vector<std::string> maps, SceneStateMachine& sceneStateMachine) : Scene(), _maps(maps), _width(100), _height(30), _snake(nullptr), _fruit(nullptr), _sceneStateMachine(sceneStateMachine),
 _pauseScene(0), _position({ 10, 5 }), _currentRound(1), _gate(nullptr)
 {
@@ -205,11 +196,13 @@ void SceneGame::OnCreate()
 	freeBlock.reset();
 
 	_mapPath = _maps[_currentRound - 1];
+
 	// Load map (wall, snake)
-	loadMap(_mapPath, _snake);
+	loadMap();
+
 	// Create fruit
 	auto [X, Y] = getFreeBlock();
-	_fruit = dynamic_cast<Fruit*>(addObject(ObjectType::fruit, X, Y));
+	_fruit = std::dynamic_pointer_cast<Fruit>(addObject(ObjectType::fruit, X, Y));
 }
 
 void SceneGame::OnDestroy()
@@ -225,7 +218,7 @@ void SceneGame::OnActivate()
 	drawBorder();
 
 	for (auto i : objects) {
-		if(!dynamic_cast<Gate*>(i)) i->paint();
+		if(!std::dynamic_pointer_cast<Gate>(i)) i->paint();
 	}
 }
 
@@ -264,7 +257,8 @@ void SceneGame::LateUpdate()
 	//show current score
 	_sceneStateMachine.player->showCurrentScore();
 
-	Fruit* destinateFruit = nullptr;
+	std::shared_ptr<Fruit> destinateFruit = nullptr;
+	std::shared_ptr<Gift> destinateGift;
 
 	// Handle collision
 	if (isOccupied(_snake->getX(), _snake->getY())) {
@@ -290,14 +284,14 @@ void SceneGame::LateUpdate()
 			const int plusSize = _sceneStateMachine.player->getCurrentScore() / 10;
 			_snake->enlonger(plusSize);
 		}
-		if (_snake->bodyCollision() || _snake->wallCollision() || _snake->gateCollision(score) == GateCollisionType::border) {
+		else if (_snake->bodyCollision() || _snake->wallCollision() || _snake->gateCollision(score) == GateCollisionType::border) {
 			_snake->setDead();
 
 			//get current score to calculate total score and reset current score = 0 if snake die
 			_sceneStateMachine.player->saveScore();
 			_sceneStateMachine.player->resetScore();
 		}
-		else if (destinateFruit = _snake->matchFruit()) {
+		else if (destinateFruit = _snake->fruitCollision()) {
 			// Remove that fruit and plus one more snake segment
 			_snake->eatFruit(destinateFruit);
 
@@ -314,17 +308,30 @@ void SceneGame::LateUpdate()
 				// Add a fruit
 				auto [X, Y] = getFreeBlock();
 
-				_fruit = dynamic_cast<Fruit*>(addObject(ObjectType::fruit, X, Y));
+				_fruit = std::dynamic_pointer_cast<Fruit>(addObject(ObjectType::fruit, X, Y));
 				_fruit->paint();
 			}
 
+		}
+		else if (destinateGift = _snake->giftCollision()) {
+			gotoXY(0, 0);
+			TextColor(ColorCode_Cyan);
+
+			
+			int i = 0;
+			if (_snake->getItem(destinateGift)) {
+				std::cout << "Got a gift";
+			}
+			else {
+				std::cout << "You don't have any free slot to get gift.";
+			}
 		}
 	}
 
 	_snake->paint();
 
 	// Time for the next move
-	Sleep(100);
+	Sleep(150);
 
 	if (_snake->isdead()) {
 		_currentRound = 1;
@@ -338,10 +345,7 @@ COORD SceneGame::getFreeBlock() {
 	do {
 		X = _position.X + rand() % (_width);
 		Y = _position.Y + rand() % (_height);
-	} while (freeBlock.test(MAX_X * Y + X));
-
-	//gotoXY(0, 0);
-	//std::cout << "Debug: Block spawns at " << X << " : " << Y;
+	} while (freeBlock.test((short)MAX_X * Y + X));
 
 	return { X, Y };
 }

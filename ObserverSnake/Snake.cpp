@@ -2,14 +2,15 @@
 #include "SceneGame.h"
 #include "Wall.h"
 #include "Gate.h"
+#include "Gift.h"
 
-Snake::Snake(int x, int y, SceneGame* board) : Object(x, y) {
+Snake::Snake(int x, int y, std::shared_ptr<SceneGame> board) : Object(x, y) {
 	_direction = Direction::idle;
 	_dead = false;
 	_board = board;
 
 	// Initialize with a segment (assume it is snake's head)
-	segments.push_back(dynamic_cast<SnakeSegment*>(_board->addObject(ObjectType::snake_segment, x, y)));
+	segments.push_back(std::dynamic_pointer_cast<SnakeSegment>(_board->addObject(ObjectType::snake_segment, x, y)));
 }
 
 void Snake::setPos(int x, int y) {
@@ -22,7 +23,7 @@ void Snake::setDead() {
 GateCollisionType Snake::gateCollision(unsigned int score) {
 	if (score < _board->_currentRound * 100) return GateCollisionType::none;
 	for (auto i : _board->objects) {
-		if (dynamic_cast<Gate*>(i)) {
+		if (std::dynamic_pointer_cast<Gate>(i)) {
 			if ((i->getX() <= _x && i->getX() + 2 >= _x) && i->getY() - 1 == _y) return GateCollisionType::border; // top
 			if ((i->getX() <= _x && i->getX() + 2 >= _x) && i->getY() + 1 == _y) return GateCollisionType::border; // bottom
 			if (i->getX() == _x && i->getY() == _y) return GateCollisionType::door;
@@ -40,35 +41,58 @@ bool Snake::bodyCollision() {
 	return false;
 }
 
-Fruit* Snake::matchFruit() {
+std::shared_ptr<Fruit> Snake::fruitCollision() {
 	for (auto i : _board->objects) {
-		if (dynamic_cast<Fruit*>(i)) {
-			if (i->getX() == _x && i->getY() == _y) return dynamic_cast<Fruit*>(i);
+		if (std::dynamic_pointer_cast<Fruit>(i)) {
+			if (i->getX() == _x && i->getY() == _y) return std::dynamic_pointer_cast<Fruit>(i);
 		}
 	}
 	return nullptr;
 }
 
-Wall* Snake::wallCollision() {
+std::shared_ptr<Gift> Snake::giftCollision() {
 	for (auto i : _board->objects) {
-		if (dynamic_cast<Wall*>(i)) {
-			if (i->getX() == _x && i->getY() == _y) return dynamic_cast<Wall*>(i);
+		if (std::dynamic_pointer_cast<Gift>(i)) {
+			if (i->getX() == _x && i->getY() == _y) return std::dynamic_pointer_cast<Gift>(i);
 		}
 	}
 	return nullptr;
 }
 
-void Snake::eatFruit(Fruit* destinateFruit) {
+std::shared_ptr<Wall> Snake::wallCollision() {
+	for (auto i : _board->objects) {
+		if (std::dynamic_pointer_cast<Wall>(i)) {
+			if (i->getX() == _x && i->getY() == _y) return std::dynamic_pointer_cast<Wall>(i);
+		}
+	}
+	return nullptr;
+}
+
+void Snake::eatFruit(std::shared_ptr<Fruit> destinateFruit) {
 	const int x = destinateFruit->getX(), y = destinateFruit->getY();
 
 	// Remove fruit
 	_board->deleteFruit(x, y);
 
 	// The size is automatically add on the next move.
-	auto object = dynamic_cast<SnakeSegment*>(_board->addObject(ObjectType::snake_segment, -1, -1));
+	auto object = std::dynamic_pointer_cast<SnakeSegment>(_board->addObject(ObjectType::snake_segment, -1, -1));
 	segments.push_back(object);
 }
 
+bool Snake::getItem(std::shared_ptr<Gift> gift) {
+	int i = 0;
+
+	while (items[i]) {
+		// Can't find a free slot
+		if (i >= ITEM_MAXSLOT) return false;
+		i++;
+	}
+
+	// found a slot
+	if (!items[i]) items[i] = std::make_shared<Item>();
+
+	return true;
+}
 void Snake::turnHead(Direction direction) {
 	if (direction == Direction::down && _direction == Direction::up) {
 		return;
@@ -126,7 +150,7 @@ void Snake::move() {
 	}
 
 	// Add new head object
-	auto object = dynamic_cast<SnakeSegment*>(_board->addObject(ObjectType::snake_segment, x, y));
+	auto object = std::dynamic_pointer_cast<SnakeSegment>(_board->addObject(ObjectType::snake_segment, x, y));
 	segments.push_front(object);
 
 	// Update new head position
@@ -143,7 +167,7 @@ void Snake::move() {
 void Snake::enlonger(int n)
 {
 	for (int i = 0; i < n; i++) {
-		auto object = dynamic_cast<SnakeSegment*>(_board->addObject(ObjectType::snake_segment, -1, -1));
+		auto object = std::dynamic_pointer_cast<SnakeSegment>(_board->addObject(ObjectType::snake_segment, -1, -1));
 		segments.push_back(object);
 	}
 }

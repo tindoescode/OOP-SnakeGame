@@ -2,11 +2,16 @@
 #include <deque>
 #include "SnakeSegment.h"
 #include "Gate.h"
+#include "Item.h"
 
 class SceneGame;
 class Fruit;
 class Wall;
 class SceneSaveGame;
+class Gift;
+
+const int ITEM_MAXSLOT = 3;
+
 enum class Direction {
 	idle = NULL,
 	up = 'w',
@@ -18,23 +23,27 @@ enum class Direction {
 class Snake : public Object {
 	friend class SceneSaveGame;
 private:
-	Direction _direction;
-	std::deque<SnakeSegment*> segments;
 	bool _dead;
-	SceneGame* _board;
 
+	Direction _direction;
+	std::deque<std::shared_ptr<SnakeSegment>> segments;
+	std::shared_ptr<SceneGame> _board;
+	std::shared_ptr<Item> items[ITEM_MAXSLOT];
 public:
-	Snake(int x, int y, SceneGame* board);
+	Snake(int x, int y, std::shared_ptr<SceneGame> board);
 
 	void setPos(int x, int y);
 	void setDead();
 
 	GateCollisionType gateCollision(unsigned int score);
 	bool bodyCollision();
-	Fruit* matchFruit();
-	Wall* wallCollision();
+	
+	std::shared_ptr<Fruit> fruitCollision();
+	std::shared_ptr<Gift> giftCollision();
+	std::shared_ptr<Wall> wallCollision();
 
-	void eatFruit(Fruit* destinateFruit);
+	void eatFruit(std::shared_ptr<Fruit> destinateFruit);
+	bool getItem(std::shared_ptr<Gift> gift);
 	void turnHead(Direction direction);
 
 	void move();

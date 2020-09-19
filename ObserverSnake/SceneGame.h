@@ -42,7 +42,7 @@ enum {
 	MAX_Y = 130
 };
 
-class SceneGame : public Scene {
+class SceneGame : public Scene, public std::enable_shared_from_this<SceneGame> {
 	friend class Snake;
 private:
 	// Game description
@@ -61,11 +61,11 @@ private:
 	COORD _position;
 
 	// Map objects
-	std::vector<Object*> objects;
+	std::vector<std::shared_ptr<Object>> objects;
 
-	Snake* _snake;
-	Fruit* _fruit;
-	Gate* _gate;
+	std::shared_ptr<Snake> _snake;
+	std::shared_ptr<Fruit> _fruit;
+	std::shared_ptr<Gate> _gate;
 
 	// State switching
 	std::unordered_map<std::string, unsigned int> _stateInf;
@@ -106,8 +106,8 @@ public:
 
 	// Addition functions
 	COORD getFreeBlock();
-	Object* addObject(ObjectType type, int x, int y);
-	void loadMap(std::string path, Snake*& snake);
+	std::shared_ptr<Object> addObject(ObjectType type, int x, int y);
+	void loadMap();
 
 	bool isOccupied(int x, int y);
 
@@ -118,8 +118,8 @@ public:
 	int getHeight();
 
 	std::string getMapPath() { return _mapPath; }
-	Fruit* getFruit() { return _fruit; }
-	Snake* getSnake() { return _snake; }
+	std::shared_ptr<Fruit> getFruit() { return _fruit; }
+	std::shared_ptr<Snake> getSnake() { return _snake; }
 
 	void registerPlayer(std::shared_ptr<Player> player, std::shared_ptr<Snake> snake); //TODO: controller for both
 };

@@ -40,6 +40,9 @@
     <Filter Include="Source Files\Utils">
       <UniqueIdentifier>{3d6c7a4f-3a05-4d37-8c3e-5b530ef62465}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Header Files\Items">
+      <UniqueIdentifier>{8abb063b-331b-4576-a77f-c18b0fe59982}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -105,6 +108,12 @@
     <ClCompile Include="Gate.cpp">
       <Filter>Source Files\Objects</Filter>
     </ClCompile>
+    <ClCompile Include="Item.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="Gift.cpp">
+      <Filter>Source Files\Objects</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h">
@@ -165,6 +174,12 @@
       <Filter>Header Files\Scenes</Filter>
     </ClInclude>
     <ClInclude Include="Gate.h">
+      <Filter>Header Files\Objects</Filter>
+    </ClInclude>
+    <ClInclude Include="Item.h">
+      <Filter>Header Files\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="Gift.h">
       <Filter>Header Files\Objects</Filter>
     </ClInclude>
   </ItemGroup>
