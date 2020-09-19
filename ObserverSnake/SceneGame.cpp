@@ -130,7 +130,7 @@ void SceneGame::loadMap(std::string path, Snake*& snake) {
 }
 
 bool SceneGame::isOccupied(int x, int y) {
-	return freeBlock[y * MAX_X + x];
+	return freeBlock.test(y * MAX_X + x);
 }
 
 void SceneGame::deleteSnakeSegment(int x, int y) {
@@ -244,26 +244,28 @@ void SceneGame::LateUpdate()
 	Fruit* destinateFruit = nullptr;
 
 	// Handle collision
-	if (_snake->bodyCollision()) {
-		_snake->setDead();
+	if (isOccupied(_snake->getX(), _snake->getY())) {
+		if (_snake->bodyCollision()) {
+			_snake->setDead();
 
-		//get current score to calculate total score and reset current score = 0 if snake die
-		_sceneStateMachine.player->saveScore(_sceneStateMachine.curSceneID);
-		_sceneStateMachine.player->resetScore(_sceneStateMachine.curSceneID);
-	}
-	else if (_snake->wallCollision()) {
-		_snake->setDead();
+			//get current score to calculate total score and reset current score = 0 if snake die
+			_sceneStateMachine.player->saveScore(_sceneStateMachine.curSceneID);
+			_sceneStateMachine.player->resetScore(_sceneStateMachine.curSceneID);
+		}
+		else if (_snake->wallCollision()) {
+			_snake->setDead();
 
-		//get current score to calculate total score and reset current score = 0 if snake die
-		_sceneStateMachine.player->saveScore(_sceneStateMachine.curSceneID);
-		_sceneStateMachine.player->resetScore(_sceneStateMachine.curSceneID);
-	}
-	else if (destinateFruit = _snake->matchFruit()) {
-		_snake->eatFruit(destinateFruit);
-		_fruit = dynamic_cast<Fruit*>(objects[objects.size()-1]);
+			//get current score to calculate total score and reset current score = 0 if snake die
+			_sceneStateMachine.player->saveScore(_sceneStateMachine.curSceneID);
+			_sceneStateMachine.player->resetScore(_sceneStateMachine.curSceneID);
+		}
+		else if (destinateFruit = _snake->matchFruit()) {
+			_snake->eatFruit(destinateFruit);
+			_fruit = dynamic_cast<Fruit*>(objects[objects.size() - 1]);
 
-		//plus 1 score if snake eat fruit
-		_sceneStateMachine.player->addScore(_sceneStateMachine.curSceneID);
+			//plus 1 score if snake eat fruit
+			_sceneStateMachine.player->addScore(_sceneStateMachine.curSceneID);
+		}
 	}
 
 	_snake->paint();
@@ -282,10 +284,10 @@ COORD SceneGame::getFreeBlock() {
 	do {
 		X = _position.X + rand() % (_width);
 		Y = _position.Y + rand() % (_height);
-	} while (freeBlock.test(Y * short(MAX_X) + X));
+	} while (freeBlock.test(MAX_X * Y + X));
 
-	gotoXY(0, 0);
-	std::cout << "Debug: Block spawns at " << X << " : " << Y;
+	//gotoXY(0, 0);
+	//std::cout << "Debug: Block spawns at " << X << " : " << Y;
 
 	return { X, Y };
 }
