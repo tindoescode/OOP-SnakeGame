@@ -1,7 +1,10 @@
 #include "SceneStateMachine.h"
 #include "Scene.h"
 
-SceneStateMachine::SceneStateMachine() : scenes(0), curScene(0), insertedSceneID(0),curSceneID(0) { player = new Player; }
+SceneStateMachine::SceneStateMachine() : scenes(0), curScene(0), insertedSceneID(0), curSceneID(0) 
+{ 
+    player = std::make_shared<Player>(); 
+}
 
 void SceneStateMachine::ProcessInput()
 {

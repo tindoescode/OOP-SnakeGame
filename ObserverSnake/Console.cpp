@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <conio.h>
 #include "console.h"
-
+#include <iostream>
 
 //-------------------------Screen-------------------------
 void clrscr() {
@@ -53,4 +53,43 @@ void Nocursortype() {
 	Info.bVisible = FALSE;
 	Info.dwSize = 20;
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &Info);
+}
+
+void drawRect(COORD start, COORD end, int color) {
+	TextColor(color);
+
+	//top
+	gotoXY(start.X, start.Y);
+	for (int i = start.X; i < end.X + 1; i++) {
+		std::cout << char(196);
+	}
+	//bottom
+	gotoXY(start.X, end.Y);
+	for (int i = start.X; i < end.X + 1; i++) {
+		std::cout << char(196);
+	}
+	//left
+	for (int i = start.Y; i < end.Y + 1; i++) {
+		gotoXY(start.X, i);
+		std::cout << char(179);
+	}
+	//right
+	for (int i = start.Y; i < end.Y + 1; i++) {
+		gotoXY(end.X, i);
+		std::cout << char(179);
+	}
+
+	// angle
+	gotoXY(start.X, start.Y);
+	std::cout << char(218);
+
+	gotoXY(end.X, start.Y);
+	std::cout << char(191);
+
+	gotoXY(start.X, end.Y);
+	std::cout << char(192);
+
+	gotoXY(end.X, end.Y);
+	std::cout << char(217);
+
 }

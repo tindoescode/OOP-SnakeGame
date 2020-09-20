@@ -8,5 +8,5 @@
 class Item
 {
 public:
-	virtual void operate() {}
+	virtual void operate() = 0;
 };

@@ -7,5 +7,7 @@ class Gift :
 public:
     Gift(int x, int y);
     void paint();
+
+
 };
 

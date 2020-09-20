@@ -71,7 +71,7 @@ Game::Game() : running(true)
 	//});
 
 	// Create scene
-	std::vector<std::string> maps = { "ModernMap1.dat", "ModernMap2.dat", "ClassicMap1.dat", "ClassicMap2.dat" };
+	std::vector<std::string> maps = { "ClassicMap1.dat", "ClassicMap2.dat", "ModernMap1.dat", "ModernMap2.dat" };
 
 	std::shared_ptr<SceneGame> gameScene1 = std::make_shared<SceneGame>(maps, sceneStateMachine);
 	std::shared_ptr<ScenePause> pauseScene = std::make_shared<ScenePause>(sceneStateMachine);

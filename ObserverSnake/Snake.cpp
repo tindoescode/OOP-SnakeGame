@@ -69,10 +69,9 @@ std::shared_ptr<Wall> Snake::wallCollision() {
 }
 
 void Snake::eatFruit(std::shared_ptr<Fruit> destinateFruit) {
-	const int x = destinateFruit->getX(), y = destinateFruit->getY();
-
 	// Remove fruit
-	_board->deleteFruit(x, y);
+	destinateFruit->setPos(-1, -1); // this avoid destructor to clear new snake segment block
+	_board->deleteFruit(-1, -1); // remove fruit with pos -1, -1
 
 	// The size is automatically add on the next move.
 	auto object = std::dynamic_pointer_cast<SnakeSegment>(_board->addObject(ObjectType::snake_segment, -1, -1));
@@ -89,7 +88,7 @@ bool Snake::getItem(std::shared_ptr<Gift> gift) {
 	}
 
 	// found a slot
-	if (!items[i]) items[i] = std::make_shared<Item>();
+	//if (!items[i]) items[i] = std::make_shared<Gift>();
 
 	return true;
 }
@@ -150,8 +149,8 @@ void Snake::move() {
 	}
 
 	// Add new head object
-	auto object = std::dynamic_pointer_cast<SnakeSegment>(_board->addObject(ObjectType::snake_segment, x, y));
-	segments.push_front(object);
+	auto head = std::dynamic_pointer_cast<SnakeSegment>(_board->addObject(ObjectType::snake_segment, x, y));
+	segments.push_front(head);
 
 	// Update new head position
 	_x = x;
@@ -167,8 +166,8 @@ void Snake::move() {
 void Snake::enlonger(int n)
 {
 	for (int i = 0; i < n; i++) {
-		auto object = std::dynamic_pointer_cast<SnakeSegment>(_board->addObject(ObjectType::snake_segment, -1, -1));
-		segments.push_back(object);
+		auto segment = std::dynamic_pointer_cast<SnakeSegment>(_board->addObject(ObjectType::snake_segment, -1, -1));
+		segments.push_back(segment);
 	}
 }
 

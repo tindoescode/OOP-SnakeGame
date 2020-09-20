@@ -11,6 +11,7 @@
 #include "Fruit.h"
 #include "Wall.h"
 #include "Gate.h"
+#include "Gift.h"
 
 #include "SceneStateMachine.h"
 #include "Scene.h"
@@ -34,7 +35,8 @@ enum class ObjectType {
 	snake_segment,
 	wall,
 	fruit,
-	gate
+	gate,
+	gift
 };
 
 class SceneGame : public Scene, public std::enable_shared_from_this<SceneGame> {
@@ -77,6 +79,9 @@ private:
 	// Checking for free block
 	std::bitset<MAX_X * MAX_Y> freeBlock;
 
+	// Gift
+	unsigned int _giftCount;
+
 	// Set block occupied
 	void setOccupiedBlock(int x, int y, unsigned int occupied = 1);
 
@@ -84,8 +89,7 @@ private:
 	void drawBorder();
 	
 public:
-	SceneGame(std::string mapPath, SceneStateMachine& sceneStateMachine);
-	SceneGame(std::vector<std::string> maps, SceneStateMachine& sceneStateMachine);
+	SceneGame(const std::vector<std::string>& maps, SceneStateMachine& sceneStateMachine);
 
 	// Scene switching
 	void SetSwitchToScene(std::unordered_map<std::string, unsigned int> stateInf);
@@ -103,6 +107,8 @@ public:
 	void LateUpdate() override;
 	
 	void Draw() override;
+
+	void paintSkillBox();
 
 	// Addition functions
 	COORD getFreeBlock();

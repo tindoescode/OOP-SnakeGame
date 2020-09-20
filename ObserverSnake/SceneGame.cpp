@@ -19,6 +19,9 @@ std::shared_ptr<Object> SceneGame::addObject(ObjectType type, int x, int y) {
 	else if (type == ObjectType::gate) {
 		object = std::make_shared<Gate>(x, y);
 	}
+	else if (type == ObjectType::gift) {
+		object = std::make_shared<Gift>(x, y);
+	}
 	objects.push_back(object);
 	
 	// Set coordinate occupied
@@ -158,7 +161,7 @@ void SceneGame::deleteSnakeSegment(int x, int y) {
 void SceneGame::deleteFruit(int x, int y) {
 	for (auto i = objects.begin(); i != objects.end(); i++) {
 		if ((*i)->getX() == x && (*i)->getY() == y && std::dynamic_pointer_cast<Fruit>(*i)) {
-			objects.erase(i);			
+			objects.erase(i);
 			setOccupiedBlock(x, y, 0);
 			break;
 		}
@@ -183,8 +186,8 @@ void SceneGame::setOccupiedBlock(int x, int y, unsigned int occupied)
  	freeBlock.set(y * MAX_X + x, occupied);
 }
 
-SceneGame::SceneGame(std::vector<std::string> maps, SceneStateMachine& sceneStateMachine) : Scene(), _maps(maps), _width(100), _height(30), _snake(nullptr), _fruit(nullptr), _sceneStateMachine(sceneStateMachine),
-_pauseScene(0), _position({ 10, 5 }), _currentRound(1), _gate(nullptr)
+SceneGame::SceneGame(const std::vector<std::string> &maps, SceneStateMachine& sceneStateMachine) : Scene(), _maps(maps), _width(100), _height(30), _snake(nullptr), _fruit(nullptr), _sceneStateMachine(sceneStateMachine),
+_pauseScene(0), _position({ 10, 5 }), _currentRound(1), _gate(nullptr), _giftCount(0)
 {
 	freeBlock.reset();	
 	_lastRound = (unsigned int)maps.size();
@@ -227,6 +230,12 @@ void SceneGame::OnDeactivate()
 	system("cls");
 }
 
+enum class Key {
+	J = 0x4A,
+	K = 0x4B,
+	L = 0x4C
+};
+
 void SceneGame::ProcessInput()
 {
 	//Handle ESC Key
@@ -234,7 +243,21 @@ void SceneGame::ProcessInput()
 		_pauseScene->SetContinueScene(_sceneStateMachine.GetCurrentScene());
 		SwitchTo("PauseScene");
 	}
-
+	else if (GetAsyncKeyState((int)Key::J)) {
+		TextColor(ColorCode_DarkCyan);
+		gotoXY(0, 0);
+		std::cout << "Key J pressed.";
+	}
+	else if (GetAsyncKeyState((int)Key::K)) {
+		TextColor(ColorCode_DarkCyan);
+		gotoXY(0, 0);
+		std::cout << "Key K pressed.";
+	}
+	else if (GetAsyncKeyState((int)Key::L)) {
+		TextColor(ColorCode_DarkCyan);
+		gotoXY(0, 0);
+		std::cout << "Key L pressed.";
+	}
 	// Game loop
 	char op;
 	
@@ -299,7 +322,7 @@ void SceneGame::LateUpdate()
 			_sceneStateMachine.player->addScore();
 
 			// Generate a new fruit or a gate when it gets enough points
-			if (_sceneStateMachine.player->getTotalScore() >= _currentRound * 100) {
+			if (_sceneStateMachine.player->getCurrentScore() >= _currentRound * 100) {
 				// Add a gate instead
 
 				_gate->paint();
@@ -316,7 +339,6 @@ void SceneGame::LateUpdate()
 		else if (destinateGift = _snake->giftCollision()) {
 			gotoXY(0, 0);
 			TextColor(ColorCode_Cyan);
-
 			
 			int i = 0;
 			if (_snake->getItem(destinateGift)) {
@@ -325,18 +347,31 @@ void SceneGame::LateUpdate()
 			else {
 				std::cout << "You don't have any free slot to get gift.";
 			}
+
+			_giftCount--;
 		}
 	}
 
 	_snake->paint();
 
 	// Time for the next move
-	Sleep(150);
+	Sleep(125);
 
 	if (_snake->isdead()) {
 		_currentRound = 1;
 		OnCreate();
 		SwitchTo("SceneGameOver"); // o day no can Id, de t xem lam sao kiem Id cho no
+	}
+
+	//1% each 150ms spawn gift
+	if (rand() % 100 == 0 && _giftCount < 2) { //MAX 2 gift at a time
+		auto [X, Y] = getFreeBlock();
+
+		std::shared_ptr<Gift> gift = std::dynamic_pointer_cast<Gift>(addObject(ObjectType::gift, X, Y));
+
+		gift->paint();
+
+		_giftCount++;
 	}
 }
 
@@ -351,6 +386,36 @@ COORD SceneGame::getFreeBlock() {
 }
 void SceneGame::Draw()
 {
+	paintSkillBox();
+}
+
+void SceneGame::paintSkillBox() {
+	drawRect({ 90, 10 }, { 100, 12 });
+	drawRect({ 90, 13 }, { 100, 15 });
+	drawRect({ 90, 16 }, { 100, 18 });
+
+	TextColor(ColorCode_Pink);
+
+	// Skill1
+	gotoXY(88, 11);
+	std::cout << "J:";
+
+	gotoXY(91, 11);
+	std::cout << "Rocket 1h";
+
+	// Skill2
+	gotoXY(88, 14);
+	std::cout << "K:";
+
+	gotoXY(91, 14);
+	std::cout << "Through Wall";
+
+	// Skill3
+	gotoXY(88, 17);
+	std::cout << "K:";
+
+	gotoXY(91, 17);
+	std::cout << "X2 Speed";
 }
 
 // Cai nay de de~ dang nhan du lieu scene o Game.cpp

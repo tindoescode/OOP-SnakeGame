@@ -146,6 +146,7 @@
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Gift.cpp" />
+    <ClCompile Include="Nitro.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneChooseMap.cpp" />
     <ClCompile Include="SceneGame.cpp" />
@@ -173,6 +174,7 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Gift.h" />
+    <ClInclude Include="Nitro.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SceneChooseMap.h" />
     <ClInclude Include="SceneGame.h" />

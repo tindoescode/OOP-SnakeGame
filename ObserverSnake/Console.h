@@ -38,5 +38,6 @@ void gotoXY(int column, int line);
 void TextColor(int color);
 void SetWindow(int Width, int Height);
 void Nocursortype();
+void drawRect(COORD start, COORD end, int color = ColorCode_DarkPink);
 
 #endif

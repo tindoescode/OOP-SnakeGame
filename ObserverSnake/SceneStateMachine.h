@@ -46,7 +46,7 @@ private:
 	//save id of curScene
 	int curSceneID;
 
-	//use to save current score and total score of each map
-	Player* player;
+	//Player
+	std::shared_ptr<Player> player;
 };
 

@@ -26,7 +26,7 @@ Menu::Menu(const std::vector<std::wstring> items, std::function<void(unsigned in
 	color = new int[ _items.size() ];
 
 	// ?
-	for (int i = 0; i < _items.size(); i++)	color[i] = MAUCHU;
+	for (int i = 0; i < _items.size(); i++)	color[i] = (unsigned int)MAUCHU;
 	color[0] = MAUNEN;
 }
 
