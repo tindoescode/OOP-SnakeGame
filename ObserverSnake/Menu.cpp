@@ -8,18 +8,27 @@ Menu::~Menu() {
 void Menu::Draw()
 {
 	Title();
-	menuBorder(maxLength(_items), (unsigned int)_items.size());
-	for (int i = 0; i < _items.size(); i++)
+	menuBorder();
+	for (int i = 0; i < heightBorder; i++)
 	{
 		TextColor(color[i]);
-		gotoXY(40, 15 + i);
+		gotoXY(SCREEN_WIDTH / 2 - lengthBorder / 2, SCREEN_HEIGHT / 2 - heightBorder / 2 + i);
 		std::wcout << _items[i] << std::endl;
 	}
 }
 
 Menu::Menu(const std::vector<std::wstring> items, std::function<void(unsigned int listitem)> onItemSelected) 
 	: _selectedItem(0), OnItemSelected(onItemSelected) {
+	
 	_items = items;
+
+	//set max length and height
+	int maxLength = 0;
+	for (int i = 0; i < items.size(); i++) {
+		if (items[i].size() > maxLength)	maxLength = (unsigned int)items[i].size();
+	}
+	lengthBorder = maxLength;
+	heightBorder = items.size();
 
 	//clrscr();
 
@@ -90,52 +99,46 @@ void Menu::Title() {
 	TextColor(rand() % 10 + 1);
 
 	std::cout << "\
-					.-')        .-') _    ('-.    .-. .-')     ('-.   \n\
-					( OO ).     ( OO ) )  ( OO ).-.\  ( OO )  _(  OO)  \n\
-					(_)---\\_),--./ ,--,'   / . --. /,--. ,--. (,------. \n\
-					/    _ | |   \\ |  |\\   | \\-.  \\ |  .'   /  |  .---' \n\
-					\\  :` `. |    \\|  | ).-'-'  |  ||      /,  |  |     \n\
-					 '..`''.)|  .     |/  \\| |_.'  ||     ' _)(|  '--.  \n";
+				.-')        .-') _    ('-.    .-. .-')     ('-.   \n\
+				( OO ).     ( OO ) )  ( OO ).-.\  ( OO )  _(  OO)  \n\
+				(_)---\\_),--./ ,--,'   / . --. /,--. ,--. (,------. \n\
+				/    _ | |   \\ |  |\\   | \\-.  \\ |  .'   /  |  .---' \n\
+				\\  :` `. |    \\|  | ).-'-'  |  ||      /,  |  |     \n\
+				 '..`''.)|  .     |/  \\| |_.'  ||     ' _)(|  '--.  \n";
 	std::cout << "\
-					.-._)   \\|  |\\    |    |  .-.  ||  .   \\   |  .--'  \n\
-					\\       /|  | \\   |    |  | |  ||  |\\   \\  |  `---. \n\
-					 `-----' `--'  `--'    `--' `--'`--' '--'  `------' \n\
+				.-._)   \\|  |\\    |    |  .-.  ||  .   \\   |  .--'  \n\
+				\\       /|  | \\   |    |  | |  ||  |\\   \\  |  `---. \n\
+				 `-----' `--'  `--'    `--' `--'`--' '--'  `------' \n\
 	";
 }
 
-int Menu::maxLength(std::vector<std::wstring> item) {
-	int max = 0;
-	for (int i = 0; i < item.size(); i++) {
-		if (item[i].size() > max)	max = (unsigned int)item[i].size();
-	}
-	return max;
-}
-void Menu::menuBorder(int maxLength, int maxHeight) {
+
+void Menu::menuBorder() {
 	//top and bottom border
 	TextColor(ColorCode_Cyan);
-	for (int i = 36; i < maxLength + 45; i++) {
-		gotoXY(i, 13);
+	for (int i = SCREEN_WIDTH / 2 - lengthBorder / 2 - 2; i <= SCREEN_WIDTH / 2 + lengthBorder / 2 + 2; i++) {
+		gotoXY(i, SCREEN_HEIGHT / 2 - heightBorder / 2 - 2);
 		std::wcout << (char)205;
-		gotoXY(i, maxHeight + 17);
+		gotoXY(i, SCREEN_HEIGHT / 2 + heightBorder / 2 + 2);
 		std::wcout << (char)205;
 	}
 
 	{	//4 corner
-		gotoXY(35, 13);
+		gotoXY(SCREEN_WIDTH / 2 - lengthBorder / 2 - 2, SCREEN_HEIGHT / 2 - heightBorder / 2 - 2);
 		std::wcout << (char)201;
-		gotoXY(35, maxHeight + 17);
+		gotoXY(SCREEN_WIDTH / 2 - lengthBorder / 2 - 2, SCREEN_HEIGHT / 2 + heightBorder / 2 + 2);
 		std::wcout << (char)200;
 
-		gotoXY(maxLength + 45, 13);
+		gotoXY(SCREEN_WIDTH / 2 + lengthBorder / 2 + 2, SCREEN_HEIGHT / 2 - heightBorder / 2 - 2);
 		std::wcout << (char)187;
-		gotoXY(maxLength + 45, maxHeight + 17);
+		gotoXY(SCREEN_WIDTH / 2 + lengthBorder / 2 + 2, SCREEN_HEIGHT / 2 + heightBorder / 2 + 2);
 		std::wcout << (char)188;
 	}
 	//left and right border
-	for (int i = 14; i < maxHeight + 17; i++) {
-		gotoXY(35, i);
+	for (int i = SCREEN_HEIGHT / 2 - heightBorder / 2 - 1; i <= SCREEN_HEIGHT / 2 + heightBorder / 2 + 1; i++) {
+		gotoXY(SCREEN_WIDTH / 2 - lengthBorder / 2 - 2, i);
 		std::wcout << (char)186;
-		gotoXY(maxLength + 45, i);
+		gotoXY(SCREEN_WIDTH / 2 + lengthBorder / 2 + 2, i);
 		std::wcout << (char)186;
 	}
 }

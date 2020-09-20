@@ -36,8 +36,7 @@ public:
 	void Title();
 
 	//MenuBoder
-	int maxLength(std::vector<std::wstring> item);
-	void menuBorder(int maxLenght, int maxHeight);
+	void menuBorder();
 protected:
 	// Called when item selected
 	std::function<void(unsigned int listitem)> OnItemSelected;
@@ -46,4 +45,8 @@ protected:
 
 	int _selectedItem;
 	int* color;
+
+	//max length and height
+	int lengthBorder;
+	int heightBorder;
 };
