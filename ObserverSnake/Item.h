@@ -7,8 +7,6 @@
 // Item on slot that snake can use to boost
 class Item
 {
-	std::shared_ptr<Object> _object;
 public:
-	virtual void operate() { _object->operate(); }
+	virtual void operate() {}
 };
-

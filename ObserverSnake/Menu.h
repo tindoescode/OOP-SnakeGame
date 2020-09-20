@@ -33,16 +33,10 @@ public:
 	void OnDeactivate();
 	void Update(Status key);
 
-	//title
-	void letterS(int x, int y);
-	void letterN(int x, int y);
-	void letterA(int x, int y);
-	void letterK(int x, int y);
-	void letterE(int x, int y);
 	void Title();
 
 	//MenuBoder
-	int maxLenght(std::vector<std::wstring> item);
+	int maxLength(std::vector<std::wstring> item);
 	void menuBorder(int maxLenght, int maxHeight);
 protected:
 	// Called when item selected

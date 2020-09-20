@@ -13,7 +13,7 @@ int main() {
 	srand(static_cast<unsigned int>(time(0)));
 
 	// Set console size
-	SetWindow(120, 40 + 1);
+	SetWindow(SCREEN_WIDTH, SCREEN_HEIGHT);
 
 	Nocursortype();
 

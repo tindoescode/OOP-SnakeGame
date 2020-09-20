@@ -345,7 +345,7 @@ COORD SceneGame::getFreeBlock() {
 	do {
 		X = _position.X + rand() % (_width);
 		Y = _position.Y + rand() % (_height);
-	} while (freeBlock.test((short)MAX_X * Y + X));
+	} while (freeBlock.test(MAX_X * Y + X));
 
 	return { X, Y };
 }
@@ -368,4 +368,3 @@ void SceneGame::SwitchTo(std::string mapName) // nay nhan vao mapName, la cai ch
 		_sceneStateMachine.SwitchTo(it->second);
 	}
 }
-

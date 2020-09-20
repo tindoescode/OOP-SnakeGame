@@ -1,4 +1,5 @@
 #include "SceneGameOver.h"
+#include "Game.h"
 
 // Constructor de khi tao mot SceneGameOver o Game.cpp
 SceneGameOver::SceneGameOver(SceneStateMachine& sceneStateMachine)
@@ -49,9 +50,9 @@ void SceneGameOver::OnCreate()
 void SceneGameOver::OnActivate() {
 	
 	TextColor(ColorCode_Cyan);
-	gotoXY(38, 8);
+	gotoXY(SCREEN_WIDTH / 2 - (9 / 2), SCREEN_HEIGHT / 4);
 	std::wcout << L"GAME OVER" << std::endl;
-	gotoXY(30, 9);
+	gotoXY(SCREEN_WIDTH / 2 - (28 / 2), SCREEN_HEIGHT / 4 + 1);
 	std::wcout << L"DO YOU WANT TO PLAY AGAIN ?" << std::endl;
 	gameOverMenu->OnActivate();
 }

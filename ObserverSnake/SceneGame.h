@@ -37,13 +37,13 @@ enum class ObjectType {
 	gate
 };
 
-enum {
-	MAX_X = 130,
-	MAX_Y = 130
-};
-
 class SceneGame : public Scene, public std::enable_shared_from_this<SceneGame> {
 	friend class Snake;
+public:
+	/* Which x, y is width/height of screen */
+	static const short MAX_X = 130;
+	static const short MAX_Y = 130;
+
 private:
 	// Game description
 	unsigned int _currentRound; // start from 1
@@ -86,7 +86,7 @@ private:
 public:
 	SceneGame(std::string mapPath, SceneStateMachine& sceneStateMachine);
 	SceneGame(std::vector<std::string> maps, SceneStateMachine& sceneStateMachine);
-	
+
 	// Scene switching
 	void SetSwitchToScene(std::unordered_map<std::string, unsigned int> stateInf);
 	void SetPauseScene(std::shared_ptr<ScenePause> scene) { _pauseScene = scene; }

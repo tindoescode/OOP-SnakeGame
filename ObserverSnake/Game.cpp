@@ -4,7 +4,7 @@
 #include "ScenePause.h"
 #include "SceneGameOver.h"
 #include "SceneSaveGame.h"
-#include"SceneShop.h"
+#include "SceneShop.h"
 
 Game::Game() : running(true)
 {
