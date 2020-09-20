@@ -3,11 +3,65 @@
 #include "Wall.h"
 #include "Gate.h"
 #include "Gift.h"
+#include "Rocket.h"
+#include "ThroughWall.h"
+#include <future>
+
+double Snake::getSpeed() { return _speed; }
+
+bool Snake::isThroughWall() {
+	if (_throughWallTime > 0) {
+		_throughWallTime -= double(125) / 1000 / _speed;
+		return true;
+	}
+	return false;
+}
+void Snake::setSpeed(double speed)
+{
+	_speed = speed;
+}
+
+bool Snake::dieInNextStep(const int step, const int score) {
+	auto x = _x, y = _y;
+
+	switch (_direction) {
+	case Direction::up: {
+		y -= step;
+		break;
+	}
+	case Direction::down: {
+		y += step;
+		break;
+	}
+	case Direction::left: {
+		x -= step;
+		break;
+	}
+	case Direction::right: {
+		x += step;
+		break;
+	}
+	}
+	
+	for (auto i : _board->objects) {
+		if (std::dynamic_pointer_cast<Wall>(i) 
+			|| std::dynamic_pointer_cast<SnakeSegment>(i) 
+			|| gateCollision({(short)x, (short)y}, score) == GateCollisionType::border) {
+			if (i->getX() == x && i->getY() == y) return true;
+		}
+	}
+	return false;
+}
+void Snake::setThroughWall(int time) {
+	_throughWallTime += time;
+}
 
 Snake::Snake(int x, int y, std::shared_ptr<SceneGame> board) : Object(x, y) {
 	_direction = Direction::idle;
 	_dead = false;
 	_board = board;
+	_speed = 1.0;
+	_throughWallTime = 0.0;
 
 	// Initialize with a segment (assume it is snake's head)
 	segments.push_back(std::dynamic_pointer_cast<SnakeSegment>(_board->addObject(ObjectType::snake_segment, x, y)));
@@ -20,6 +74,7 @@ void Snake::setPos(int x, int y) {
 void Snake::setDead() { 
 	_dead = true; 
 }
+
 GateCollisionType Snake::gateCollision(unsigned int score) {
 	if (score < _board->_currentRound * 100) return GateCollisionType::none;
 	for (auto i : _board->objects) {
@@ -31,6 +86,21 @@ GateCollisionType Snake::gateCollision(unsigned int score) {
 	}
 	return GateCollisionType::none;
 }
+// Check if in any specify coord that snake can get gate collision
+GateCollisionType Snake::gateCollision(COORD coord, unsigned int score) {
+	auto [X, Y] = coord;
+
+	if (score < _board->_currentRound * 100) return GateCollisionType::none;
+	for (auto i : _board->objects) {
+		if (std::dynamic_pointer_cast<Gate>(i)) {
+			if ((i->getX() <= X && i->getX() + 2 >= X) && i->getY() - 1 == Y) return GateCollisionType::border; // top
+			if ((i->getX() <= X && i->getX() + 2 >= X) && i->getY() + 1 == Y) return GateCollisionType::border; // bottom
+			if (i->getX() == X && i->getY() == Y) return GateCollisionType::door;
+		}
+	}
+	return GateCollisionType::none;
+}
+
 bool Snake::bodyCollision() {
 	for (auto i = segments.begin() + 1; i != segments.end(); i++)
 	{
@@ -79,16 +149,28 @@ void Snake::eatFruit(std::shared_ptr<Fruit> destinateFruit) {
 }
 
 bool Snake::getItem(std::shared_ptr<Gift> gift) {
-	int i = 0;
+	int i = 1;
 
-	while (items[i]) {
+	while (_items[i]) {
 		// Can't find a free slot
-		if (i >= ITEM_MAXSLOT) return false;
+		if (i >= (ITEM_MAXSLOT + 1)) return false;
 		i++;
 	}
 
 	// found a slot
-	//if (!items[i]) items[i] = std::make_shared<Gift>();
+	if (!_items[i]) {
+		int n = rand() % 2;
+		switch (n) {
+		case 0:
+			_items[i] = std::make_shared<Rocket>();
+			std::cout << "You got a \"Rocket 30s\" on slot " << i << ".";
+			break;
+		case 1:
+			_items[i] = std::make_shared<ThroughWall>();
+			std::cout << "You got a \"Through Wall 30s\" on slot " << i << ".";
+			break;
+		}
+	}
 
 	return true;
 }
@@ -110,26 +192,26 @@ void Snake::turnHead(Direction direction) {
 		_direction = direction;
 }
 
-void Snake::move() {
+void Snake::move(int step) {
 	if (_direction == Direction::idle) return;
 	//new head
 	int x = segments.front()->getX(), y = segments.front()->getY();
 
 	switch (_direction) {
 	case Direction::up: {
-		y--;
+		y -= step;
 		break;
 	}
 	case Direction::down: {
-		y++;
+		y += step;
 		break;
 	}
 	case Direction::left: {
-		x--;
+		x -= step;
 		break;
 	}
 	case Direction::right: {
-		x++;
+		x += step;
 		break;
 	}	
 	}
@@ -160,7 +242,18 @@ void Snake::move() {
 	x = segments.back()->getX(), y = segments.back()->getY();
 	
 	_board->deleteSnakeSegment(x, y);
+	
 	segments.pop_back();
+}
+
+std::shared_ptr<SnakeSegment> Snake::getTail() { return segments.back(); }
+
+bool Snake::activeItem(int slot) {
+	if (!_items[slot]) return false;
+	
+	_items[slot]->operate(shared_from_this());
+
+	return true;
 }
 
 void Snake::enlonger(int n)

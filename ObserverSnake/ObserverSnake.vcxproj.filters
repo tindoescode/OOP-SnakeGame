@@ -117,7 +117,10 @@
     <ClCompile Include="Item.cpp">
       <Filter>Source Files\Items</Filter>
     </ClCompile>
-    <ClCompile Include="Nitro.cpp">
+    <ClCompile Include="Rocket.cpp">
+      <Filter>Source Files\Items</Filter>
+    </ClCompile>
+    <ClCompile Include="ThroughWall.cpp">
       <Filter>Source Files\Items</Filter>
     </ClCompile>
   </ItemGroup>
@@ -188,7 +191,10 @@
     <ClInclude Include="Gift.h">
       <Filter>Header Files\Objects</Filter>
     </ClInclude>
-    <ClInclude Include="Nitro.h">
+    <ClInclude Include="Rocket.h">
+      <Filter>Header Files\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="ThroughWall.h">
       <Filter>Header Files\Items</Filter>
     </ClInclude>
   </ItemGroup>

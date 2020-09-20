@@ -14,6 +14,8 @@ public:
 	Object(int x, int y);
 	virtual ~Object();
 
+	void clearBlock();
+
 	int getWidth();
 	int getHeight();
 

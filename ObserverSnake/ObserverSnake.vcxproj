@@ -146,7 +146,7 @@
     <ClCompile Include="Item.cpp" />
     <ClCompile Include="Menu.cpp" />
     <ClCompile Include="Gift.cpp" />
-    <ClCompile Include="Nitro.cpp" />
+    <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="Player.cpp" />
     <ClCompile Include="SceneChooseMap.cpp" />
     <ClCompile Include="SceneGame.cpp" />
@@ -166,6 +166,7 @@
     <ClCompile Include="SceneStateMachine.cpp" />
     <ClCompile Include="Snake.cpp" />
     <ClCompile Include="SnakeSegment.cpp" />
+    <ClCompile Include="ThroughWall.cpp" />
     <ClCompile Include="Wall.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -174,7 +175,7 @@
     <ClInclude Include="Item.h" />
     <ClInclude Include="Menu.h" />
     <ClInclude Include="Gift.h" />
-    <ClInclude Include="Nitro.h" />
+    <ClInclude Include="Rocket.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="SceneChooseMap.h" />
     <ClInclude Include="SceneGame.h" />
@@ -193,6 +194,7 @@
     <ClInclude Include="SceneStateMachine.h" />
     <ClInclude Include="Snake.h" />
     <ClInclude Include="SnakeSegment.h" />
+    <ClInclude Include="ThroughWall.h" />
     <ClInclude Include="Wall.h" />
   </ItemGroup>
   <ItemGroup>

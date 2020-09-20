@@ -247,16 +247,49 @@ void SceneGame::ProcessInput()
 		TextColor(ColorCode_DarkCyan);
 		gotoXY(0, 0);
 		std::cout << "Key J pressed.";
+
+		if (_snake->activeItem(1)) {
+			TextColor(ColorCode_DarkCyan);
+			gotoXY(0, 0);
+			std::cout << "Item on slot 1 activated.";
+		}
+		else {
+			TextColor(ColorCode_DarkCyan);
+			gotoXY(0, 0);
+			std::cout << "You don't have any item on slot 1.";
+		}
 	}
 	else if (GetAsyncKeyState((int)Key::K)) {
 		TextColor(ColorCode_DarkCyan);
 		gotoXY(0, 0);
 		std::cout << "Key K pressed.";
+
+		if (_snake->activeItem(2)) {
+			TextColor(ColorCode_DarkCyan);
+			gotoXY(0, 0);
+			std::cout << "Item on slot 2 activated.";
+		}
+		else {
+			TextColor(ColorCode_DarkCyan);
+			gotoXY(0, 0);
+			std::cout << "You don't have any item on slot 2.";
+		}
 	}
 	else if (GetAsyncKeyState((int)Key::L)) {
 		TextColor(ColorCode_DarkCyan);
 		gotoXY(0, 0);
 		std::cout << "Key L pressed.";
+
+		if (_snake->activeItem(3)) {
+			TextColor(ColorCode_DarkCyan);
+			gotoXY(0, 0);
+			std::cout << "Item on slot 3 activated.";
+		}
+		else {
+			TextColor(ColorCode_DarkCyan);
+			gotoXY(0, 0);
+			std::cout << "You don't have any item on slot 3.";
+		}
 	}
 	// Game loop
 	char op;
@@ -272,7 +305,21 @@ void SceneGame::ProcessInput()
 
 void SceneGame::Update()
 {
-	_snake->move();
+	// calculate next step, checking if snake could get die -> move next step
+	int step = 1;
+	const unsigned int score = _sceneStateMachine.player->getCurrentScore();
+
+	int X = _snake->getX();
+	int Y = _snake->getY();
+
+	while (
+		isOccupied(X, Y) 
+		&& _snake->isThroughWall() 
+		&& _snake->dieInNextStep(step, score)) {
+		step++;
+	}
+
+	_snake->move(step);
 }
 
 void SceneGame::LateUpdate()
@@ -283,37 +330,22 @@ void SceneGame::LateUpdate()
 	std::shared_ptr<Fruit> destinateFruit = nullptr;
 	std::shared_ptr<Gift> destinateGift;
 
+	const bool occupied = isOccupied(_snake->getX(), _snake->getY());
+	const unsigned int score = _sceneStateMachine.player->getCurrentScore();
+
 	// Handle collision
-	if (isOccupied(_snake->getX(), _snake->getY())) {
-		const unsigned int score = _sceneStateMachine.player->getCurrentScore();
-
-		if (_snake->gateCollision(score) == GateCollisionType::door) {
-			// get to next round
-			_currentRound++;
-
-			if (_currentRound > _lastRound) {
-				gotoXY(0, 0);
-				std::cout << "Chuc mung, ve nuoc.";
-				Sleep(10000);
-
-				// Luu vao bang xep hang cac kieu
-
-				exit(0);
-			}
-			clrscr();
-			OnCreate();
-			OnActivate();
-			
-			const int plusSize = _sceneStateMachine.player->getCurrentScore() / 10;
-			_snake->enlonger(plusSize);
-		}
-		else if (_snake->bodyCollision() || _snake->wallCollision() || _snake->gateCollision(score) == GateCollisionType::border) {
+	if (occupied) {
+		// Things can cause snake to dead
+		if (_snake->bodyCollision() || _snake->wallCollision() || _snake->gateCollision(score) == GateCollisionType::border) {
+			// If it can go through wall, move more step
 			_snake->setDead();
 
 			//get current score to calculate total score and reset current score = 0 if snake die
 			_sceneStateMachine.player->saveScore();
 			_sceneStateMachine.player->resetScore();
 		}
+
+		// Fruit/Gift
 		else if (destinateFruit = _snake->fruitCollision()) {
 			// Remove that fruit and plus one more snake segment
 			_snake->eatFruit(destinateFruit);
@@ -339,7 +371,7 @@ void SceneGame::LateUpdate()
 		else if (destinateGift = _snake->giftCollision()) {
 			gotoXY(0, 0);
 			TextColor(ColorCode_Cyan);
-			
+
 			int i = 0;
 			if (_snake->getItem(destinateGift)) {
 				std::cout << "Got a gift";
@@ -350,12 +382,36 @@ void SceneGame::LateUpdate()
 
 			_giftCount--;
 		}
+		else if (_snake->gateCollision(score) == GateCollisionType::door) {
+			// Get to next round
+			_currentRound++;
+
+			if (_currentRound > _lastRound) {
+				gotoXY(0, 0);
+				std::cout << "Chuc mung, ve nuoc.";
+
+				Sleep(30000);
+				// Luu vao bang xep hang cac kieu
+
+				exit(0);
+			}
+			else {
+				// Going to next round, remains snake size
+				clrscr();
+				OnCreate();
+				OnActivate();
+
+				const int plusSize = _sceneStateMachine.player->getCurrentScore() / 10;
+				_snake->enlonger(plusSize);
+			}
+		}
 	}
 
 	_snake->paint();
 
 	// Time for the next move
-	Sleep(125);
+	
+	Sleep(static_cast<DWORD>((double)125 / _snake->getSpeed()));
 
 	if (_snake->isdead()) {
 		_currentRound = 1;
@@ -401,21 +457,21 @@ void SceneGame::paintSkillBox() {
 	std::cout << "J:";
 
 	gotoXY(91, 11);
-	std::cout << "Rocket 1h";
+	std::cout << "Update..";
 
 	// Skill2
 	gotoXY(88, 14);
 	std::cout << "K:";
 
 	gotoXY(91, 14);
-	std::cout << "Through Wall";
+	std::cout << "Update..";
 
 	// Skill3
 	gotoXY(88, 17);
 	std::cout << "K:";
 
 	gotoXY(91, 17);
-	std::cout << "X2 Speed";
+	std::cout << "Update..";
 }
 
 // Cai nay de de~ dang nhan du lieu scene o Game.cpp
