@@ -43,6 +43,20 @@ bool Snake::dieInNextStep(const int step, const int score) {
 	}
 	}
 	
+	// if _snake get over border
+	if (x > _board->_position.X + _board->_width) {
+		x = _board->_position.X;
+	}
+	else if (x < _board->_position.X) {
+		x = _board->_position.X + _board->_width;
+	}
+	else if (y > _board->_position.Y + _board->_height) {
+		y = _board->_position.Y;
+	}
+	else if (y < _board->_position.Y) {
+		y = _board->_position.Y + _board->_height;
+	}
+
 	for (auto i : _board->objects) {
 		if (std::dynamic_pointer_cast<Wall>(i) 
 			|| std::dynamic_pointer_cast<SnakeSegment>(i) 
@@ -159,17 +173,25 @@ bool Snake::getItem(std::shared_ptr<Gift> gift) {
 
 	// found a slot
 	if (!_items[i]) {
-		int n = rand() % 2;
-		switch (n) {
-		case 0:
-			_items[i] = std::make_shared<Rocket>();
-			std::cout << "You got a \"Rocket 30s\" on slot " << i << ".";
-			break;
+		int n = rand() % 2 + 1;
+		std::string itemNames[4] = { {""}, "Rocket 30s", "Through Wall 30s", "X3 Points" };
+		COORD UISlotTextPosition[4] = { {-1, -1}, {91, 11}, {91, 14}, {91, 17} };
+
+		switch(n) {
 		case 1:
+			_items[i] = std::make_shared<Rocket>();
+			break;
+		case 2:
 			_items[i] = std::make_shared<ThroughWall>();
-			std::cout << "You got a \"Through Wall 30s\" on slot " << i << ".";
 			break;
 		}
+
+		gotoXY(0, 0);
+		TextColor(ColorCode_Pink);
+		std::cout << "You got a " << itemNames[n] << " on slot " << i << ".";
+
+		gotoXY(UISlotTextPosition[i].X, UISlotTextPosition[i].Y);
+		std::cout << itemNames[n];
 	}
 
 	return true;
@@ -252,6 +274,11 @@ bool Snake::activeItem(int slot) {
 	if (!_items[slot]) return false;
 	
 	_items[slot]->operate(shared_from_this());
+	_items[slot].reset();
+
+	COORD UISlotTextPosition[4] = { {-1, -1}, {91, 11}, {91, 14}, {91, 17} };
+	gotoXY(UISlotTextPosition[slot].X, UISlotTextPosition[slot].Y);
+	std::cout << "Empty            ";
 
 	return true;
 }

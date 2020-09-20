@@ -217,7 +217,8 @@ void SceneGame::OnActivate()
 	TextColor(ColorCode_DarkYellow);
 	gotoXY(5, 0);
 	std::cout << "Round " << _currentRound << ", Destination: " << _currentRound * 100 << " points to next round";
-		
+
+	drawSkillBox();
 	drawBorder();
 
 	for (auto i : objects) {
@@ -369,14 +370,15 @@ void SceneGame::LateUpdate()
 
 		}
 		else if (destinateGift = _snake->giftCollision()) {
-			gotoXY(0, 0);
-			TextColor(ColorCode_Cyan);
-
 			int i = 0;
 			if (_snake->getItem(destinateGift)) {
+				gotoXY(0, 0);
+				TextColor(ColorCode_Cyan);
 				std::cout << "Got a gift";
 			}
 			else {
+				gotoXY(0, 0);
+				TextColor(ColorCode_Cyan);
 				std::cout << "You don't have any free slot to get gift.";
 			}
 
@@ -442,10 +444,9 @@ COORD SceneGame::getFreeBlock() {
 }
 void SceneGame::Draw()
 {
-	paintSkillBox();
 }
 
-void SceneGame::paintSkillBox() {
+void SceneGame::drawSkillBox() {
 	drawRect({ 90, 10 }, { 100, 12 });
 	drawRect({ 90, 13 }, { 100, 15 });
 	drawRect({ 90, 16 }, { 100, 18 });
@@ -457,21 +458,21 @@ void SceneGame::paintSkillBox() {
 	std::cout << "J:";
 
 	gotoXY(91, 11);
-	std::cout << "Update..";
+	std::cout << "Empty";
 
 	// Skill2
 	gotoXY(88, 14);
 	std::cout << "K:";
 
 	gotoXY(91, 14);
-	std::cout << "Update..";
+	std::cout << "Empty";
 
 	// Skill3
 	gotoXY(88, 17);
 	std::cout << "K:";
 
 	gotoXY(91, 17);
-	std::cout << "Update..";
+	std::cout << "Empty";
 }
 
 // Cai nay de de~ dang nhan du lieu scene o Game.cpp

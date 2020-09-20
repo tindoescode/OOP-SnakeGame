@@ -108,7 +108,7 @@ public:
 	
 	void Draw() override;
 
-	void paintSkillBox();
+	void drawSkillBox();
 
 	// Addition functions
 	COORD getFreeBlock();
