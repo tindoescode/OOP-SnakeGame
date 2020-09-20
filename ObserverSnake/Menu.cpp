@@ -28,7 +28,7 @@ Menu::Menu(const std::vector<std::wstring> items, std::function<void(unsigned in
 		if (items[i].size() > maxLength)	maxLength = (unsigned int)items[i].size();
 	}
 	lengthBorder = maxLength;
-	heightBorder = items.size();
+	heightBorder = (int)items.size();
 
 	//clrscr();
 
@@ -118,27 +118,27 @@ void Menu::menuBorder() {
 	TextColor(ColorCode_Cyan);
 	for (int i = SCREEN_WIDTH / 2 - lengthBorder / 2 - 2; i <= SCREEN_WIDTH / 2 + lengthBorder / 2 + 2; i++) {
 		gotoXY(i, SCREEN_HEIGHT / 2 - heightBorder / 2 - 2);
-		std::wcout << (char)205;
+		std::cout << (char)205;
 		gotoXY(i, SCREEN_HEIGHT / 2 + heightBorder / 2 + 2);
-		std::wcout << (char)205;
+		std::cout << (char)205;
 	}
 
 	{	//4 corner
 		gotoXY(SCREEN_WIDTH / 2 - lengthBorder / 2 - 2, SCREEN_HEIGHT / 2 - heightBorder / 2 - 2);
-		std::wcout << (char)201;
+		std::cout << (char)201;
 		gotoXY(SCREEN_WIDTH / 2 - lengthBorder / 2 - 2, SCREEN_HEIGHT / 2 + heightBorder / 2 + 2);
-		std::wcout << (char)200;
+		std::cout << (char)200;
 
 		gotoXY(SCREEN_WIDTH / 2 + lengthBorder / 2 + 2, SCREEN_HEIGHT / 2 - heightBorder / 2 - 2);
-		std::wcout << (char)187;
+		std::cout << (char)187;
 		gotoXY(SCREEN_WIDTH / 2 + lengthBorder / 2 + 2, SCREEN_HEIGHT / 2 + heightBorder / 2 + 2);
-		std::wcout << (char)188;
+		std::cout << (char)188;
 	}
 	//left and right border
 	for (int i = SCREEN_HEIGHT / 2 - heightBorder / 2 - 1; i <= SCREEN_HEIGHT / 2 + heightBorder / 2 + 1; i++) {
 		gotoXY(SCREEN_WIDTH / 2 - lengthBorder / 2 - 2, i);
-		std::wcout << (char)186;
+		std::cout << (char)186;
 		gotoXY(SCREEN_WIDTH / 2 + lengthBorder / 2 + 2, i);
-		std::wcout << (char)186;
+		std::cout << (char)186;
 	}
 }

@@ -5,23 +5,61 @@
 #include "Gift.h"
 #include "Rocket.h"
 #include "ThroughWall.h"
+#include "X2Point.h"
 #include <future>
 
 double Snake::getSpeed() { return _speed; }
 
 bool Snake::isThroughWall() {
 	if (_throughWallTime > 0) {
-		_throughWallTime -= double(125) / 1000 / _speed;
 		return true;
 	}
 	return false;
 }
-void Snake::setSpeed(double speed)
+bool Snake::isX2Point() {
+	if (_x2PointTime > 0) {
+		return true;
+	}
+	return false;
+}
+void Snake::setSpeed(double speed, double speedTime)
 {
 	_speed = speed;
+	_speedTime = speedTime;
 }
-
-bool Snake::dieInNextStep(const int step, const int score) {
+void Snake::setX2Point(double time)
+{
+	_x2PointTime = time;
+}
+void Snake::ThroughWallDecrease() {
+	if (_throughWallTime < 0) {
+		_throughWallTime = 0;
+	}
+	else if (_throughWallTime > 0) {
+		_throughWallTime -= double(125) / 1000 / _speed;
+	}
+}
+void Snake::SpeedTimeDecrease() 
+{
+	if (_speedTime < 0) {
+		_speed = 1.0;
+		_speedTime = 0;
+	}
+	else if(_speedTime > 0) {
+		_speedTime -= double(125) / 1000 / _speed;
+	}
+}
+void Snake::X2PointDecrease()
+{
+	if (_x2PointTime < 0) {
+		_x2PointTime = 0;
+	}
+	else if (_x2PointTime > 0) {
+		_x2PointTime -= double(125) / 1000 / _speed;
+	}
+}
+bool Snake::dieInNextStep(int &step, const int &score) 
+{
 	auto x = _x, y = _y;
 
 	switch (_direction) {
@@ -46,15 +84,23 @@ bool Snake::dieInNextStep(const int step, const int score) {
 	// if _snake get over border
 	if (x > _board->_position.X + _board->_width) {
 		x = _board->_position.X;
+
+		step -= _board->_width + 1;
 	}
 	else if (x < _board->_position.X) {
 		x = _board->_position.X + _board->_width;
+
+		step += _board->_width + 1;
 	}
 	else if (y > _board->_position.Y + _board->_height) {
 		y = _board->_position.Y;
+
+		step -= _board->_height + 1;
 	}
 	else if (y < _board->_position.Y) {
 		y = _board->_position.Y + _board->_height;
+
+		step -= _board->_height;
 	}
 
 	for (auto i : _board->objects) {
@@ -75,7 +121,9 @@ Snake::Snake(int x, int y, std::shared_ptr<SceneGame> board) : Object(x, y) {
 	_dead = false;
 	_board = board;
 	_speed = 1.0;
+	_speedTime = 0;
 	_throughWallTime = 0.0;
+	_x2PointTime = 0.0;
 
 	// Initialize with a segment (assume it is snake's head)
 	segments.push_back(std::dynamic_pointer_cast<SnakeSegment>(_board->addObject(ObjectType::snake_segment, x, y)));
@@ -173,8 +221,8 @@ bool Snake::getItem(std::shared_ptr<Gift> gift) {
 
 	// found a slot
 	if (!_items[i]) {
-		int n = rand() % 2 + 1;
-		std::string itemNames[4] = { {""}, "Rocket 30s", "Through Wall 30s", "X3 Points" };
+		int n = rand() % 3 + 1;
+		std::string itemNames[4] = { {""}, "Rocket 30s", "Through Wall 30s", "X2 Points 30s" };
 		COORD UISlotTextPosition[4] = { {-1, -1}, {91, 11}, {91, 14}, {91, 17} };
 
 		switch(n) {
@@ -183,6 +231,9 @@ bool Snake::getItem(std::shared_ptr<Gift> gift) {
 			break;
 		case 2:
 			_items[i] = std::make_shared<ThroughWall>();
+			break;
+		case 3:
+			_items[i] = std::make_shared<X2Point>();
 			break;
 		}
 
@@ -267,8 +318,6 @@ void Snake::move(int step) {
 	
 	segments.pop_back();
 }
-
-std::shared_ptr<SnakeSegment> Snake::getTail() { return segments.back(); }
 
 bool Snake::activeItem(int slot) {
 	if (!_items[slot]) return false;

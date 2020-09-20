@@ -7,9 +7,9 @@ Player::Player() {
 void Player::resetScore() {
 	currentScore = 0;
 }
-void Player::addScore() {
-	currentScore += 10;
-	totalScore += 10;
+void Player::addScore(int score) {
+	currentScore += score;
+	totalScore += score;
 }
 unsigned int Player::getCurrentScore() {
 	return currentScore;

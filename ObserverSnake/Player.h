@@ -9,7 +9,7 @@ public:
 
 	Player();
 	void resetScore();
-	void addScore();
+	void addScore(int score = 10);
 	unsigned int getCurrentScore();
 	unsigned int getTotalScore();
 	void saveScore();

@@ -168,6 +168,7 @@
     <ClCompile Include="SnakeSegment.cpp" />
     <ClCompile Include="ThroughWall.cpp" />
     <ClCompile Include="Wall.cpp" />
+    <ClCompile Include="X2Point.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Game.h" />
@@ -196,6 +197,7 @@
     <ClInclude Include="SnakeSegment.h" />
     <ClInclude Include="ThroughWall.h" />
     <ClInclude Include="Wall.h" />
+    <ClInclude Include="X2Point.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="ClassicMap1.dat" />

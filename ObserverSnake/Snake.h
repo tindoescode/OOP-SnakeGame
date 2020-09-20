@@ -32,18 +32,29 @@ private:
 	
 	// Affected by item
 	double _speed;
+	double _speedTime;
 	double _throughWallTime; 
+	double _x2PointTime;
 
 public:
+	Snake(int x, int y, std::shared_ptr<SceneGame> board);
+
 	double getSpeed();
 	bool isThroughWall();
-	void setSpeed(double speed);
 
-	bool dieInNextStep(const int step, const int score);
+	bool isX2Point();
 
+	void setSpeed(double speed, double speedTime = 30.0);
+	void setX2Point(double time);
 	void setThroughWall(int time);
 
-	Snake(int x, int y, std::shared_ptr<SceneGame> board);
+	// Callbacks
+	void ThroughWallDecrease();
+	void SpeedTimeDecrease();
+	void X2PointDecrease();
+
+	// Check die, p/s: step is mutate is case of snake goes over border
+	bool dieInNextStep(int& step, const int& score);
 
 	void setPos(int x, int y);
 	void setDead();
@@ -61,8 +72,6 @@ public:
 	void turnHead(Direction direction);
 
 	void move(int step = 1);
-
-	std::shared_ptr<SnakeSegment> getTail();
 
 	bool activeItem(int slot);
 	

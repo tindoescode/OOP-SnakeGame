@@ -123,6 +123,9 @@
     <ClCompile Include="ThroughWall.cpp">
       <Filter>Source Files\Items</Filter>
     </ClCompile>
+    <ClCompile Include="X2Point.cpp">
+      <Filter>Source Files\Items</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h">
@@ -195,6 +198,9 @@
       <Filter>Header Files\Items</Filter>
     </ClInclude>
     <ClInclude Include="ThroughWall.h">
+      <Filter>Header Files\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="X2Point.h">
       <Filter>Header Files\Items</Filter>
     </ClInclude>
   </ItemGroup>

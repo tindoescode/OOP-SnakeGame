@@ -41,6 +41,7 @@ protected:
 	// Called when item selected
 	std::function<void(unsigned int listitem)> OnItemSelected;
 
+	// Had to be wstring because file path can be wstring
 	std::vector<std::wstring> _items;
 
 	int _selectedItem;

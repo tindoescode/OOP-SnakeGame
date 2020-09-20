@@ -351,8 +351,13 @@ void SceneGame::LateUpdate()
 			// Remove that fruit and plus one more snake segment
 			_snake->eatFruit(destinateFruit);
 
-			//plus 1 score if snake eat fruit
-			_sceneStateMachine.player->addScore();
+			//plus 10 score if snake eat fruit
+			if (_snake->isX2Point()) {
+				_sceneStateMachine.player->addScore(20);
+			}
+			else {
+				_sceneStateMachine.player->addScore(10);
+			}
 
 			// Generate a new fruit or a gate when it gets enough points
 			if (_sceneStateMachine.player->getCurrentScore() >= _currentRound * 100) {
@@ -411,10 +416,13 @@ void SceneGame::LateUpdate()
 
 	_snake->paint();
 
-	// Time for the next move
-	
+	// Time delay for the next move
 	Sleep(static_cast<DWORD>((double)125 / _snake->getSpeed()));
+	_snake->ThroughWallDecrease();
+	_snake->SpeedTimeDecrease();
+	_snake->X2PointDecrease();
 
+	// Check dead
 	if (_snake->isdead()) {
 		_currentRound = 1;
 		OnCreate();
@@ -422,7 +430,7 @@ void SceneGame::LateUpdate()
 	}
 
 	//1% each 150ms spawn gift
-	if (rand() % 100 == 0 && _giftCount < 2) { //MAX 2 gift at a time
+	if (rand() % 100 < 50 && _giftCount <= 2) { //MAX 2 gift at a time
 		auto [X, Y] = getFreeBlock();
 
 		std::shared_ptr<Gift> gift = std::dynamic_pointer_cast<Gift>(addObject(ObjectType::gift, X, Y));
