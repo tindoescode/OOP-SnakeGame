@@ -173,9 +173,9 @@ GateCollisionType Snake::gateCollision(COORD coord, unsigned int score) {
 }
 
 bool Snake::bodyCollision() {
-	for (auto i = segments.begin() + 1; i != segments.end(); i++)
+	for (auto i : _board->objects)
 	{
-		if (_x == (*i)->getX() && _y == (*i)->getY()) {
+		if (std::dynamic_pointer_cast<SnakeSegment>(i) && i != segments[0] && _x == i->getX() && _y == i->getY()) {
 			return true;
 		}
 	}
