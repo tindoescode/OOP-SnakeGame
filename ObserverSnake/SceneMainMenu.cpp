@@ -6,7 +6,7 @@
 #include "SceneGame.h"
 #include "SceneSaveGame.h"
 #include "SceneShop.h"
-
+#include"SceneScoreBoard.h"
 #include <functional>
 
 SceneMainMenu::SceneMainMenu(SceneStateMachine& sceneStateMachine) : Scene(), _sceneStateMachine(sceneStateMachine), mainMenu(nullptr) {}
@@ -29,7 +29,7 @@ void SceneMainMenu::SwitchTo(std::string mapName)
 void SceneMainMenu::OnCreate()
 {
 	mainMenu = new Menu(
-		{ L"Single player", L"Two players", L"Load game", L"Shop", L"Exit" },
+		{ L"Single player", L"Two players", L"Load game", L"Shop",L"Score Board", L"Exit" },
 		std::bind(
 			[this](unsigned int listitem) {
 				// Create scene
@@ -39,6 +39,7 @@ void SceneMainMenu::OnCreate()
 				std::shared_ptr<ScenePause> pauseScene = std::make_shared<ScenePause>(_sceneStateMachine);
 				std::shared_ptr<SceneGameOver> gameOverScene = std::make_shared<SceneGameOver>(_sceneStateMachine);
 				std::shared_ptr<SceneShop> ShopScene = std::make_shared<SceneShop>(_sceneStateMachine);
+				std::shared_ptr< SceneScoreBoard> ScoreBoard = std::make_shared<SceneScoreBoard>(_sceneStateMachine);
 
 				unsigned int gameSceneID1 = _sceneStateMachine.Add(gameScene1);
 				unsigned int gameSceneID2 = _sceneStateMachine.Add(gameScene2);
@@ -46,6 +47,8 @@ void SceneMainMenu::OnCreate()
 				unsigned int pauseSceneID = _sceneStateMachine.Add(pauseScene);
 				unsigned int gameOverSceneID = _sceneStateMachine.Add(gameOverScene);
 				unsigned int ShopSceneID = _sceneStateMachine.Add(ShopScene);
+
+				unsigned int ScoreBoardID = _sceneStateMachine.Add(ScoreBoard);
 
 				// Game scenes need to know pauseScene, when pauseScene want to know current playing scene
 				gameScene1->SetPauseScene(pauseScene);
@@ -81,6 +84,9 @@ void SceneMainMenu::OnCreate()
 					_sceneStateMachine.SwitchTo(ShopScene);
 					break;
 				case 4:
+					_sceneStateMachine.SwitchTo(ScoreBoard);
+					break;
+				case 5:
 					exit(0);
 					break;
 				}

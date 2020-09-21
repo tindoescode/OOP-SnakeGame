@@ -1,6 +1,6 @@
 #include "SceneGame.h"
 #include "ScenePause.h"
-
+#include<sstream>
 std::shared_ptr<Object> SceneGame::addObject(ObjectType type, int x, int y) {
 	std::shared_ptr<Object> object;
 
@@ -456,6 +456,8 @@ void SceneGame::LateUpdate()
 				//get current score to calculate total score and reset current score = 0 if snake die
 				_sceneStateMachine.player->saveScore();
 				_sceneStateMachine.player->resetScore();
+
+				saveScore();
 			}
 
 			// Fruit/Gift
@@ -612,4 +614,38 @@ void SceneGame::SwitchTo(std::string mapName) // nay nhan vao mapName, la cai ch
 	if (it != _stateInf.end()) {
 		_sceneStateMachine.SwitchTo(it->second);
 	}
+}
+
+void SceneGame::saveScore() {
+	std::ifstream writer("ScoreBoard.txt", std::ios::in);
+	std::string line;
+
+	int countline = 0;
+	std::vector<std::string>temp;
+	while (getline(writer, line)) {
+		temp.push_back(line);
+	}
+	for (int i = 0; i < 10; i++) {
+		if (atoi(temp[i].substr(temp[i].rfind(" ") + 1, line.size() - temp[9].rfind(" ") - 1).c_str()) < _sceneStateMachine.player->getTotalScore())
+		{
+			Console::TextColor(ColorCode_DarkRed);
+			Console::gotoXY(15, 15);
+			std::cout << "Your score is in top 10 !!! Please enter your name (<10 character):";
+			Console::gotoXY(15, 16);
+			std::cout << "Please enter your name (<10 character):";
+			getline(std::cin, line);
+			std::stringstream input;
+			input << i + 1 << "." << line << " " << _lastRound << " " << _sceneStateMachine.player->getTotalScore();
+			temp[i] = input.str();
+			break;
+		}
+	}
+
+	writer.close();
+
+	std::ofstream reader("ScoreBoard.txt", std::ios::out);
+	for (int i = 0; i < 10; i++) {
+		reader << temp[i] << std::endl;
+	}
+	reader.close();
 }

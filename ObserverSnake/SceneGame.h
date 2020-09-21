@@ -132,4 +132,6 @@ public:
 	std::shared_ptr<Snake> getSnake() { return _snakes[0]; }
 
 	void registerPlayer(std::shared_ptr<Player> player, std::shared_ptr<Snake> snake); //TODO: controller for both
+
+	void saveScore();
 };

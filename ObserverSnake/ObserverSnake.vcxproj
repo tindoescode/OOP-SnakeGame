@@ -162,6 +162,7 @@
     <ClCompile Include="SceneSaveGame.cpp">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClCompile>
+    <ClCompile Include="SceneScoreBoard.cpp" />
     <ClCompile Include="SceneShop.cpp" />
     <ClCompile Include="SceneStateMachine.cpp" />
     <ClCompile Include="Snake.cpp" />
@@ -191,6 +192,7 @@
     <ClInclude Include="SceneSaveGame.h">
       <ExcludedFromBuild Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">false</ExcludedFromBuild>
     </ClInclude>
+    <ClInclude Include="SceneScoreBoard.h" />
     <ClInclude Include="SceneShop.h" />
     <ClInclude Include="SceneStateMachine.h" />
     <ClInclude Include="Snake.h" />

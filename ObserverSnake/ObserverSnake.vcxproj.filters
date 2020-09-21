@@ -126,6 +126,9 @@
     <ClCompile Include="X2Point.cpp">
       <Filter>Source Files\Items</Filter>
     </ClCompile>
+    <ClCompile Include="SceneScoreBoard.cpp">
+      <Filter>Source Files\Scenes</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Console.h">
@@ -202,6 +205,9 @@
     </ClInclude>
     <ClInclude Include="X2Point.h">
       <Filter>Header Files\Items</Filter>
+    </ClInclude>
+    <ClInclude Include="SceneScoreBoard.h">
+      <Filter>Header Files\Scenes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
