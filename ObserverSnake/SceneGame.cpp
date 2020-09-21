@@ -259,7 +259,6 @@ void SceneGame::OnCreate()
 	objects.clear();
 	freeBlock.reset();
 	_giftCount = 0;
-
 	_mapPath = _maps[_currentRound - 1];
 
 	// Load map (wall, snake)
@@ -289,6 +288,9 @@ void SceneGame::OnDestroy()
 
 void SceneGame::OnActivate()
 {
+	std::cin.clear();
+	fflush(stdin);
+
 	Console::TextColor(ColorCode_DarkYellow);
 	Console::gotoXY(5, 0);
 	std::cout << "Round " << _currentRound << ", Destination: " << _currentRound * 100 << " points to next round";
@@ -595,13 +597,14 @@ void SceneGame::saveScore() {
 	for (int i = 0; i < temp.size(); i++) {
 		if (atoi(temp[i].substr(temp[i].rfind(" ") + 1, line.size() - temp[9].rfind(" ") - 1).c_str()) < _sceneStateMachine.player->getTotalScore())
 		{
-			std::cin.ignore(INT_MAX, '\n');
+			std::cin.clear();
+			fflush(stdin);
 
 			Console::TextColor(ColorCode_DarkRed);
 			Console::gotoXY(15, 15);
-			std::cout << "Your score is in top 10 !!! Please enter your name (<10 character):";
+			std::cout << "Your score is in top 10 !!! Please enter your name (< 10 characters):";
 			Console::gotoXY(15, 16);
-			std::cout << "Enter your name (<10 character):";
+			std::cout << "Enter your name (< 10 characters):";
 
 			getline(std::cin, line);
 
