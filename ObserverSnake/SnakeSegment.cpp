@@ -1,11 +1,11 @@
 #include "SnakeSegment.h"
 
-SnakeSegment::SnakeSegment(int x, int y) : Object(x, y) {
+SnakeSegment::SnakeSegment(int x, int y) : Object(x, y), _character('O'), _color(ColorCode_Green) {
 
 }
 
 void SnakeSegment::paint() {
-	Console::TextColor(ColorCode_Green);
+	Console::TextColor(_color);
 	Console::gotoXY(_x, _y);
-	std::wcout << L'O';
+	std::cout << _character;
 }

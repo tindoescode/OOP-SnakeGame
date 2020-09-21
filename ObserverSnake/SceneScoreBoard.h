@@ -12,9 +12,14 @@ class SceneScoreBoard : public Scene
 private:
 	Menu* mainMenu;
 	SceneStateMachine& _sceneStateMachine;
+	std::unordered_map<std::string, unsigned int> _stateInf;
 
 public:
 	SceneScoreBoard(SceneStateMachine& sceneStateMachine);
+
+	void SetSwitchToScene(std::unordered_map<std::string, unsigned int> stateInf);
+
+	void SwitchTo(std::string mapName);
 
 	void OnCreate() override;
 	void OnActivate() override;

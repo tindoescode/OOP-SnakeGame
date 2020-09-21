@@ -39,12 +39,16 @@ private:
 
 	std::function<void()> _SkillKeyHandle;
 
+	int _color;
+	char _character;
+
 public:
-	Snake(int x, int y, std::shared_ptr<SceneGame> board);
+	Snake(int x, int y, std::shared_ptr<SceneGame> board, int color = ColorCode_DarkGreen, char character = 'O');
 
 	double getSpeed();
+	void resetStatus();
 	bool isThroughWall();
-
+	bool isStandingStill() { return _direction == Direction::idle; }
 	bool isX2Point();
 
 	void setSpeed(double speed, double speedTime = 30.0);
@@ -64,6 +68,9 @@ public:
 
 	void setPos(int x, int y);
 	void setDead();
+
+	void setColor(int color) { _color = color; }
+	void setCharacter(char character) { _character = character; }
 
 	GateCollisionType gateCollision(unsigned int score);
 	GateCollisionType gateCollision(COORD coord, unsigned int score);

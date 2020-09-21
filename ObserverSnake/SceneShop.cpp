@@ -47,7 +47,7 @@ void SceneShop::OnCreate()
 					break;
 				}
 				case 5: {
-					SwitchTo("ChooseMapScene");
+					SwitchTo("MainMenuScene");
 					break;
 				}
 				}

@@ -5,7 +5,20 @@
 #include"Game.h"
 SceneScoreBoard::SceneScoreBoard(SceneStateMachine& sceneStateMachine) : Scene(), _sceneStateMachine(sceneStateMachine), mainMenu(nullptr) {}
 
+void SceneScoreBoard::SetSwitchToScene(std::unordered_map<std::string, unsigned int> stateInf)
+{
+	// Stores the id of the scene that we will transition to.
+	_stateInf.merge(stateInf);
+}
 
+void SceneScoreBoard::SwitchTo(std::string mapName) // nay nhan vao mapName, la cai chuoi~ string dau tien
+{
+	auto it = _stateInf.find(mapName);
+
+	if (it != _stateInf.end()) {
+		_sceneStateMachine.SwitchTo(it->second);
+	}
+}
 
 void SceneScoreBoard::OnCreate()
 {
@@ -58,6 +71,10 @@ void SceneScoreBoard::OnActivate() {
 
 	Console::gotoXY(startPositionName - 3, 20);
 	std::cout << "PRESS ANYKEY TO BACK TO MY MENU";
+
+	if (_getch()) {
+		SwitchTo("MainMenuScene");
+	}
 }
 
 void SceneScoreBoard::OnDeactivate()

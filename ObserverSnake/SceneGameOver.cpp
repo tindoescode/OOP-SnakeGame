@@ -25,19 +25,18 @@ void SceneGameOver::SwitchTo(std::string mapName) // nay nhan vao mapName, la ca
 void SceneGameOver::OnCreate()
 {
 	gameOverMenu = new Menu(
-		{ L"Yes", L"Exit" },
+		{ L"Yes", L"Back to main menu" },
 		std::bind(
 			[this](unsigned int listitem) {
 				switch (listitem) {
 				case 0:
 					// Play again, switch to scene choose map
-					SwitchTo("SceneGame");  // roi bay gio t truyen SceneChooseMap voi Id cua no vao
-					//SwitchTo cua sceneStateMachine nhan Id hoac nhan tham chieu cua scene can chuyen
+					SwitchTo("SceneGame"); 
 
 					break;
 				case 1:
-					// Exit
-					exit(false);
+					// Back to main menu
+					_sceneStateMachine.SwitchTo(0);
 					break;
 				}
 			},

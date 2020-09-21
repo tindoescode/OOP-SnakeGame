@@ -10,6 +10,15 @@
 
 double Snake::getSpeed() { return _speed; }
 
+void Snake::resetStatus() {
+	_direction = Direction::idle;
+	_throughWallTime = 0;
+	_x2PointTime = 0;
+	_speed = 1;
+	_speedTime = 0;
+	_dead = false;
+}
+
 bool Snake::isThroughWall() {
 	if (_throughWallTime > 0) {
 		return true;
@@ -125,7 +134,7 @@ void Snake::setThroughWall(int time) {
 	_throughWallTime += time;
 }
 
-Snake::Snake(int x, int y, std::shared_ptr<SceneGame> board) : Object(x, y) {
+Snake::Snake(int x, int y, std::shared_ptr<SceneGame> board, int color, char character) : Object(x, y) {
 	_direction = Direction::idle;
 	_dead = false;
 	_board = board;
@@ -134,8 +143,15 @@ Snake::Snake(int x, int y, std::shared_ptr<SceneGame> board) : Object(x, y) {
 	_throughWallTime = 0.0;
 	_x2PointTime = 0.0;
 
+	_color = color;
+	_character = character;
+
 	// Initialize with a segment (assume it is snake's head)
-	segments.push_back(std::dynamic_pointer_cast<SnakeSegment>(_board->addObject(ObjectType::snake_segment, x, y)));
+	auto segment = std::dynamic_pointer_cast<SnakeSegment>(_board->addObject(ObjectType::snake_segment, x, y));
+	segment->setColor(_color);
+	segment->setCharacter(_character);
+
+	segments.push_back(segment);
 }
 
 void Snake::setPos(int x, int y) {
@@ -314,6 +330,10 @@ void Snake::move(int step) {
 
 	// Add new head object
 	auto head = std::dynamic_pointer_cast<SnakeSegment>(_board->addObject(ObjectType::snake_segment, x, y));
+	
+	head->setColor(isX2Point() ? rand() % 10 + 1 : _color);
+	head->setCharacter(_character);
+
 	segments.push_front(head);
 
 	// Update new head position
