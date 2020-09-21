@@ -11,8 +11,8 @@ void Menu::Draw()
 	menuBorder();
 	for (int i = 0; i < heightBorder; i++)
 	{
-		TextColor(color[i]);
-		gotoXY(SCREEN_WIDTH / 2 - lengthBorder / 2, SCREEN_HEIGHT / 2 - heightBorder / 2 + i);
+		Console::TextColor(color[i]);
+		Console::gotoXY(SCREEN_WIDTH / 2 - lengthBorder / 2, SCREEN_HEIGHT / 2 - heightBorder / 2 + i);
 		std::wcout << _items[i] << std::endl;
 	}
 }
@@ -30,7 +30,7 @@ Menu::Menu(const std::vector<std::wstring> items, std::function<void(unsigned in
 	lengthBorder = maxLength;
 	heightBorder = (int)items.size();
 
-	//clrscr();
+	//Console::clrscr();
 
 	color = new int[ _items.size() ];
 
@@ -73,8 +73,8 @@ void Menu::Update(Status key) {
 	}
 
 	case Status::enter: {
-		gotoXY(0, _selectedItem + 10);
-		TextColor(ColorCode_Black);
+		Console::gotoXY(0, _selectedItem + 10);
+		Console::TextColor(ColorCode_Black);
 
 		//cls khong clear dc mau nen` 
 		std::cout << "\t\t\t\t\t\t\t\t\t\t";
@@ -95,8 +95,8 @@ void Menu::Update(Status key) {
 }
 
 void Menu::Title() {
-	gotoXY(0, 0);
-	TextColor(rand() % 10 + 1);
+	Console::gotoXY(0, 0);
+	Console::TextColor(rand() % 10 + 1);
 
 	std::cout << "\
 				.-')        .-') _    ('-.    .-. .-')     ('-.   \n\
@@ -115,30 +115,30 @@ void Menu::Title() {
 
 void Menu::menuBorder() {
 	//top and bottom border
-	TextColor(ColorCode_Cyan);
+	Console::TextColor(ColorCode_Cyan);
 	for (int i = SCREEN_WIDTH / 2 - lengthBorder / 2 - 2; i <= SCREEN_WIDTH / 2 + lengthBorder / 2 + 2; i++) {
-		gotoXY(i, SCREEN_HEIGHT / 2 - heightBorder / 2 - 2);
+		Console::gotoXY(i, SCREEN_HEIGHT / 2 - heightBorder / 2 - 2);
 		std::cout << (char)205;
-		gotoXY(i, SCREEN_HEIGHT / 2 + heightBorder / 2 + 2);
+		Console::gotoXY(i, SCREEN_HEIGHT / 2 + heightBorder / 2 + 2);
 		std::cout << (char)205;
 	}
 
 	{	//4 corner
-		gotoXY(SCREEN_WIDTH / 2 - lengthBorder / 2 - 2, SCREEN_HEIGHT / 2 - heightBorder / 2 - 2);
+		Console::gotoXY(SCREEN_WIDTH / 2 - lengthBorder / 2 - 2, SCREEN_HEIGHT / 2 - heightBorder / 2 - 2);
 		std::cout << (char)201;
-		gotoXY(SCREEN_WIDTH / 2 - lengthBorder / 2 - 2, SCREEN_HEIGHT / 2 + heightBorder / 2 + 2);
+		Console::gotoXY(SCREEN_WIDTH / 2 - lengthBorder / 2 - 2, SCREEN_HEIGHT / 2 + heightBorder / 2 + 2);
 		std::cout << (char)200;
 
-		gotoXY(SCREEN_WIDTH / 2 + lengthBorder / 2 + 2, SCREEN_HEIGHT / 2 - heightBorder / 2 - 2);
+		Console::gotoXY(SCREEN_WIDTH / 2 + lengthBorder / 2 + 2, SCREEN_HEIGHT / 2 - heightBorder / 2 - 2);
 		std::cout << (char)187;
-		gotoXY(SCREEN_WIDTH / 2 + lengthBorder / 2 + 2, SCREEN_HEIGHT / 2 + heightBorder / 2 + 2);
+		Console::gotoXY(SCREEN_WIDTH / 2 + lengthBorder / 2 + 2, SCREEN_HEIGHT / 2 + heightBorder / 2 + 2);
 		std::cout << (char)188;
 	}
 	//left and right border
 	for (int i = SCREEN_HEIGHT / 2 - heightBorder / 2 - 1; i <= SCREEN_HEIGHT / 2 + heightBorder / 2 + 1; i++) {
-		gotoXY(SCREEN_WIDTH / 2 - lengthBorder / 2 - 2, i);
+		Console::gotoXY(SCREEN_WIDTH / 2 - lengthBorder / 2 - 2, i);
 		std::cout << (char)186;
-		gotoXY(SCREEN_WIDTH / 2 + lengthBorder / 2 + 2, i);
+		Console::gotoXY(SCREEN_WIDTH / 2 + lengthBorder / 2 + 2, i);
 		std::cout << (char)186;
 	}
 }

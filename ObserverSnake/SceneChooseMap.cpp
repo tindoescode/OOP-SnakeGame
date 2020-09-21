@@ -49,8 +49,8 @@ void SceneChooseMap::OnCreate()
 				}
 				}
 
-				//TextColor(ColorCode_White);
-				//gotoXY(0, 0);
+				//Console::TextColor(ColorCode_White);
+				//Console::gotoXY(0, 0);
 				//std::cout << "Select item: " << listitem << std::endl;
 			},
 			std::placeholders::_1

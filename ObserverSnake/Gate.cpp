@@ -7,12 +7,12 @@ Gate::Gate(int x, int y) : Object(x, y) {
 }
 
 void Gate::paint() {
-	TextColor(ColorCode_Red);
-	gotoXY(_x, _y - 1);
+	Console::TextColor(ColorCode_Red);
+	Console::gotoXY(_x, _y - 1);
 	std::cout << char(220) << char(220) << char(220);
-	gotoXY(_x, _y);
+	Console::gotoXY(_x, _y);
 	std::cout << char(219);
-	gotoXY(_x, _y + 1);
+	Console::gotoXY(_x, _y + 1);
 	std::cout << char(223) << char(223) << char(223);
 }
 

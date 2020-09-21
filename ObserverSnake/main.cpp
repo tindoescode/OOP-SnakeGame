@@ -9,11 +9,11 @@ int main() {
 	srand(static_cast<unsigned int>(time(0)));
 
 	// Set console size
-	SetWindow(SCREEN_WIDTH, SCREEN_HEIGHT);
+	Console::SetWindow(SCREEN_WIDTH, SCREEN_HEIGHT);
 
-	//drawRect( { 0,0 }, { 10,10 } );
+	//Console::drawRect( { 0,0 }, { 10,10 } );
 
-	Nocursortype();
+	Console::Nocursortype();
 
 	// Make the game loop
 	Game game;

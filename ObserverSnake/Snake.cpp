@@ -246,11 +246,11 @@ bool Snake::getItem(std::shared_ptr<Gift> gift) {
 			break;
 		}
 
-		gotoXY(0, 0);
-		TextColor(ColorCode_Pink);
+		Console::gotoXY(0, 0);
+		Console::TextColor(ColorCode_Pink);
 		std::cout << "You got a " << itemNames[n] << " on slot " << i << ".";
 
-		gotoXY(UISlotTextPosition[i].X, UISlotTextPosition[i].Y);
+		Console::gotoXY(UISlotTextPosition[i].X, UISlotTextPosition[i].Y);
 		std::cout << itemNames[n];
 	}
 
@@ -335,7 +335,7 @@ bool Snake::activeItem(int slot) {
 	_items[slot].reset();
 
 	COORD UISlotTextPosition[4] = { {-1, -1}, {91, 11}, {91, 14}, {91, 17} };
-	gotoXY(UISlotTextPosition[slot].X, UISlotTextPosition[slot].Y);
+	Console::gotoXY(UISlotTextPosition[slot].X, UISlotTextPosition[slot].Y);
 	std::cout << "Empty            ";
 
 	return true;
@@ -350,7 +350,7 @@ void Snake::enlonger(int n)
 }
 
 void Snake::paint() {
-	TextColor(ColorCode_Green);
+	Console::TextColor(ColorCode_Green);
 
 	if(segments.front()->getX() != 0 && segments.front()->getY() != 0)
 		segments.front()->paint();

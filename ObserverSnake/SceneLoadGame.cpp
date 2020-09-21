@@ -32,8 +32,8 @@ void SceneLoadGame::OnCreate()
 	std::filesystem::create_directory(savegamePath);
 
 	// Top message
-	gotoXY(0, 0);
-	TextColor(ColorCode_Cyan);
+	Console::gotoXY(0, 0);
+	Console::TextColor(ColorCode_Cyan);
 	std::cout << "Choose a previous saved game to continue your progress." << std::endl;
 
 	//

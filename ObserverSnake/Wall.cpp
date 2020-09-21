@@ -5,8 +5,8 @@ Wall::Wall(int x, int y) : Object(x, y) {
 }
 
 void Wall::paint() {
-	TextColor(ColorCode_Grey);
-	gotoXY(_x, _y);
+	Console::TextColor(ColorCode_Grey);
+	Console::gotoXY(_x, _y);
 
 	std::cout << char(219);
 }

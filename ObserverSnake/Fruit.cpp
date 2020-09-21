@@ -10,8 +10,8 @@ Fruit::~Fruit()
 }
 
 void Fruit::paint() {
-	TextColor(ColorCode_Red);
-	gotoXY(_x, _y);
+	Console::TextColor(ColorCode_Red);
+	Console::gotoXY(_x, _y);
 	std::cout << '#';
 }
 

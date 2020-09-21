@@ -44,8 +44,8 @@ void SceneSaveGame::OnActivate()
 
 	std::filesystem::create_directory(savegamePath);
 
-	//gotoXY(0, 0);
-	//TextColor(ColorCode_Cyan);
+	//Console::gotoXY(0, 0);
+	//Console::TextColor(ColorCode_Cyan);
 	//for (const auto& entry : std::filesystem::directory_iterator(savegamePath))
 	//	std::cout << entry.path() << std::endl; 
 	
@@ -70,8 +70,8 @@ void SceneSaveGame::OnActivate()
 	}
 	writer.close();
 
-	gotoXY(30,10);
-	TextColor(ColorCode_Cyan);
+	Console::gotoXY(30,10);
+	Console::TextColor(ColorCode_Cyan);
 	std::wcout << L"Successfully save game to " << output << std::endl;
 
 	Sleep(3000);

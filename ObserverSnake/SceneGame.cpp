@@ -35,7 +35,7 @@ std::shared_ptr<Object> SceneGame::addObject(ObjectType type, int x, int y) {
 }
 
 void SceneGame::drawBorder() {
-	TextColor(ColorCode_Cyan);
+	Console::TextColor(ColorCode_Cyan);
 
 	int x, y;
 	//it will be changed when we have more information 
@@ -43,7 +43,7 @@ void SceneGame::drawBorder() {
 	x = 0, y = 0;
 
 	while (x <= _width) {
-		gotoXY(_position.X + x, _position.Y + y - 1);
+		Console::gotoXY(_position.X + x, _position.Y + y - 1);
 		std::cout << char(205);
 		x++;
 	}
@@ -51,7 +51,7 @@ void SceneGame::drawBorder() {
 	//draw line at the bottom of program
 	x = 0, y = _height;
 	while (x <= _width) {
-		gotoXY(_position.X + x, _position.Y + y + 1);
+		Console::gotoXY(_position.X + x, _position.Y + y + 1);
 		std::cout << char(205);
 		x++;
 	}
@@ -59,7 +59,7 @@ void SceneGame::drawBorder() {
 	//draw line at the left of program
 	x = 0, y = 0;
 	while (y <= _height) {
-		gotoXY(_position.X + x - 1, _position.Y + y);
+		Console::gotoXY(_position.X + x - 1, _position.Y + y);
 		std::cout << char(186);
 		y++;
 	}
@@ -67,25 +67,25 @@ void SceneGame::drawBorder() {
 	//draw line at the right of program
 	x = _width, y = 0;
 	while (y <= _height) {
-		gotoXY(_position.X + x + 1, _position.Y + y);
+		Console::gotoXY(_position.X + x + 1, _position.Y + y);
 		std::cout << char(186);
 		y++;
 	}
 
 	// top left
-	gotoXY(_position.X - 1, _position.Y - 1);
+	Console::gotoXY(_position.X - 1, _position.Y - 1);
 	std::cout << char(201);
 
 	// top right
-	gotoXY(_position.X + _width + 1, _position.Y - 1);
+	Console::gotoXY(_position.X + _width + 1, _position.Y - 1);
 	std::cout << char(187);
 
 	// bottom left
-	gotoXY(_position.X - 1, _position.Y + _height + 1);
+	Console::gotoXY(_position.X - 1, _position.Y + _height + 1);
 	std::cout << char(200);
 
 	// bottom right
-	gotoXY(_position.X + _width + 1, _position.Y + _height + 1);
+	Console::gotoXY(_position.X + _width + 1, _position.Y + _height + 1);
 	std::cout << char(188);
 
 }
@@ -149,50 +149,50 @@ void SceneGame::loadSnakeKeyHandle()
 	_snakes[0]->setSkillKeyHandle([this]() {
 		//TODO: the same thing to snake 1
 		if (GetAsyncKeyState((int)Key::N1)) {
-			TextColor(ColorCode_DarkCyan);
-			gotoXY(0, 0);
+			Console::TextColor(ColorCode_DarkCyan);
+			Console::gotoXY(0, 0);
 			std::cout << "Key 1 pressed.";
 
 			if (_snakes[0]->activeItem(1)) {
-				TextColor(ColorCode_DarkCyan);
-				gotoXY(0, 0);
+				Console::TextColor(ColorCode_DarkCyan);
+				Console::gotoXY(0, 0);
 				std::cout << "Item on slot 1 activated.";
 			}
 			else {
-				TextColor(ColorCode_DarkCyan);
-				gotoXY(0, 0);
+				Console::TextColor(ColorCode_DarkCyan);
+				Console::gotoXY(0, 0);
 				std::cout << "You don't have any item on slot 1.";
 			}
 		}
 		else if (GetAsyncKeyState((int)Key::N2)) {
-			TextColor(ColorCode_DarkCyan);
-			gotoXY(0, 0);
+			Console::TextColor(ColorCode_DarkCyan);
+			Console::gotoXY(0, 0);
 			std::cout << "Key 2 pressed.";
 
 			if (_snakes[0]->activeItem(2)) {
-				TextColor(ColorCode_DarkCyan);
-				gotoXY(0, 0);
+				Console::TextColor(ColorCode_DarkCyan);
+				Console::gotoXY(0, 0);
 				std::cout << "Item on slot 2 activated.";
 			}
 			else {
-				TextColor(ColorCode_DarkCyan);
-				gotoXY(0, 0);
+				Console::TextColor(ColorCode_DarkCyan);
+				Console::gotoXY(0, 0);
 				std::cout << "You don't have any item on slot 2.";
 			}
 		}
 		else if (GetAsyncKeyState((int)Key::N3)) {
-			TextColor(ColorCode_DarkCyan);
-			gotoXY(0, 0);
+			Console::TextColor(ColorCode_DarkCyan);
+			Console::gotoXY(0, 0);
 			std::cout << "Key L pressed.";
 
 			if (_snakes[0]->activeItem(3)) {
-				TextColor(ColorCode_DarkCyan);
-				gotoXY(0, 0);
+				Console::TextColor(ColorCode_DarkCyan);
+				Console::gotoXY(0, 0);
 				std::cout << "Item on slot 3 activated.";
 			}
 			else {
-				TextColor(ColorCode_DarkCyan);
-				gotoXY(0, 0);
+				Console::TextColor(ColorCode_DarkCyan);
+				Console::gotoXY(0, 0);
 				std::cout << "You don't have any item on slot 3.";
 			}
 		}
@@ -201,50 +201,50 @@ void SceneGame::loadSnakeKeyHandle()
 	if (_snakes.size() >= 2) {
 		_snakes[1]->setSkillKeyHandle([this]() {
 			if (GetAsyncKeyState((int)Key::J)) {
-				TextColor(ColorCode_DarkCyan);
-				gotoXY(0, 0);
+				Console::TextColor(ColorCode_DarkCyan);
+				Console::gotoXY(0, 0);
 				std::cout << "Key J pressed.";
 
 				if (_snakes[1]->activeItem(1)) {
-					TextColor(ColorCode_DarkCyan);
-					gotoXY(0, 0);
+					Console::TextColor(ColorCode_DarkCyan);
+					Console::gotoXY(0, 0);
 					std::cout << "Item on slot 1 activated.";
 				}
 				else {
-					TextColor(ColorCode_DarkCyan);
-					gotoXY(0, 0);
+					Console::TextColor(ColorCode_DarkCyan);
+					Console::gotoXY(0, 0);
 					std::cout << "You don't have any item on slot 1.";
 				}
 			}
 			else if (GetAsyncKeyState((int)Key::K)) {
-				TextColor(ColorCode_DarkCyan);
-				gotoXY(0, 0);
+				Console::TextColor(ColorCode_DarkCyan);
+				Console::gotoXY(0, 0);
 				std::cout << "Key K pressed.";
 
 				if (_snakes[1]->activeItem(2)) {
-					TextColor(ColorCode_DarkCyan);
-					gotoXY(0, 0);
+					Console::TextColor(ColorCode_DarkCyan);
+					Console::gotoXY(0, 0);
 					std::cout << "Item on slot 2 activated.";
 				}
 				else {
-					TextColor(ColorCode_DarkCyan);
-					gotoXY(0, 0);
+					Console::TextColor(ColorCode_DarkCyan);
+					Console::gotoXY(0, 0);
 					std::cout << "You don't have any item on slot 2.";
 				}
 			}
 			else if (GetAsyncKeyState((int)Key::L)) {
-				TextColor(ColorCode_DarkCyan);
-				gotoXY(0, 0);
+				Console::TextColor(ColorCode_DarkCyan);
+				Console::gotoXY(0, 0);
 				std::cout << "Key L pressed.";
 
 				if (_snakes[1]->activeItem(3)) {
-					TextColor(ColorCode_DarkCyan);
-					gotoXY(0, 0);
+					Console::TextColor(ColorCode_DarkCyan);
+					Console::gotoXY(0, 0);
 					std::cout << "Item on slot 3 activated.";
 				}
 				else {
-					TextColor(ColorCode_DarkCyan);
-					gotoXY(0, 0);
+					Console::TextColor(ColorCode_DarkCyan);
+					Console::gotoXY(0, 0);
 					std::cout << "You don't have any item on slot 3.";
 				}
 			}
@@ -332,8 +332,8 @@ void SceneGame::OnDestroy()
 
 void SceneGame::OnActivate()
 {
-	TextColor(ColorCode_DarkYellow);
-	gotoXY(5, 0);
+	Console::TextColor(ColorCode_DarkYellow);
+	Console::gotoXY(5, 0);
 	std::cout << "Round " << _currentRound << ", Destination: " << _currentRound * 100 << " points to next round";
 
 	drawSkillBox();
@@ -489,13 +489,13 @@ void SceneGame::LateUpdate()
 			else if (destinateGift = snake->giftCollision()) {
 				int i = 0;
 				if (snake->getItem(destinateGift)) {
-					gotoXY(0, 0);
-					TextColor(ColorCode_Cyan);
+					Console::gotoXY(0, 0);
+					Console::TextColor(ColorCode_Cyan);
 					std::cout << "Got a gift";
 				}
 				else {
-					gotoXY(0, 0);
-					TextColor(ColorCode_Cyan);
+					Console::gotoXY(0, 0);
+					Console::TextColor(ColorCode_Cyan);
 					std::cout << "You don't have any free slot to get gift.";
 				}
 
@@ -506,7 +506,7 @@ void SceneGame::LateUpdate()
 				_currentRound++;
 
 				if (_currentRound > _lastRound) {
-					gotoXY(0, 0);
+					Console::gotoXY(0, 0);
 					std::cout << "Chuc mung, ve nuoc.";
 
 					Sleep(30000);
@@ -516,7 +516,7 @@ void SceneGame::LateUpdate()
 				}
 				else {
 					// Going to next round, remains snake size
-					clrscr();
+					Console::clrscr();
 					OnCreate();
 					OnActivate();
 
@@ -570,31 +570,31 @@ void SceneGame::Draw()
 }
 
 void SceneGame::drawSkillBox() {
-	drawRect({ 90, 10 }, { 100, 12 });
-	drawRect({ 90, 13 }, { 100, 15 });
-	drawRect({ 90, 16 }, { 100, 18 });
+	Console::drawRect({ 90, 10 }, { 100, 12 });
+	Console::drawRect({ 90, 13 }, { 100, 15 });
+	Console::drawRect({ 90, 16 }, { 100, 18 });
 
-	TextColor(ColorCode_Pink);
+	Console::TextColor(ColorCode_Pink);
 
 	// Skill1
-	gotoXY(88, 11);
+	Console::gotoXY(88, 11);
 	std::cout << "J:";
 
-	gotoXY(91, 11);
+	Console::gotoXY(91, 11);
 	std::cout << "Empty";
 
 	// Skill2
-	gotoXY(88, 14);
+	Console::gotoXY(88, 14);
 	std::cout << "K:";
 
-	gotoXY(91, 14);
+	Console::gotoXY(91, 14);
 	std::cout << "Empty";
 
 	// Skill3
-	gotoXY(88, 17);
+	Console::gotoXY(88, 17);
 	std::cout << "K:";
 
-	gotoXY(91, 17);
+	Console::gotoXY(91, 17);
 	std::cout << "Empty";
 }
 

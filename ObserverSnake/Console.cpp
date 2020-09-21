@@ -4,7 +4,7 @@
 #include <iostream>
 
 //-------------------------Screen-------------------------
-void clrscr() {
+void Console::clrscr() {
 	CONSOLE_SCREEN_BUFFER_INFO	csbiInfo;
 	HANDLE	hConsoleOut;
 	COORD	Home = { 0,0 };
@@ -19,7 +19,7 @@ void clrscr() {
 	SetConsoleCursorPosition(hConsoleOut, csbiInfo.dwCursorPosition);
 }
 
-void SetWindow(int Width, int Height)
+void Console::SetWindow(int Width, int Height)
 {
 	_COORD coord;
 	coord.X = Width;
@@ -37,25 +37,25 @@ void SetWindow(int Width, int Height)
 }
 
 //screen: goto (x,y)
-void gotoXY(int column, int line) {
+void Console::gotoXY(int column, int line) {
 	COORD coord;
 	coord.X = column;
 	coord.Y = line;
 	SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
 }
 
-void TextColor(int color) {
+void Console::TextColor(int color) {
 	SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
 }
 
-void Nocursortype() {
+void Console::Nocursortype() {
 	CONSOLE_CURSOR_INFO Info;
 	Info.bVisible = FALSE;
 	Info.dwSize = 20;
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &Info);
 }
 
-void drawRect(COORD start, COORD end, int color) {
+void Console::drawRect(COORD start, COORD end, int color) {
 	TextColor(color);
 
 	//top

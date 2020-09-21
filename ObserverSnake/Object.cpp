@@ -8,7 +8,7 @@ Object::~Object() {
 
 void Object::clearBlock() {
 	if (_x != -1 && _y != -1) {
-		gotoXY(_x, _y);
+		Console::gotoXY(_x, _y);
 		std::cout << " ";
 	}
 }

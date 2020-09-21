@@ -23,8 +23,8 @@ void Player::saveScore() {
 }
 
 void Player::showCurrentScore() {
-	gotoXY(103, 3);
+	Console::gotoXY(103, 3);
 	std::wcout << "Total Score: " << totalScore;
-	gotoXY(103, 4);
+	Console::gotoXY(103, 4);
 	std::wcout << "Your Score: " << currentScore;
 }

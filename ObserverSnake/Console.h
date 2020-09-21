@@ -40,13 +40,16 @@ enum class Key {
 	L = 0x4C
 };
 
-void clrscr();
+class Console {
+public:
+	static void clrscr();
 
-//screen: goto [x,y]
-void gotoXY(int column, int line);
-void TextColor(int color);
-void SetWindow(int Width, int Height);
-void Nocursortype();
-void drawRect(COORD start, COORD end, int color = ColorCode_DarkPink);
+	//screen: goto [x,y]
+	static void gotoXY(int column, int line);
+	static void TextColor(int color);
+	static void SetWindow(int Width, int Height);
+	static void Nocursortype();
+	static void drawRect(COORD start, COORD end, int color = ColorCode_DarkPink);
+};
 
 #endif
