@@ -25,26 +25,26 @@ void SceneChooseMap::OnCreate()
 	mainMenu = new Menu(
 		{ L"Classic Map 1", L"Classic Map 2", L"Modern Map 1", L"Modern Map 2", L"Shop" }, 
 		std::bind(
-			[](unsigned int listitem, Scene* scene) {
+			[this](unsigned int listitem) {
 				switch (listitem) {
 				case 0: {
-					dynamic_cast<SceneChooseMap*>(scene)->SwitchTo("ClassicMap1");
+					SwitchTo("ClassicMap1");
 					break;
 				}
 				case 1: {
-					dynamic_cast<SceneChooseMap*>(scene)->SwitchTo("ClassicMap2");
+					SwitchTo("ClassicMap2");
 					break;
 				}
 				case 2: {
-					dynamic_cast<SceneChooseMap*>(scene)->SwitchTo("ModernMap1");
+					SwitchTo("ModernMap1");
 					break;
 				}
 				case 3: {
-					dynamic_cast<SceneChooseMap*>(scene)->SwitchTo("ModernMap2");
+					SwitchTo("ModernMap2");
 					break;
 				}
 				case 4: {
-					dynamic_cast<SceneChooseMap*>(scene)->SwitchTo("ShopScene");
+					SwitchTo("ShopScene");
 					break;
 				}
 				}
@@ -53,7 +53,7 @@ void SceneChooseMap::OnCreate()
 				//gotoXY(0, 0);
 				//std::cout << "Select item: " << listitem << std::endl;
 			},
-			std::placeholders::_1, (Scene*)this
+			std::placeholders::_1
 		)
 	);
 }

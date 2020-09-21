@@ -29,7 +29,7 @@ void SceneShop::OnCreate()
 		L"20 Score: Snake's Speed x3",
 		L"Back to ChooseMapMenu" },
 		std::bind(
-			[](unsigned int listitem, Scene* scene) {
+			[this](unsigned int listitem) {
 				switch (listitem) {
 				case 0: {
 					break;
@@ -47,13 +47,13 @@ void SceneShop::OnCreate()
 					break;
 				}
 				case 5: {
-					dynamic_cast<SceneShop*>(scene)->SwitchTo("ChooseMapScene");
+					SwitchTo("ChooseMapScene");
 					break;
 				}
 				}
 			},
-			std::placeholders::_1, (Scene*)this
-				)
+			std::placeholders::_1
+		)
 	);
 }
 

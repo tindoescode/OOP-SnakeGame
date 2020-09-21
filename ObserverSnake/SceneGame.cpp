@@ -119,7 +119,7 @@ void SceneGame::loadMap() {
 			}
 			else if (line[i] == '>') // start
 			{
-				_snake = std::dynamic_pointer_cast<Snake>(addObject(ObjectType::snake, _position.X + i, _position.Y + height));
+				_snakes.push_back(std::dynamic_pointer_cast<Snake>(addObject(ObjectType::snake, _position.X + i, _position.Y + height)));
 			}
 			else if (line[i] == 'G') //gate
 			{
@@ -134,7 +134,7 @@ void SceneGame::loadMap() {
 	_height = height - 1;
 
 	try {
-		if (!_snake) throw NoSnakeException();
+		if (!_snakes.size()) throw NoSnakeException();
 	}
 	catch (std::exception& ex) {
 		system("cls");
@@ -142,6 +142,114 @@ void SceneGame::loadMap() {
 	}
 
 	f.close();
+}
+
+void SceneGame::loadSnakeKeyHandle()
+{
+	_snakes[0]->setSkillKeyHandle([this]() {
+		//TODO: the same thing to snake 1
+		if (GetAsyncKeyState((int)Key::N1)) {
+			TextColor(ColorCode_DarkCyan);
+			gotoXY(0, 0);
+			std::cout << "Key 1 pressed.";
+
+			if (_snakes[0]->activeItem(1)) {
+				TextColor(ColorCode_DarkCyan);
+				gotoXY(0, 0);
+				std::cout << "Item on slot 1 activated.";
+			}
+			else {
+				TextColor(ColorCode_DarkCyan);
+				gotoXY(0, 0);
+				std::cout << "You don't have any item on slot 1.";
+			}
+		}
+		else if (GetAsyncKeyState((int)Key::N2)) {
+			TextColor(ColorCode_DarkCyan);
+			gotoXY(0, 0);
+			std::cout << "Key 2 pressed.";
+
+			if (_snakes[0]->activeItem(2)) {
+				TextColor(ColorCode_DarkCyan);
+				gotoXY(0, 0);
+				std::cout << "Item on slot 2 activated.";
+			}
+			else {
+				TextColor(ColorCode_DarkCyan);
+				gotoXY(0, 0);
+				std::cout << "You don't have any item on slot 2.";
+			}
+		}
+		else if (GetAsyncKeyState((int)Key::N3)) {
+			TextColor(ColorCode_DarkCyan);
+			gotoXY(0, 0);
+			std::cout << "Key L pressed.";
+
+			if (_snakes[0]->activeItem(3)) {
+				TextColor(ColorCode_DarkCyan);
+				gotoXY(0, 0);
+				std::cout << "Item on slot 3 activated.";
+			}
+			else {
+				TextColor(ColorCode_DarkCyan);
+				gotoXY(0, 0);
+				std::cout << "You don't have any item on slot 3.";
+			}
+		}
+	});
+
+	if (_snakes.size() == 2) {
+		_snakes[1]->setSkillKeyHandle([this]() {
+			if (GetAsyncKeyState((int)Key::J)) {
+				TextColor(ColorCode_DarkCyan);
+				gotoXY(0, 0);
+				std::cout << "Key J pressed.";
+
+				if (_snakes[1]->activeItem(1)) {
+					TextColor(ColorCode_DarkCyan);
+					gotoXY(0, 0);
+					std::cout << "Item on slot 1 activated.";
+				}
+				else {
+					TextColor(ColorCode_DarkCyan);
+					gotoXY(0, 0);
+					std::cout << "You don't have any item on slot 1.";
+				}
+			}
+			else if (GetAsyncKeyState((int)Key::K)) {
+				TextColor(ColorCode_DarkCyan);
+				gotoXY(0, 0);
+				std::cout << "Key K pressed.";
+
+				if (_snakes[1]->activeItem(2)) {
+					TextColor(ColorCode_DarkCyan);
+					gotoXY(0, 0);
+					std::cout << "Item on slot 2 activated.";
+				}
+				else {
+					TextColor(ColorCode_DarkCyan);
+					gotoXY(0, 0);
+					std::cout << "You don't have any item on slot 2.";
+				}
+			}
+			else if (GetAsyncKeyState((int)Key::L)) {
+				TextColor(ColorCode_DarkCyan);
+				gotoXY(0, 0);
+				std::cout << "Key L pressed.";
+
+				if (_snakes[1]->activeItem(3)) {
+					TextColor(ColorCode_DarkCyan);
+					gotoXY(0, 0);
+					std::cout << "Item on slot 3 activated.";
+				}
+				else {
+					TextColor(ColorCode_DarkCyan);
+					gotoXY(0, 0);
+					std::cout << "You don't have any item on slot 3.";
+				}
+			}
+		});
+	}
 }
 
 bool SceneGame::isOccupied(int x, int y) {
@@ -186,7 +294,7 @@ void SceneGame::setOccupiedBlock(int x, int y, unsigned int occupied)
  	freeBlock.set(y * MAX_X + x, occupied);
 }
 
-SceneGame::SceneGame(const std::vector<std::string> &maps, SceneStateMachine& sceneStateMachine) : Scene(), _maps(maps), _width(100), _height(30), _snake(nullptr), _fruit(nullptr), _sceneStateMachine(sceneStateMachine),
+SceneGame::SceneGame(const std::vector<std::string> &maps, SceneStateMachine& sceneStateMachine) : Scene(), _maps(maps), _width(100), _height(30), _fruit(nullptr), _sceneStateMachine(sceneStateMachine),
 _pauseScene(0), _position({ 10, 5 }), _currentRound(1), _gate(nullptr), _giftCount(0)
 {
 	freeBlock.reset();	
@@ -195,6 +303,7 @@ _pauseScene(0), _position({ 10, 5 }), _currentRound(1), _gate(nullptr), _giftCou
 
 void SceneGame::OnCreate()
 {
+	_snakes.clear();
 	objects.clear();
 	freeBlock.reset();
 
@@ -203,9 +312,16 @@ void SceneGame::OnCreate()
 	// Load map (wall, snake)
 	loadMap();
 
-	// Create fruit
+	// Add the second snake
 	auto [X, Y] = getFreeBlock();
-	_fruit = std::dynamic_pointer_cast<Fruit>(addObject(ObjectType::fruit, X, Y));
+	_snakes.push_back(std::dynamic_pointer_cast<Snake>(addObject(ObjectType::snake, X, Y)));
+
+	// Initialize controller for each snake
+	loadSnakeKeyHandle();
+
+	// Create fruit
+	COORD block = getFreeBlock();
+	_fruit = std::dynamic_pointer_cast<Fruit>(addObject(ObjectType::fruit, block.X, block.Y));
 }
 
 void SceneGame::OnDestroy()
@@ -231,12 +347,6 @@ void SceneGame::OnDeactivate()
 	system("cls");
 }
 
-enum class Key {
-	J = 0x4A,
-	K = 0x4B,
-	L = 0x4C
-};
-
 void SceneGame::ProcessInput()
 {
 	//Handle ESC Key
@@ -244,63 +354,54 @@ void SceneGame::ProcessInput()
 		_pauseScene->SetContinueScene(_sceneStateMachine.GetCurrentScene());
 		SwitchTo("PauseScene");
 	}
-	else if (GetAsyncKeyState((int)Key::J)) {
-		TextColor(ColorCode_DarkCyan);
-		gotoXY(0, 0);
-		std::cout << "Key J pressed.";
-
-		if (_snake->activeItem(1)) {
-			TextColor(ColorCode_DarkCyan);
-			gotoXY(0, 0);
-			std::cout << "Item on slot 1 activated.";
-		}
-		else {
-			TextColor(ColorCode_DarkCyan);
-			gotoXY(0, 0);
-			std::cout << "You don't have any item on slot 1.";
-		}
-	}
-	else if (GetAsyncKeyState((int)Key::K)) {
-		TextColor(ColorCode_DarkCyan);
-		gotoXY(0, 0);
-		std::cout << "Key K pressed.";
-
-		if (_snake->activeItem(2)) {
-			TextColor(ColorCode_DarkCyan);
-			gotoXY(0, 0);
-			std::cout << "Item on slot 2 activated.";
-		}
-		else {
-			TextColor(ColorCode_DarkCyan);
-			gotoXY(0, 0);
-			std::cout << "You don't have any item on slot 2.";
-		}
-	}
-	else if (GetAsyncKeyState((int)Key::L)) {
-		TextColor(ColorCode_DarkCyan);
-		gotoXY(0, 0);
-		std::cout << "Key L pressed.";
-
-		if (_snake->activeItem(3)) {
-			TextColor(ColorCode_DarkCyan);
-			gotoXY(0, 0);
-			std::cout << "Item on slot 3 activated.";
-		}
-		else {
-			TextColor(ColorCode_DarkCyan);
-			gotoXY(0, 0);
-			std::cout << "You don't have any item on slot 3.";
-		}
-	}
-	// Game loop
-	char op;
 	
-	if (_kbhit())
-	{
-		// Create a new head segment, delete tail segment
-		op = tolower(_getch());
+	for(auto snake : _snakes) {
+		snake->HandleSkillKey();
+	}
 
-		_snake->turnHead(Direction(op));
+	// Game loop
+	Direction direction = Direction::idle;
+	int snakeId = -1;
+
+	// Snake 0
+	if (GetAsyncKeyState(0x57)) { // W
+		direction = Direction::up;
+		snakeId = 0;
+	}
+	else if (GetAsyncKeyState(0x53)) { // S
+		direction = Direction::down;
+		snakeId = 0;
+	}
+	else if (GetAsyncKeyState(0x41)) { // A
+		direction = Direction::left;
+		snakeId = 0;
+	}
+	else if (GetAsyncKeyState(0x44)) { // D
+		direction = Direction::right;
+		snakeId = 0;
+	}
+
+	// Snake 1
+	if (GetAsyncKeyState(VK_UP)) { // UP arrow
+		direction = Direction::up;
+		snakeId = 1;
+	}
+	else if (GetAsyncKeyState(VK_DOWN)) { // DOWN arrow
+		direction = Direction::down;
+		snakeId = 1;
+	}
+	else if (GetAsyncKeyState(VK_LEFT)) { // LEFT arrow
+		direction = Direction::left;
+		snakeId = 1;
+	}
+	else if (GetAsyncKeyState(VK_RIGHT)) { // RIGHT arrow
+		direction = Direction::right;
+		snakeId = 1;
+	}
+
+	if (snakeId != -1)
+	{
+		_snakes[snakeId]->turnHead(direction);
 	}
 }
 
@@ -310,17 +411,21 @@ void SceneGame::Update()
 	int step = 1;
 	const unsigned int score = _sceneStateMachine.player->getCurrentScore();
 
-	int X = _snake->getX();
-	int Y = _snake->getY();
+	int X, Y;
 
-	while (
-		isOccupied(X, Y) 
-		&& _snake->isThroughWall() 
-		&& _snake->dieInNextStep(step, score)) {
-		step++;
+	for (auto snake : _snakes) {
+		X = snake->getX();
+		Y = snake->getY();
+
+		while (
+			isOccupied(X, Y)
+			&& snake->isThroughWall()
+			&& snake->dieInNextStep(step, score)) {
+			step++;
+		}
+
+		snake->move(step);
 	}
-
-	_snake->move(step);
 }
 
 void SceneGame::LateUpdate()
@@ -328,117 +433,121 @@ void SceneGame::LateUpdate()
 	//show current score
 	_sceneStateMachine.player->showCurrentScore();
 
-	std::shared_ptr<Fruit> destinateFruit = nullptr;
-	std::shared_ptr<Gift> destinateGift;
+	for (auto snake : _snakes) {
+		std::shared_ptr<Fruit> destinateFruit = nullptr;
+		std::shared_ptr<Gift> destinateGift;
 
-	const bool occupied = isOccupied(_snake->getX(), _snake->getY());
-	const unsigned int score = _sceneStateMachine.player->getCurrentScore();
+		const bool occupied = isOccupied(snake->getX(), snake->getY());
+		const unsigned int score = _sceneStateMachine.player->getCurrentScore();
 
-	// Handle collision
-	if (occupied) {
-		// Things can cause snake to dead
-		if (_snake->bodyCollision() || _snake->wallCollision() || _snake->gateCollision(score) == GateCollisionType::border) {
-			// If it can go through wall, move more step
-			_snake->setDead();
+		// Handle collision
+		if (occupied) {
+			// Things can cause snake to dead
+			if (snake->bodyCollision() || snake->wallCollision() || snake->gateCollision(score) == GateCollisionType::border) {
+				// If it can go through wall, move more step
+				snake->setDead();
 
-			//get current score to calculate total score and reset current score = 0 if snake die
-			_sceneStateMachine.player->saveScore();
-			_sceneStateMachine.player->resetScore();
+				//get current score to calculate total score and reset current score = 0 if snake die
+				_sceneStateMachine.player->saveScore();
+				_sceneStateMachine.player->resetScore();
+			}
+
+			// Fruit/Gift
+			else if (destinateFruit = snake->fruitCollision()) {
+				// Remove that fruit and plus one more snake segment
+				snake->eatFruit(destinateFruit);
+
+				//plus 10 score if snake eat fruit
+				if (snake->isX2Point()) {
+					_sceneStateMachine.player->addScore(20);
+				}
+				else {
+					_sceneStateMachine.player->addScore(10);
+				}
+
+				// Generate a new fruit or a gate when it gets enough points
+				if (_sceneStateMachine.player->getCurrentScore() >= _currentRound * 100) {
+					// Add a gate instead
+
+					_gate->paint();
+				}
+				else {
+					// Add a fruit
+					auto [X, Y] = getFreeBlock();
+
+					_fruit = std::dynamic_pointer_cast<Fruit>(addObject(ObjectType::fruit, X, Y));
+					_fruit->paint();
+				}
+
+			}
+			else if (destinateGift = snake->giftCollision()) {
+				int i = 0;
+				if (snake->getItem(destinateGift)) {
+					gotoXY(0, 0);
+					TextColor(ColorCode_Cyan);
+					std::cout << "Got a gift";
+				}
+				else {
+					gotoXY(0, 0);
+					TextColor(ColorCode_Cyan);
+					std::cout << "You don't have any free slot to get gift.";
+				}
+
+				_giftCount--;
+			}
+			else if (snake->gateCollision(score) == GateCollisionType::door) {
+				// Get to next round
+				_currentRound++;
+
+				if (_currentRound > _lastRound) {
+					gotoXY(0, 0);
+					std::cout << "Chuc mung, ve nuoc.";
+
+					Sleep(30000);
+					// Luu vao bang xep hang cac kieu
+
+					exit(0);
+				}
+				else {
+					// Going to next round, remains snake size
+					clrscr();
+					OnCreate();
+					OnActivate();
+
+					const int plusSize = _sceneStateMachine.player->getCurrentScore() / 10;
+					snake->enlonger(plusSize);
+				}
+			}
 		}
 
-		// Fruit/Gift
-		else if (destinateFruit = _snake->fruitCollision()) {
-			// Remove that fruit and plus one more snake segment
-			_snake->eatFruit(destinateFruit);
+		snake->paint();
 
-			//plus 10 score if snake eat fruit
-			if (_snake->isX2Point()) {
-				_sceneStateMachine.player->addScore(20);
-			}
-			else {
-				_sceneStateMachine.player->addScore(10);
-			}
+		//
+		snake->ThroughWallDecrease();
+		snake->SpeedTimeDecrease();
+		snake->X2PointDecrease();
 
-			// Generate a new fruit or a gate when it gets enough points
-			if (_sceneStateMachine.player->getCurrentScore() >= _currentRound * 100) {
-				// Add a gate instead
-
-				_gate->paint();
-			}
-			else {
-				// Add a fruit
-				auto [X, Y] = getFreeBlock();
-
-				_fruit = std::dynamic_pointer_cast<Fruit>(addObject(ObjectType::fruit, X, Y));
-				_fruit->paint();
-			}
-
+		// Check dead
+		if (snake->isdead()) {
+			_currentRound = 1;
+			OnCreate();
+			SwitchTo("SceneGameOver"); // o day no can Id, de t xem lam sao kiem Id cho no
 		}
-		else if (destinateGift = _snake->giftCollision()) {
-			int i = 0;
-			if (_snake->getItem(destinateGift)) {
-				gotoXY(0, 0);
-				TextColor(ColorCode_Cyan);
-				std::cout << "Got a gift";
-			}
-			else {
-				gotoXY(0, 0);
-				TextColor(ColorCode_Cyan);
-				std::cout << "You don't have any free slot to get gift.";
-			}
 
-			_giftCount--;
-		}
-		else if (_snake->gateCollision(score) == GateCollisionType::door) {
-			// Get to next round
-			_currentRound++;
+		//1% each 150ms spawn gift
+		if (rand() % 100 < 50 && _giftCount <= 2) { //MAX 2 gift at a time
+			auto [X, Y] = getFreeBlock();
 
-			if (_currentRound > _lastRound) {
-				gotoXY(0, 0);
-				std::cout << "Chuc mung, ve nuoc.";
+			std::shared_ptr<Gift> gift = std::dynamic_pointer_cast<Gift>(addObject(ObjectType::gift, X, Y));
 
-				Sleep(30000);
-				// Luu vao bang xep hang cac kieu
+			gift->paint();
 
-				exit(0);
-			}
-			else {
-				// Going to next round, remains snake size
-				clrscr();
-				OnCreate();
-				OnActivate();
-
-				const int plusSize = _sceneStateMachine.player->getCurrentScore() / 10;
-				_snake->enlonger(plusSize);
-			}
+			_giftCount++;
 		}
 	}
-
-	_snake->paint();
 
 	// Time delay for the next move
-	Sleep(static_cast<DWORD>((double)125 / _snake->getSpeed()));
-	_snake->ThroughWallDecrease();
-	_snake->SpeedTimeDecrease();
-	_snake->X2PointDecrease();
-
-	// Check dead
-	if (_snake->isdead()) {
-		_currentRound = 1;
-		OnCreate();
-		SwitchTo("SceneGameOver"); // o day no can Id, de t xem lam sao kiem Id cho no
-	}
-
-	//1% each 150ms spawn gift
-	if (rand() % 100 < 50 && _giftCount <= 2) { //MAX 2 gift at a time
-		auto [X, Y] = getFreeBlock();
-
-		std::shared_ptr<Gift> gift = std::dynamic_pointer_cast<Gift>(addObject(ObjectType::gift, X, Y));
-
-		gift->paint();
-
-		_giftCount++;
-	}
+	Sleep(125);
 }
 
 COORD SceneGame::getFreeBlock() {

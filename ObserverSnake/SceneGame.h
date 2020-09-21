@@ -65,7 +65,7 @@ private:
 	// Map objects
 	std::vector<std::shared_ptr<Object>> objects;
 
-	std::shared_ptr<Snake> _snake;
+	std::vector<std::shared_ptr<Snake>> _snakes;
 	std::shared_ptr<Fruit> _fruit;
 	std::shared_ptr<Gate> _gate;
 
@@ -112,8 +112,11 @@ public:
 
 	// Addition functions
 	COORD getFreeBlock();
+	
 	std::shared_ptr<Object> addObject(ObjectType type, int x, int y);
+	
 	void loadMap();
+	void loadSnakeKeyHandle();
 
 	bool isOccupied(int x, int y);
 
@@ -125,7 +128,7 @@ public:
 
 	std::string getMapPath() { return _mapPath; }
 	std::shared_ptr<Fruit> getFruit() { return _fruit; }
-	std::shared_ptr<Snake> getSnake() { return _snake; }
+	std::shared_ptr<Snake> getSnake() { return _snakes[0]; }
 
 	void registerPlayer(std::shared_ptr<Player> player, std::shared_ptr<Snake> snake); //TODO: controller for both
 };

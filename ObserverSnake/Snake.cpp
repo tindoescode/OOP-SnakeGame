@@ -58,8 +58,17 @@ void Snake::X2PointDecrease()
 		_x2PointTime -= double(125) / 1000 / _speed;
 	}
 }
+void Snake::HandleSkillKey()
+{
+	_SkillKeyHandle();
+}
+void Snake::setSkillKeyHandle(std::function<void()> func)
+{
+	_SkillKeyHandle = func;
+}
 bool Snake::dieInNextStep(int &step, const int &score) 
 {
+	if (_direction == Direction::idle) return false;
 	auto x = _x, y = _y;
 
 	switch (_direction) {

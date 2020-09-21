@@ -1,5 +1,6 @@
 #pragma once
 #include <deque>
+#include <functional>
 #include "SnakeSegment.h"
 #include "Gate.h"
 #include "Item.h"
@@ -36,6 +37,8 @@ private:
 	double _throughWallTime; 
 	double _x2PointTime;
 
+	std::function<void()> _SkillKeyHandle;
+
 public:
 	Snake(int x, int y, std::shared_ptr<SceneGame> board);
 
@@ -52,6 +55,9 @@ public:
 	void ThroughWallDecrease();
 	void SpeedTimeDecrease();
 	void X2PointDecrease();
+
+	void HandleSkillKey();
+	void setSkillKeyHandle(std::function<void()> func);
 
 	// Check die, p/s: step is mutate is case of snake goes over border
 	bool dieInNextStep(int& step, const int& score);

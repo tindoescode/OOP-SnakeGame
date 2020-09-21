@@ -23,21 +23,22 @@ void SceneMainMenu::SwitchTo(std::string mapName)
 void SceneMainMenu::OnCreate()
 {
 	mainMenu = new Menu(
-		{ L"Single player", L"Shop" },
+		{ L"Single player", L"Two players", L"Shop" },
 		std::bind(
-			[](unsigned int listitem, SceneMainMenu* scene) {
+			[this](unsigned int listitem) {
 				switch (listitem) {
-				case 0: {
-					scene->SwitchTo("SinglePlayerScene");
+				case 0: 
+					SwitchTo("SinglePlayerScene");
 					break;
-				}
-				case 4: {
-					scene->SwitchTo("ShopScene");
+				case 1:
+					SwitchTo("TwoPlayerScene");
 					break;
-				}
+				case 2: 
+					SwitchTo("ShopScene");
+					break;
 				}
 			},
-			std::placeholders::_1, this
+			std::placeholders::_1
 		)
 	);
 }

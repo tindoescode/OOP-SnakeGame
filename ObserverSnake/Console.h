@@ -31,6 +31,15 @@
 
 #include <windows.h>
 
+enum class Key {
+	N1 = 0x31,
+	N2 = 0x32,
+	N3 = 0x33,
+	J = 0x4A,
+	K = 0x4B,
+	L = 0x4C
+};
+
 void clrscr();
 
 //screen: goto [x,y]

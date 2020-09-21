@@ -47,7 +47,7 @@ void SceneLoadGame::OnCreate()
 	gameOverMenu = new Menu(
 		writer,
 		std::bind(
-			[](unsigned int listitem, std::vector<std::wstring> writer) {
+			[this](unsigned int listitem, std::vector<std::wstring> writer) {
 				// We have writer here
 			},
 			std::placeholders::_1, writer

@@ -33,40 +33,37 @@ void ScenePause::OnCreate()
 	pauseMenu = new Menu(
 		{ L"Continue", L"Save game", L"Load game", L"Return to choose map", L"Exit" },
 		std::bind(
-			[](unsigned int listitem, Scene* scene) {
-				auto _this = dynamic_cast<ScenePause*>(scene);
-				auto continueScene = _this->continueScene;
-				
+			[this](unsigned int listitem) {
 				switch (listitem) {
 				case 0: {
 					auto lastGameScene = continueScene;
 
-					_this->_sceneStateMachine.SwitchTo(lastGameScene);
+					_sceneStateMachine.SwitchTo(lastGameScene);
 					break;
 				}
 				case 1: {
 					std::shared_ptr<SceneSaveGame> saveGameScene 
-						= std::make_shared<SceneSaveGame>(_this->_sceneStateMachine);
+						= std::make_shared<SceneSaveGame>(_sceneStateMachine);
 
 					saveGameScene->SetSwitchToScene({ 
 						{ "ContinueScene", continueScene } 
 					});
 
-					//_this->_currentGameScene = saveGameScene;
-					//_this->_currentGameScene->SetSaveGameScene(continueScene);
+					//_currentGameScene = saveGameScene;
+					//_currentGameScene->SetSaveGameScene(continueScene);
 
 					saveGameScene->SetSaveGameScene(continueScene);
 
-					_this->SwitchTo(saveGameScene);
+					SwitchTo(saveGameScene);
 					break;
 				}
 				case 2: {
-					_this->SwitchTo("LoadGameScene");
+					SwitchTo("LoadGameScene");
 					break;
 				}
 				case 3: {
 					continueScene->OnCreate(); // reset old game sence when switching to choose map scene
-					_this->SwitchTo("ChooseMapScene");
+					SwitchTo("ChooseMapScene");
 					break;
 				}
 				case 4: {
@@ -79,7 +76,7 @@ void ScenePause::OnCreate()
 				//gotoXY(0, 0);
 				//std::cout << "Select item: " << listitem << std::endl;
 			},
-			std::placeholders::_1, (Scene*)this
+			std::placeholders::_1
 		)
 	);
 }
