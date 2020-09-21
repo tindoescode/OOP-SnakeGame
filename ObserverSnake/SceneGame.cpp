@@ -198,7 +198,7 @@ void SceneGame::loadSnakeKeyHandle()
 		}
 	});
 
-	if (_snakes.size() == 2) {
+	if (_snakes.size() >= 2) {
 		_snakes[1]->setSkillKeyHandle([this]() {
 			if (GetAsyncKeyState((int)Key::J)) {
 				TextColor(ColorCode_DarkCyan);
@@ -294,8 +294,8 @@ void SceneGame::setOccupiedBlock(int x, int y, unsigned int occupied)
  	freeBlock.set(y * MAX_X + x, occupied);
 }
 
-SceneGame::SceneGame(const std::vector<std::string> &maps, SceneStateMachine& sceneStateMachine) : Scene(), _maps(maps), _width(100), _height(30), _fruit(nullptr), _sceneStateMachine(sceneStateMachine),
-_pauseScene(0), _position({ 10, 5 }), _currentRound(1), _gate(nullptr), _giftCount(0)
+SceneGame::SceneGame(const int playerNumber, const std::vector<std::string> &maps, SceneStateMachine& sceneStateMachine) : Scene(), _maps(maps), _width(100), _height(30), _fruit(nullptr), _sceneStateMachine(sceneStateMachine),
+_pauseScene(0), _position({ 10, 5 }), _currentRound(1), _gate(nullptr), _giftCount(0), _playerNumber(playerNumber)
 {
 	freeBlock.reset();	
 	_lastRound = (unsigned int)maps.size();
@@ -313,8 +313,10 @@ void SceneGame::OnCreate()
 	loadMap();
 
 	// Add the second snake
-	auto [X, Y] = getFreeBlock();
-	_snakes.push_back(std::dynamic_pointer_cast<Snake>(addObject(ObjectType::snake, X, Y)));
+	if (_playerNumber >= 2) {
+		auto [X, Y] = getFreeBlock();
+		_snakes.push_back(std::dynamic_pointer_cast<Snake>(addObject(ObjectType::snake, X, Y)));
+	}
 
 	// Initialize controller for each snake
 	loadSnakeKeyHandle();
@@ -397,6 +399,10 @@ void SceneGame::ProcessInput()
 	else if (GetAsyncKeyState(VK_RIGHT)) { // RIGHT arrow
 		direction = Direction::right;
 		snakeId = 1;
+	}
+
+	if (_playerNumber < 2) {
+		snakeId = 0;
 	}
 
 	if (snakeId != -1)

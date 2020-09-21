@@ -82,6 +82,7 @@ private:
 	// Gift
 	unsigned int _giftCount;
 
+	unsigned int _playerNumber;
 	// Set block occupied
 	void setOccupiedBlock(int x, int y, unsigned int occupied = 1);
 
@@ -89,7 +90,7 @@ private:
 	void drawBorder();
 	
 public:
-	SceneGame(const std::vector<std::string>& maps, SceneStateMachine& sceneStateMachine);
+	SceneGame(const int playerNumber, const std::vector<std::string>& maps, SceneStateMachine& sceneStateMachine);
 
 	// Scene switching
 	void SetSwitchToScene(std::unordered_map<std::string, unsigned int> stateInf);
