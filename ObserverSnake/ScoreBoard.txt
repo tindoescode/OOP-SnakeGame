@@ -1,10 +1,10 @@
 1.Nam 4 400
 2.Tah 4 310
 3.ajh 3 300
-4.Nam 4 200
-5.Tah 4 150
-6.ajh 3 140
+4. 4 300
+5. 4 200
+6. 4 160
 7.Nam 4 100
 8.namnam 4 100
 9.ajh 3 80
-10.nam 4 20
+10.fsafasfaafssaf 4 80

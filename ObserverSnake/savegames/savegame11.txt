@@ -1,0 +1,3 @@
+ClassicMap1.dat
+43 15
+10 15

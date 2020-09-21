@@ -258,6 +258,7 @@ void SceneGame::OnCreate()
 
 	objects.clear();
 	freeBlock.reset();
+	_giftCount = 0;
 
 	_mapPath = _maps[_currentRound - 1];
 
@@ -487,7 +488,6 @@ void SceneGame::LateUpdate()
 				}
 			}
 		}
-
 		snake->paint();
 
 		//
@@ -498,8 +498,9 @@ void SceneGame::LateUpdate()
 		// Check dead
 		if (snake->isdead()) {
 			_currentRound = 1;
+			_snakes.clear();
 			OnCreate();
-			snake->resetStatus();
+			
 			SwitchTo("SceneGameOver"); // o day no can Id, de t xem lam sao kiem Id cho no
 		}
 
@@ -591,16 +592,17 @@ void SceneGame::saveScore() {
 	while (getline(writer, line)) {
 		temp.push_back(line);
 	}
-	for (int i = 0; i < 10; i++) {
-		if (i < line.size() && atoi(temp[i].substr(temp[i].rfind(" ") + 1, line.size() - temp[9].rfind(" ") - 1).c_str()) < _sceneStateMachine.player->getTotalScore())
+	for (int i = 0; i < temp.size(); i++) {
+		if (atoi(temp[i].substr(temp[i].rfind(" ") + 1, line.size() - temp[9].rfind(" ") - 1).c_str()) < _sceneStateMachine.player->getTotalScore())
 		{
+			std::cin.ignore(INT_MAX, '\n');
+
 			Console::TextColor(ColorCode_DarkRed);
 			Console::gotoXY(15, 15);
 			std::cout << "Your score is in top 10 !!! Please enter your name (<10 character):";
 			Console::gotoXY(15, 16);
 			std::cout << "Enter your name (<10 character):";
 
-			std::cin.ignore(INT_MAX, '\n');
 			getline(std::cin, line);
 
 			std::stringstream input;

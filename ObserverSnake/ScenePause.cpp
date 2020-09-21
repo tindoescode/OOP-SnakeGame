@@ -31,7 +31,7 @@ void ScenePause::SwitchTo(std::shared_ptr<Scene> scene)
 void ScenePause::OnCreate()
 {
 	pauseMenu = new Menu(
-		{ L"Continue", L"Save game", L"Load game", L"Return to choose map", L"Exit" },
+		{ L"Continue", L"Save game", L"Load game", L"Return to main menu", L"Exit" },
 		std::bind(
 			[this](unsigned int listitem) {
 				switch (listitem) {
@@ -63,11 +63,7 @@ void ScenePause::OnCreate()
 				}
 				case 3: {
 					continueScene->OnCreate(); // reset old game sence when switching to choose map scene
-					SwitchTo("ChooseMapScene");
-					break;
-				}
-				case 4: {
-					exit(false);
+					_sceneStateMachine.SwitchTo(0);
 					break;
 				}
 				}

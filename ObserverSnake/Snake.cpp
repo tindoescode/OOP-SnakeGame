@@ -69,7 +69,7 @@ void Snake::X2PointDecrease()
 }
 void Snake::HandleSkillKey()
 {
-	_SkillKeyHandle();
+	if(_SkillKeyHandle) _SkillKeyHandle();
 }
 void Snake::setSkillKeyHandle(std::function<void()> func)
 {
