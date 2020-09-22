@@ -127,7 +127,7 @@ void SceneGame::drawBorder() {
 void SceneGame::loadMap() {
 	std::ifstream f;
 
-	f.open(_mapPath, std::ios::in);
+	f.open(L"maps/" + _mapPath, std::ios::in);
 
 	//TODO: make it library
 	try {

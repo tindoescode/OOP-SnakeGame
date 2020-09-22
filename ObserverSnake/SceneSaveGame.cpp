@@ -2,6 +2,7 @@
 #include <fstream>
 #include <filesystem>
 #include "SceneGame.h"
+#include "Game.h"
 
 SceneSaveGame::SceneSaveGame(SceneStateMachine& sceneStateMachine)
 	: Scene(), _sceneStateMachine(sceneStateMachine), _currentGameScene(0){}
@@ -85,7 +86,7 @@ void SceneSaveGame::OnActivate()
 	writer.close();
 
 	// Notify to player
-	Console::gotoXY(30,10);
+	Console::gotoXY(SCREEN_WIDTH / 10,10);
 	Console::TextColor(ColorCode_Cyan);
 	std::wcout << L"Successfully save game to " << output << std::endl;
 

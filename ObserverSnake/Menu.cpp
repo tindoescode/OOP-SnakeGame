@@ -175,7 +175,7 @@ void Menu::menuOuterBorder() {
 		std::cout << i;
 	}
 
-	Console::TextColor(rand() % 10 + 1);
+	Console::TextColor(ColorCode_DarkWhite);
 	Console::gotoXY(80, j++);
 	std::cout << "Made by Bui Huynh Trung Nam";
 	Console::gotoXY(88, j++);
