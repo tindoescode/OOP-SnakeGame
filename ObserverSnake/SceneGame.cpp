@@ -188,7 +188,7 @@ void SceneGame::loadMap() {
 		auto [X, Y] = getFreeBlock();
 		auto snake = std::dynamic_pointer_cast<Snake>(addObject(ObjectType::snake, X, Y));
 		snake->setColor(ColorCode_Pink);
-		snake->setCharacter(char(238));
+		snake->setCharacter(167);
 
 		// Bind player indx 1 if there are two players
 
@@ -349,57 +349,48 @@ void SceneGame::ProcessInput()
 
 	// Game loop
 	Direction direction = Direction::idle;
-	int snakeId = -1;
+	std::unordered_map<std::shared_ptr<Snake>, Direction> list;
 
 	// Snake 0
-	if (_kbhit()) {
-		switch (Key(_getch())) {
-		case Key::W:
+	if (GetAsyncKeyState(0x57)) { // W
+		direction = Direction::up;
+		list.insert(std::make_pair(_snakes[0], direction));
+	}
+	else if (GetAsyncKeyState(0x53)) { // S
+		direction = Direction::down;
+		list.insert(std::make_pair(_snakes[0], direction));
+	}
+	else if (GetAsyncKeyState(0x41)) { // A
+		direction = Direction::left;
+		list.insert(std::make_pair(_snakes[0], direction));
+	}
+	else if (GetAsyncKeyState(0x44)) { // D
+		direction = Direction::right;
+		list.insert(std::make_pair(_snakes[0], direction));
+	}
+
+	if (_playerNumber > 1) {
+		// Snake 1
+		if (GetAsyncKeyState(VK_UP)) { // UP arrow
 			direction = Direction::up;
-			snakeId = 0;
-			break;
-		case Key::S:
+			list.insert(std::make_pair(_snakes[1], direction));
+		}
+		else if (GetAsyncKeyState(VK_DOWN)) { // DOWN arrow
 			direction = Direction::down;
-			snakeId = 0;
-			break;
-		case Key::A:
+			list.insert(std::make_pair(_snakes[1], direction));
+		}
+		else if (GetAsyncKeyState(VK_LEFT)) { // LEFT arrow
 			direction = Direction::left;
-			snakeId = 0;
-			break;
-		case Key::D:
+			list.insert(std::make_pair(_snakes[1], direction));
+		}
+		else if (GetAsyncKeyState(VK_RIGHT)) { // RIGHT arrow
 			direction = Direction::right;
-			snakeId = 0;
-			break;
-		case Key(224):
-			switch (Key(_getch())) {
-			case Key::VKUP:
-				direction = Direction::up;
-				snakeId = 1;
-				break;
-			case Key::VKDOWN:
-				direction = Direction::down;
-				snakeId = 1;
-				break;
-			case Key::VKLEFT:
-				direction = Direction::left;
-				snakeId = 1;
-				break;
-			case Key::VKRIGHT:
-				direction = Direction::right;
-				snakeId = 1;
-				break;
-			}
+			list.insert(std::make_pair(_snakes[1], direction));
 		}
 	}
 
-
-	if (_playerNumber < 2) {
-		snakeId = 0;
-	}
-
-	if (snakeId != -1)
-	{
-		_snakes[snakeId]->turnHead(direction);
+	for (auto i : list) {
+		i.first->turnHead(i.second);
 	}
 }
 
@@ -617,6 +608,7 @@ void SceneGame::saveScore() {
 	for (int i = 0; i < temp.size(); i++) {
 		if (atoi(temp[i].substr(temp[i].rfind(" ") + 1, line.size() - temp[i].rfind(" ")).c_str()) < _snakes.front()->getPlayer()->getCurrentScore() / 2)
 		{
+			Console::ClearConsoleInputBuffer();
 			Console::TextColor(ColorCode_DarkYellow);
 			Console::gotoXY(40, 15);
 			std::cout << "Your score is in top 10 !!!";

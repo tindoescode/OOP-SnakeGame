@@ -34,7 +34,10 @@ void Snake::setSkin() {
 	std::shared_ptr<Player> player;
 
 	if (player = getPlayer()) {
-		player->getSnakeSkin();
+		Skin skin = player->getSnakeSkin();
+
+		setColor(skin.color);
+		setCharacter(skin.character);
 	}
 }
 // Reset on next round
@@ -138,26 +141,26 @@ void Snake::drawSkillBox() {
 
 	
 	Console::TextColor(ColorCode_Cyan);
-	Console::gotoXY(marginLeft - 3, 8);
+	Console::gotoXY(marginLeft - 1, 8);
 	std::cout << "Items";
 
 	Console::TextColor(ColorCode_Pink);
 	// Skill1
-	Console::gotoXY(marginLeft - 3, 12);
+	Console::gotoXY(marginLeft - 1, 12);
 	std::cout << _keys[0].keyName;
 
 	Console::gotoXY(marginLeft, 11);
 	std::cout << "Empty";
 
 	// Skill2
-	Console::gotoXY(marginLeft - 3, 15);
+	Console::gotoXY(marginLeft - 1, 15);
 	std::cout << _keys[1].keyName;
 
 	Console::gotoXY(marginLeft, 14);
 	std::cout << "Empty";
 
 	// Skill3
-	Console::gotoXY(marginLeft - 3, 18);
+	Console::gotoXY(marginLeft - 1, 18);
 	std::cout << _keys[2].keyName;
 
 	Console::gotoXY(marginLeft, 17);

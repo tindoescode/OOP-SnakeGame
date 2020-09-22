@@ -60,7 +60,22 @@ void SceneGameOver::OnDeactivate()
 void SceneGameOver::ProcessInput() {
 	Console::TextColor(ColorCode_Cyan);
 	Console::gotoXY(SCREEN_WIDTH / 2 - (9 / 2), SCREEN_HEIGHT / 4);
-	std::wcout << L"GAME OVER" << std::endl;
+
+	auto marginLeft = SCREEN_WIDTH / 10 * 2 + 6;
+
+	std::vector<std::string> gameOverText = {
+		" .---.   .--.  .-.   .-..----.    .----. .-. .-..----..----. ",
+		"/   __} / {} \\ |  `.'  || {_     /  {}  \\| | | || {_  | {}  }",
+		"\\  {_ }/  /\\  \\| |\\ /| || {__    \\      /\\ \\_/ /| {__ | .-. \\",
+		" `---' `-'  `-'`-' ` `-'`----'    `----'  `---' `----'`-' `-'"
+	};
+
+	int j = 11;
+	for (auto i : gameOverText) {
+		Console::gotoXY(marginLeft, j++);
+		std::cout << i;
+	}
+	//std::wcout << L"GAME OVER" << std::endl;
 	Console::gotoXY(SCREEN_WIDTH / 2 - (28 / 2), SCREEN_HEIGHT / 4 + 1);
 	std::wcout << L"DO YOU WANT TO PLAY AGAIN ?" << std::endl;
 	gameOverMenu->ProcessInput();

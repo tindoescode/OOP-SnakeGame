@@ -93,3 +93,11 @@ void Console::drawRect(COORD start, COORD end, int color) {
 	std::cout << char(217);
 
 }
+
+void Console::ClearConsoleInputBuffer()
+{
+	PINPUT_RECORD ClearingVar1 = new INPUT_RECORD[256];
+	DWORD ClearingVar2;
+	ReadConsoleInput(GetStdHandle(STD_INPUT_HANDLE), ClearingVar1, 256, &ClearingVar2);
+	delete[] ClearingVar1;
+}

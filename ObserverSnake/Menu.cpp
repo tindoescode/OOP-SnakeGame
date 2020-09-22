@@ -41,6 +41,8 @@ Menu::Menu(const std::vector<std::wstring> items, std::function<void(unsigned in
 }
 
 void Menu::ProcessInput() {
+	Console::ClearConsoleInputBuffer();
+
 	int key = _getch();
 
 	Update(Status(key));
@@ -132,6 +134,8 @@ void Menu::menuOuterBorder() {
 	std::vector<std::string> title = {
 		"   _.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._	\n",
 		".-'---      - ---     --     ---   -----   - --       ----  ----   -     ---`-.\n",
+		" )                                                                           (	\n",
+		"(                                                                             )\n",
 		" )                                                                           (	\n",
 		"(                                                                             )\n",
 		" )                                                                           (	\n",

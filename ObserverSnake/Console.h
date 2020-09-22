@@ -60,6 +60,7 @@ public:
 	static void SetWindow(int Width, int Height);
 	static void Nocursortype();
 	static void drawRect(COORD start, COORD end, int color = ColorCode_DarkPink);
+	static void ClearConsoleInputBuffer();
 };
 
 #endif
