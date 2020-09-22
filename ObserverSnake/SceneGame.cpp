@@ -525,6 +525,7 @@ void SceneGame::LateUpdate()
 				_snake->getPlayer()->resetScore();
 			}
 
+			// Check win if there are two players
 			if (_playerNumber == 2) {
 				if (score[0] == score[1]) {
 					const auto marginLeft = SCREEN_WIDTH / 2;
@@ -569,13 +570,12 @@ L"| _|      |_______/__/     \\__\\  |__|     |_______|| _| `._____|   |____|   
 						std::wcout << i;
 					}
 				}
-
-				_snakes.clear();
-				OnCreate();
-
-				Sleep(5000);
 			}
 
+			_snakes.clear();
+			OnCreate();
+
+			Sleep(5000);
 
 			SwitchTo("SceneGameOver"); // o day no can Id, de t xem lam sao kiem Id cho no
 		}
