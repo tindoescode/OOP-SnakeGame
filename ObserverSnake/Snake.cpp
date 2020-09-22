@@ -133,6 +133,7 @@ void Snake::setSkillKey(std::vector<KeyDescription> keys)
 	_keys = keys;
 }
 void Snake::drawSkillBox() {
+	if (!_player) return;
 	short marginLeft = getPlayer()->getSkillUIMarginLeft();
 
 	Console::drawRect({ marginLeft, 10 }, { marginLeft + 4, 12 });

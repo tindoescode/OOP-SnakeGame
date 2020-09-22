@@ -184,7 +184,7 @@ void SceneGame::loadMap() {
 	}
 
 	// Add the second snake
-	if (_playerNumber >= 2) {
+	if (_playerNumber == 2 && _snakes.size() == 1) {
 		auto [X, Y] = getFreeBlock();
 		auto snake = std::dynamic_pointer_cast<Snake>(addObject(ObjectType::snake, X, Y));
 		snake->setColor(ColorCode_Pink);
@@ -500,11 +500,9 @@ void SceneGame::LateUpdate()
 					OnActivate();
 
 					// Reset snake status like: direction, buff..
-					snake->resetStatus();
-
-					// Give it size proper with its points
-					//const int plusSize = snake->getPlayer()->getCurrentScore() / 10;
-					//snake->enlonger(plusSize);
+					for(auto _snake: _snakes) {
+						_snake->resetStatus();
+					}
 				}
 			}
 		}
