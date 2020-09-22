@@ -55,7 +55,7 @@ void Console::Nocursortype() {
 	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &Info);
 }
 
-void Console::drawRect(COORD start, COORD end, int color) {
+void Console::drawRect(Coord start, Coord end, int color) {
 	TextColor(color);
 
 	//top

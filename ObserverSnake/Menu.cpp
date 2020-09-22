@@ -117,7 +117,7 @@ void Menu::Title() {
 "  `-...-'  '--'    '--' '.(_,_).' `--'   `'-'     `'-..-'   \n",
 	};
 
-	auto marginLeft = SCREEN_WIDTH / 2 - title[0].size() / 2;
+	int marginLeft = (int)SCREEN_WIDTH / 2 - (int)title[0].size() / 2;
 	int j = 0;
 	for (auto i : title) {
 		Console::gotoXY(marginLeft, j++);
@@ -169,7 +169,7 @@ void Menu::menuOuterBorder() {
 	};
 
 	int j = 0;
-	auto marginLeft = SCREEN_WIDTH / 2 - title[0].size() / 2;
+	int marginLeft = (int) SCREEN_WIDTH / 2 - (int)title[0].size() / 2;
 	for (auto i : title) {
 		Console::gotoXY(marginLeft, j++);
 		std::cout << i;

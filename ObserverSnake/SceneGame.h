@@ -60,7 +60,7 @@ private:
 	std::wstring _mapPath;
 
 	// Position of the map on console screen
-	COORD _position;
+	Coord _position;
 
 	// Map objects
 	std::vector<std::shared_ptr<Object>> objects;
@@ -100,7 +100,7 @@ public:
 	void SwitchTo(std::string mapName);
 
 	// Just for one-player mode
-	void initializeSavedData(COORD fruit, COORD snakeHead, std::vector<COORD> snakeSegments, unsigned int round, Direction dir);
+	void initializeSavedData(Coord fruit, Coord snakeHead, std::vector<Coord> snakeSegments, unsigned int round, Direction dir);
 
 	// Callbacks
 	void OnCreate() override;
@@ -117,7 +117,7 @@ public:
 	void drawSkillBox();
 
 	// Addition functions
-	COORD getFreeBlock();
+	Coord getFreeBlock();
 	
 	std::shared_ptr<Object> addObject(ObjectType type, int x, int y);
 	

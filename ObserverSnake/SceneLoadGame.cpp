@@ -99,7 +99,7 @@ void SceneLoadGame::OnCreate()
 					_snakeSegments.push_back( { _snakeHead.X, _snakeHead.Y } );
 
 					while (!f.eof()) {
-						COORD a;
+						Coord a;
 						f >> a.X >> a.Y;
 
 						_snakeSegments.push_back(a);

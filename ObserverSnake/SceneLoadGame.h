@@ -42,15 +42,15 @@ private:
 	
 	// Data loaded
 	std::vector<std::wstring> _maps;
-	COORD _fruit;
-	COORD _snakeHead;
-	std::vector<COORD> _snakeSegments;
+	Coord _fruit;
+	Coord _snakeHead;
+	std::vector<Coord> _snakeSegments;
 	unsigned int _currentRound;
 	Direction _direction;
 
-	COORD getFruit() { return _fruit; }
-	COORD getSnakeHead() { return _snakeHead; }
-	std::vector<COORD> getSnakeSegments() { return _snakeSegments; }
+	Coord getFruit() { return _fruit; }
+	Coord getSnakeHead() { return _snakeHead; }
+	std::vector<Coord> getSnakeSegments() { return _snakeSegments; }
 	unsigned int getCurrentRound() { return _currentRound; }
 	Direction getDirection() { return _direction; }
 };

@@ -26,7 +26,7 @@ void SceneGame::ShowTopTitle() {
 "  `-...-'  '--'    '--' '.(_,_).' `--'   `'-'     `'-..-'   \n",
 	};
 
-	auto marginLeft = SCREEN_WIDTH / 2 - title[0].size() / 2;
+	int marginLeft = SCREEN_WIDTH / 2 - (int)title[0].size() / 2;
 	int j = 1;
 	for (auto i : title) {
 		Console::gotoXY(marginLeft, j++);
@@ -151,7 +151,7 @@ void SceneGame::loadMap() {
 
 	while (std::getline(f, line))
 	{
-		for (int i = 0, j = line.size(); i < j; i++)
+		for (int i = 0, j = (int)line.size(); i < j; i++)
 		{
 			if (line[i] == 'i') // wall
 			{
@@ -188,7 +188,7 @@ void SceneGame::loadMap() {
 		auto [X, Y] = getFreeBlock();
 		auto snake = std::dynamic_pointer_cast<Snake>(addObject(ObjectType::snake, X, Y));
 		snake->setColor(ColorCode_Pink);
-		snake->setCharacter(167);
+		snake->setCharacter((char)167);
 
 		// Bind player indx 1 if there are two players
 
@@ -249,7 +249,7 @@ void SceneGame::setOccupiedBlock(int x, int y, unsigned int occupied)
  	freeBlock.set(y * MAX_X + x, occupied);
 }
 
-void SceneGame::initializeSavedData(COORD fruit, COORD snakeHead, std::vector<COORD> snakeSegments, unsigned int round, Direction dir) {
+void SceneGame::initializeSavedData(Coord fruit, Coord snakeHead, std::vector<Coord> snakeSegments, unsigned int round, Direction dir) {
 	// A semi OnCreate for loading game
 	objects.clear();
 	freeBlock.reset();
@@ -270,7 +270,7 @@ void SceneGame::initializeSavedData(COORD fruit, COORD snakeHead, std::vector<CO
 	_snakes.push_back(std::dynamic_pointer_cast<Snake>(addObject(ObjectType::snake, snakeHead.X, snakeHead.Y)));
 	
 	_snakes[0]->setDirection(dir);
-	_snakes[0]->enlonger(snakeSegments.size());
+	_snakes[0]->enlonger((int) snakeSegments.size());
 	_snakes[0]->bindPlayer(_sceneStateMachine.getPlayer(0));
 
 	loadSnakeKeyHandle();
@@ -301,14 +301,14 @@ void SceneGame::OnCreate()
 	// In two player mode, snakes are different in color
 	if(_snakes.size() > 1) {
 		_snakes[1]->setColor(ColorCode_Red);
-		_snakes[1]->setCharacter(177);
+		_snakes[1]->setCharacter((char)177);
 	}
 
 	// Initialize controller for each snake
 	loadSnakeKeyHandle();
 
 	// Create fruit
-	COORD block = getFreeBlock();
+	Coord block = getFreeBlock();
 	_fruit = std::dynamic_pointer_cast<Fruit>(addObject(ObjectType::fruit, block.X, block.Y));
 }
 
@@ -609,7 +609,7 @@ L"| _|      |_______/__/     \\__\\  |__|     |_______|| _| `._____|   |____|   
 	Sleep(static_cast<DWORD>((double)SNAKE_MOVE_SPEED / max));
 }
 
-COORD SceneGame::getFreeBlock() {
+Coord SceneGame::getFreeBlock() {
 	short X, Y;
 	do {
 		X = _position.X + rand() % (_width);

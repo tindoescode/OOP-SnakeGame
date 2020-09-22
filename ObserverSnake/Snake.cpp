@@ -246,7 +246,7 @@ GateCollisionType Snake::gateCollision(unsigned int score) {
 }
 
 // Check if in any specify coord that snake can get gate collision
-GateCollisionType Snake::gateCollision(COORD coord, unsigned int score) {
+GateCollisionType Snake::gateCollision(Coord coord, unsigned int score) {
 	auto [X, Y] = coord;
 
 	if (score < _board->_currentRound * 100) return GateCollisionType::none;
@@ -324,13 +324,13 @@ bool Snake::getItem(std::shared_ptr<Gift> gift) {
 
 		int n = rand() % 3 + 1;
 		std::string itemNames[4] = { {""}, "Rocket", "Through Wall", "X2 Points" };
-		COORD UISlotTextPosition[4] = { {-1, -1}, 
-			{getPlayer()->getSkillUIMarginLeft(), 11}, 
-			{getPlayer()->getSkillUIMarginLeft(), 14}, 
-			{getPlayer()->getSkillUIMarginLeft(), 17} 
+		Coord UISlotTextPosition[4] = { {-1, -1},
+			{getPlayer()->getSkillUIMarginLeft(), 11},
+			{getPlayer()->getSkillUIMarginLeft(), 14},
+			{getPlayer()->getSkillUIMarginLeft(), 17}
 		};
 
-		switch(n) {
+		switch (n) {
 		case 1:
 			_items[i] = std::make_shared<Rocket>();
 			break;
@@ -395,9 +395,9 @@ void Snake::move(int step) {
 	case Direction::right: {
 		x += step;
 		break;
-	}	
 	}
-	
+	}
+
 	// if _snake get over border
 	if (x > _board->_position.X + _board->_width) {
 		x = _board->_position.X;
@@ -414,7 +414,7 @@ void Snake::move(int step) {
 
 	// Add new head object
 	auto head = std::dynamic_pointer_cast<SnakeSegment>(_board->addObject(ObjectType::snake_segment, x, y));
-	
+
 	head->setColor(isX2Point() ? rand() % 10 + 1 : _color);
 	head->setCharacter(_character);
 
@@ -426,18 +426,18 @@ void Snake::move(int step) {
 
 	// Delete tail object / old head object if its size was 1
 	x = segments.back()->getX(), y = segments.back()->getY();
-	
+
 	_board->deleteSnakeSegment(x, y);
-	
+
 	segments.pop_back();
 }
 bool Snake::activeItem(int slot) {
 	if (!_items[slot]) return false;
-	
+
 	_items[slot]->operate(shared_from_this());
 	_items[slot].reset();
 
-	COORD UISlotTextPosition[4] = { {-1, -1}, 
+	Coord UISlotTextPosition[4] = { {-1, -1},
 		{getPlayer()->getSkillUIMarginLeft(), 11}, 
 		{getPlayer()->getSkillUIMarginLeft(), 14}, 
 		{getPlayer()->getSkillUIMarginLeft(), 17} 

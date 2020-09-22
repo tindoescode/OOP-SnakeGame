@@ -50,6 +50,11 @@ enum class Key {
 	L = 0x4C
 };
 
+struct Coord {
+	int X;
+	int Y;
+};
+
 class Console {
 public:
 	static void clrscr();
@@ -59,7 +64,7 @@ public:
 	static void TextColor(int color);
 	static void SetWindow(int Width, int Height);
 	static void Nocursortype();
-	static void drawRect(COORD start, COORD end, int color = ColorCode_DarkPink);
+	static void drawRect(Coord start, Coord end, int color = ColorCode_DarkPink);
 	static void ClearConsoleInputBuffer();
 };
 

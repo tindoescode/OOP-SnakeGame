@@ -91,7 +91,7 @@ public:
 	void setCharacter(char character) { _character = character; }
 
 	GateCollisionType gateCollision(unsigned int score);
-	GateCollisionType gateCollision(COORD coord, unsigned int score);
+	GateCollisionType gateCollision(Coord coord, unsigned int score);
 	bool bodyCollision();
 	
 	std::shared_ptr<Fruit> fruitCollision();
