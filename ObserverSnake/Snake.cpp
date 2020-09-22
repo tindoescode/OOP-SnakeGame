@@ -293,7 +293,7 @@ std::shared_ptr<Wall> Snake::wallCollision() {
 
 // Behavious
 void Snake::eatFruit(std::shared_ptr<Fruit> destinateFruit) {
-	PlaySound(L"sounds\\bonus-collect-x1.wav", NULL, SND_ASYNC);
+	PlaySound(L"sounds\\eatFood.wav", NULL, SND_ASYNC);
 
 	// Remove fruit
 	destinateFruit->setPos(-1, -1); // this avoid destructor to clear new snake segment block
@@ -365,8 +365,11 @@ void Snake::turnHead(Direction direction) {
 		return;
 	}
 
-	if(!(direction != Direction::down && direction != Direction::up && direction != Direction::left && direction != Direction::right))
+	if (!(direction != Direction::down && direction != Direction::up && direction != Direction::left && direction != Direction::right))
+	{
 		_direction = direction;
+		PlaySound(L"sounds\\eatFood.wav", NULL, SND_ASYNC);
+	}
 }
 void Snake::move(int step) {
 	if (_direction == Direction::idle) return;

@@ -4,7 +4,7 @@
 #include <unordered_map>
 class Menu;
 class SceneStateMachine;
-const int startPositionName = 50;
+const int startPositionName = 45;
 const int startPositionRound = 60;
 const int startPositionScore = 70;
 class SceneScoreBoard : public Scene

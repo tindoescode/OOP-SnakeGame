@@ -598,36 +598,39 @@ void SceneGame::saveScore() {
 	if (_playerNumber > 1) return;
 
 	//
-	std::fstream f("ScoreBoard.txt", std::ios::in || std::ios::out);
+	std::fstream f("ScoreBoard.txt", std::ios::in);
 	std::string line;
 
-	int countline = 0;
 
 	std::vector<std::string>temp;
 
-	for(int i = 0; i < 10; i++) 
+	for (int i = 0; i < 10; i++)
 		temp.push_back("");
 
-	int i = 0;
-	while (getline(f, line)) {
+
+	for (int i = 0; i < 10; i++)
+	{
+		getline(f, line);
 		temp[i] = line;
 	}
 
 	for (int i = 0; i < temp.size(); i++) {
-		if (atoi(temp[i].substr(temp[i].rfind(" ") + 1, line.size() - temp[9].rfind(" ") - 1).c_str()) < _snakes.front()->getPlayer()->getTotalScore())
+		if (atoi(temp[i].substr(temp[i].rfind(" ") + 1, line.size() - temp[i].rfind(" ")).c_str()) < _snakes.front()->getPlayer()->getCurrentScore() / 2)
 		{
-			Console::TextColor(ColorCode_DarkRed);
-			Console::gotoXY(15, 15);
-			std::cout << "Your score is in top 10 !!! Please enter your name (< 10 characters):";
-			Console::gotoXY(15, 16);
+			Console::TextColor(ColorCode_DarkYellow);
+			Console::gotoXY(40, 15);
+			std::cout << "Your score is in top 10 !!!";
+			Console::gotoXY(40, 16);
 			std::cout << "Enter your name (< 10 characters):";
-
-			Console::gotoXY(15, 17);
+			Console::gotoXY(40, 17);
 
 			getline(std::cin, line);
 
 			std::stringstream input;
-			input << i + 1 << "." << line << " " << _lastRound << " " << _snakes.front()->getPlayer()->getTotalScore();
+			input << i + 1 << "." << line << " " << _lastRound << " " << _snakes.front()->getPlayer()->getCurrentScore() / 2;
+			for (int j = 9; j < i; j--) {
+				temp[j] = temp[j - 1];
+			}
 			temp[i] = input.str();
 			break;
 		}

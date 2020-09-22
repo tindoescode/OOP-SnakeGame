@@ -48,6 +48,7 @@ void Menu::ProcessInput() {
 
 void Menu::OnActivate()
 {
+	PlaySound(L"sounds\\bkmusic.wav", NULL, SND_LOOP | SND_ASYNC);
 	Draw();
 }
 
@@ -61,9 +62,6 @@ void Menu::Update(Status key) {
 
 	if (key == Status::enter) {
 		PlaySound(L"sounds\\menu-enter-x1.wav", NULL, SND_ASYNC);
-	}
-	else {
-		PlaySound(L"sounds\\menu-item-switching-x1.wav", NULL, SND_ASYNC);
 	}
 
 	switch (key)
