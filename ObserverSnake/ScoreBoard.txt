@@ -1,5 +1,5 @@
-1.trung tin 4 60
-2.tin 4 10
+1.tin 4 80
+2.tin 4 20
 
 
 

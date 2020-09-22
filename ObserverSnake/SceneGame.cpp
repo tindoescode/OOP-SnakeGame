@@ -517,22 +517,22 @@ void SceneGame::LateUpdate()
 		if (snake->isdead()) {
 			_currentRound = 1;
 
-			const auto player1Score = _snakes[0]->getPlayer()->getCurrentScore();
-			const auto player2Score = _snakes[1]->getPlayer()->getCurrentScore();
+			std::vector<int> score;
 
 			for (auto _snake : _snakes) {
+				score.push_back(_snake->getPlayer()->getCurrentScore());
 				_snake->getPlayer()->saveScore();
 				_snake->getPlayer()->resetScore();
 			}
 
 			if (_playerNumber == 2) {
-				if (player1Score == player2Score) {
+				if (score[0] == score[1]) {
 					const auto marginLeft = SCREEN_WIDTH / 2;
 					Console::gotoXY(marginLeft, 15);
 
 					std::cout << "Ca 2 hue";
 				}
-				else if (player1Score > player2Score) {
+				else if (score[0] > score[1]) {
 					Console::clrscr();
 					std::vector<std::wstring> textDraw = {
 L".______    __          ___   ____    ____  _______ .______          __     ____    __    ____  __  .__   __. ",
