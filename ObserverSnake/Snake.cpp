@@ -286,6 +286,8 @@ std::shared_ptr<Wall> Snake::wallCollision() {
 
 // Behavious
 void Snake::eatFruit(std::shared_ptr<Fruit> destinateFruit) {
+	PlaySound(L"sounds\\bonus-collect-x1.wav", NULL, SND_ASYNC);
+
 	// Remove fruit
 	destinateFruit->setPos(-1, -1); // this avoid destructor to clear new snake segment block
 	_board->deleteFruit(-1, -1); // remove fruit with pos -1, -1
@@ -299,12 +301,17 @@ bool Snake::getItem(std::shared_ptr<Gift> gift) {
 
 	while (_items[i]) {
 		// Can't find a free slot
-		if (i >= (ITEM_MAXSLOT + 1)) return false;
+		if (i >= (ITEM_MAXSLOT + 1)) {
+			PlaySound(L"sounds\\out-of-item-slot-x1.wav", NULL, SND_ASYNC);
+			return false;
+		}
 		i++;
 	}
 
 	// found a slot
 	if (!_items[i]) {
+		PlaySound(L"sounds\\item-collect-x1.wav", NULL, SND_ASYNC);
+
 		int n = rand() % 3 + 1;
 		std::string itemNames[4] = { {""}, "Rocket", "Through Wall", "X2 Points" };
 		COORD UISlotTextPosition[4] = { {-1, -1}, 

@@ -542,11 +542,14 @@ void SceneGame::LateUpdate()
 	}
 
 	// Time delay for the next move
-	double max = 1.0;
+	double max = 1;
 	for (auto snake : _snakes) {
 		if (max < snake->getSpeed()) max = snake->getSpeed();
 	}
 
+	if (max > 1) {
+		PlaySound(L"sounds\\snake-move-fast-x1.wav", NULL, SND_ASYNC);
+	}
 	Sleep(static_cast<DWORD>((double)125 / max));
 }
 

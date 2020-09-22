@@ -59,6 +59,13 @@ void Menu::OnDeactivate()
 void Menu::Update(Status key) {
 	if ((int) key == 224) key = Status(_getch());
 
+	if (key == Status::enter) {
+		PlaySound(L"sounds\\menu-enter-x1.wav", NULL, SND_ASYNC);
+	}
+	else {
+		PlaySound(L"sounds\\menu-item-switching-x1.wav", NULL, SND_ASYNC);
+	}
+
 	switch (key)
 	{
 	case Status::up: {
