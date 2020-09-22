@@ -80,6 +80,8 @@ public:
 	void setPos(int x, int y);
 	void setDead();
 
+	Direction getDirection();
+
 	void setColor(int color) { _color = color; }
 	void setCharacter(char character) { _character = character; }
 

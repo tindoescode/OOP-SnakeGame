@@ -34,7 +34,7 @@ void SceneMainMenu::OnCreate()
 		std::bind(
 			[this](unsigned int listitem) {
 				// Create scene
-				std::vector<std::string> maps = { "ClassicMap1.dat", "ClassicMap2.dat", "ModernMap1.dat", "ModernMap2.dat" };
+				std::vector<std::wstring> maps = { L"ClassicMap1.dat", L"ClassicMap2.dat", L"ModernMap1.dat", L"ModernMap2.dat" };
 				std::shared_ptr<SceneGame> gameScene1 = std::make_shared<SceneGame>(1, maps, _sceneStateMachine);
 				std::shared_ptr<SceneGame> gameScene2 = std::make_shared<SceneGame>(2, maps, _sceneStateMachine);
 				std::shared_ptr<ScenePause> pauseScene = std::make_shared<ScenePause>(_sceneStateMachine);
@@ -57,6 +57,9 @@ void SceneMainMenu::OnCreate()
 				gameScene2->SetPauseScene(pauseScene);
 
 				// Scene can be switched from game scene
+				pauseScene->SetSwitchToScene({
+					{ "LoadGameScene", loadGameSceneID }
+				});
 				gameScene1->SetSwitchToScene({
 					{ "SceneGameOver", gameOverSceneID},
 					{ "PauseScene", pauseSceneID }
@@ -80,7 +83,6 @@ void SceneMainMenu::OnCreate()
 					_sceneStateMachine.SwitchTo(gameScene2);
 					break;
 				case 2:
-					loadGameScene->SetSwitchToScene({ { "SceneGame", gameSceneID1} });
 					_sceneStateMachine.SwitchTo(loadGameScene);
 					break;
 				case 3: 

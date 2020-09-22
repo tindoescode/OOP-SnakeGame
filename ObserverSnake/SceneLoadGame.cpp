@@ -1,4 +1,7 @@
 #include "SceneLoadGame.h"
+#include "SceneGame.h"
+#include "ScenePause.h"
+#include "SceneGameOver.h"
 #include <filesystem>
 #include <sstream>
 
@@ -36,17 +39,16 @@ void SceneLoadGame::OnCreate()
 	Console::TextColor(ColorCode_Cyan);
 	std::cout << "Choose a previous saved game to continue your progress." << std::endl;
 
-	//
-	std::vector<std::wstring> writer;
-
 	for (const auto& entry : std::filesystem::directory_iterator(savegamePath)) {
-		writer.push_back(entry.path().c_str());
+		files.push_back(entry.path().c_str());
 	}
-	writer.push_back(L"Back to main menu");
+	
+	auto menuItem{ files };
+	menuItem.push_back(L"Back to main menu");
 
 	// show menu that allow player to choose saved game file.
 	gameOverMenu = new Menu(
-		writer,
+		menuItem,
 		std::bind(
 			[this](unsigned int listitem, std::vector<std::wstring> writer) {
 				if (listitem == writer.size()) {
@@ -54,10 +56,85 @@ void SceneLoadGame::OnCreate()
 					_sceneStateMachine.SwitchTo(0);
 				}
 				else {
-					//load	
+					// Load data from file
+					std::wfstream f;
+					f.open(writer[listitem], std::ios::in);
+
+					if (!f.is_open()) {
+						std::cout << "Can't open";
+						Sleep(4000);
+						exit(0);
+					}
+					// TODO: handle if file isn't exist
+					int n;
+					std::wstring mapName;
+
+					// Map list
+					f >> n;
+					for (int i = 0; i < n; i++) {
+						getline(f, mapName);
+						_maps.push_back(mapName);
+					}
+
+					// Skip \n
+					//f.seekg(2, std::ios::cur);
+					getline(f, mapName);
+
+					// Round
+					f >> _currentRound;
+
+					// Fruit coord
+					f >> _fruit.X >> _fruit.Y;
+
+					// Direction
+					int x;
+					f >> x;
+					_direction = (Direction)x;
+
+					// Snake/segments coord
+					f >> _snakeHead.X >> _snakeHead.Y;
+
+					_snakeSegments.push_back( { _snakeHead.X, _snakeHead.Y } );
+
+					while (!f.eof()) {
+						COORD a;
+						f >> a.X >> a.Y;
+
+						_snakeSegments.push_back(a);
+					}
+
+					// Close file
+					f.close();
+
+					// Initialize what a game scene needs
+					std::shared_ptr<SceneGame> gameScene1 = std::make_shared<SceneGame>(1, _maps, _sceneStateMachine);
+					unsigned int gameSceneID1 = _sceneStateMachine.Add(gameScene1);
+
+					std::shared_ptr<ScenePause> pauseScene = std::make_shared<ScenePause>(_sceneStateMachine);
+					std::shared_ptr<SceneGameOver> gameOverScene = std::make_shared<SceneGameOver>(_sceneStateMachine);
+
+					unsigned int pauseSceneID = _sceneStateMachine.Add(pauseScene);
+					unsigned int gameOverSceneID = _sceneStateMachine.Add(gameOverScene);
+
+					gameScene1->initializeSavedData(getFruit(), getSnakeHead(), getSnakeSegments(), getCurrentRound(), getDirection());
+
+					// Scene can be switched from game scene
+					gameScene1->SetSwitchToScene({
+						{ "SceneGameOver", gameOverSceneID},
+						{ "PauseScene", pauseSceneID }
+					});
+					gameOverScene->SetSwitchToScene({
+						{ "SceneGame", gameSceneID1}
+					});
+					_sceneStateMachine.SwitchTo(gameSceneID1);
+
+					// Remove scene when unused
+					//_sceneStateMachine.Remove(gameSceneID1);
+					//_sceneStateMachine.Remove(gameOverSceneID);
+					//_sceneStateMachine.Remove(pauseSceneID);
 				}
 			},
-			std::placeholders::_1, writer
+			std::placeholders::_1, files
 		)
 	);
 }

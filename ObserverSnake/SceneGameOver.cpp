@@ -48,11 +48,6 @@ void SceneGameOver::OnCreate()
 // Con may cai nay phai co de handle action cua menu
 void SceneGameOver::OnActivate() {
 	
-	Console::TextColor(ColorCode_Cyan);
-	Console::gotoXY(SCREEN_WIDTH / 2 - (9 / 2), SCREEN_HEIGHT / 4);
-	std::wcout << L"GAME OVER" << std::endl;
-	Console::gotoXY(SCREEN_WIDTH / 2 - (28 / 2), SCREEN_HEIGHT / 4 + 1);
-	std::wcout << L"DO YOU WANT TO PLAY AGAIN ?" << std::endl;
 	gameOverMenu->OnActivate();
 }
 
@@ -63,6 +58,11 @@ void SceneGameOver::OnDeactivate()
 }
 
 void SceneGameOver::ProcessInput() {
+	Console::TextColor(ColorCode_Cyan);
+	Console::gotoXY(SCREEN_WIDTH / 2 - (9 / 2), SCREEN_HEIGHT / 4);
+	std::wcout << L"GAME OVER" << std::endl;
+	Console::gotoXY(SCREEN_WIDTH / 2 - (28 / 2), SCREEN_HEIGHT / 4 + 1);
+	std::wcout << L"DO YOU WANT TO PLAY AGAIN ?" << std::endl;
 	gameOverMenu->ProcessInput();
 }
 

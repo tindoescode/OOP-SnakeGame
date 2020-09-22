@@ -4,7 +4,7 @@
 #include <sstream>
 #include <limits>
 
-SceneGame::SceneGame(const unsigned int playerNumber, const std::vector<std::string>& maps, SceneStateMachine& sceneStateMachine) : Scene(), _maps(maps), _width(100), _height(30), _fruit(nullptr), _sceneStateMachine(sceneStateMachine),
+SceneGame::SceneGame(const unsigned int playerNumber, const std::vector<std::wstring>& maps, SceneStateMachine& sceneStateMachine) : Scene(), _maps(maps), _width(100), _height(30), _fruit(nullptr), _sceneStateMachine(sceneStateMachine),
 _pauseScene(0), _position({ SCREEN_WIDTH / 6, SCREEN_HEIGHT / 4 + 1}), _currentRound(1), _gate(nullptr), _giftCount(0), _playerNumber(playerNumber)
 {
 	freeBlock.reset();
@@ -143,11 +143,15 @@ void SceneGame::loadMap() {
 
 	// we want our map be center
 	f >> _width;
+	
+	// Skip \n
+	f.seekg(2, std::ios::cur);
+
 	_position.X = SCREEN_WIDTH / 2 - _width / 2;
 
 	while (std::getline(f, line))
 	{
-		for (int i = 0, j = min(_width, line.size()); i < j; i++)
+		for (int i = 0, j = line.size(); i < j; i++)
 		{
 			if (line[i] == 'i') // wall
 			{
@@ -196,7 +200,9 @@ void SceneGame::loadMap() {
 
 void SceneGame::loadSnakeKeyHandle()
 {
-	_snakes[0]->setSkillKey({ {'1', Key::N1}, {'2', Key::N2}, {'3', Key::N3} });
+	if (_snakes.size() > 0)
+		_snakes[0]->setSkillKey({ {'1', Key::N1}, {'2', Key::N2}, {'3', Key::N3} });
+	
 	if(_snakes.size() > 1)
 		_snakes[1]->setSkillKey({ {'J', Key::J},  {'K', Key::K},  {'L', Key::L}  });
 }
@@ -243,6 +249,31 @@ void SceneGame::setOccupiedBlock(int x, int y, unsigned int occupied)
  	freeBlock.set(y * MAX_X + x, occupied);
 }
 
+void SceneGame::initializeSavedData(COORD fruit, COORD snakeHead, std::vector<COORD> snakeSegments, unsigned int round, Direction dir) {
+	// A semi OnCreate for loading game
+	_currentRound = round;
+	_mapPath = _maps[_currentRound - 1];
+	
+	loadMap();
+
+	// Atempt to clear old moveable/fruit object
+	//_snakes[0]->clearBlock();
+	_snakes.clear();
+	_fruit->clearBlock();
+
+	freeBlock.reset();
+	
+	//
+	_fruit = std::dynamic_pointer_cast<Fruit>(addObject(ObjectType::fruit, fruit.X, fruit.Y));
+	_snakes.push_back(std::dynamic_pointer_cast<Snake>(addObject(ObjectType::snake, snakeHead.X, snakeHead.Y)));
+	
+	_snakes[0]->turnHead(dir);
+	_snakes[0]->enlonger(snakeSegments.size());
+	_snakes[0]->bindPlayer(_sceneStateMachine.getPlayer(0));
+
+	loadSnakeKeyHandle();
+}
+
 void SceneGame::OnCreate()
 {
 	for (auto snake : _snakes) {
@@ -258,7 +289,7 @@ void SceneGame::OnCreate()
 	loadMap();
 
 	// Bind player to make use of UI
-	_snakes[0]->bindPlayer(_sceneStateMachine.getPlayer(0));
+	if(_snakes.size() >= 1) _snakes[0]->bindPlayer(_sceneStateMachine.getPlayer(0));
 	if(_snakes.size() >= 2) _snakes[1]->bindPlayer(_sceneStateMachine.getPlayer(1));
 
 	// Initialize controller for each snake

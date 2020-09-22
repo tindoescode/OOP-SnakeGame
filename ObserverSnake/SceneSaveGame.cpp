@@ -54,7 +54,7 @@ void SceneSaveGame::OnActivate()
 	}
 	
 	std::wstring output = fileName + std::to_wstring(n) + L".txt";
-	std::ofstream writer(output, std::ios::out);
+	std::wofstream writer(output, std::ios::out);
 
 	// Start writing
 	auto maps = _currentGameScene->getMapPath();
@@ -67,11 +67,14 @@ void SceneSaveGame::OnActivate()
 	}
 	
 	// Writing round
-	writer << _currentGameScene->getCurrentRound();
+	writer << _currentGameScene->getCurrentRound() << std::endl;
 
 
-	// Saving fruit, snake
+	// Saving fruit, direction, snake
 	writer << _currentGameScene->getFruit()->getX() << " " << _currentGameScene->getFruit()->getY() << std::endl;
+
+	auto dir = _currentGameScene->getSnake()->getDirection();
+	writer << (int)dir << std::endl;
 
 	for (auto i : _currentGameScene->getSnake()->segments)
 	{

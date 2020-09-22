@@ -43,6 +43,8 @@ void Snake::setDead() {
 	_dead = true;
 }
 
+Direction Snake::getDirection() { return _direction; }
+
 // Buff functions
 double Snake::getSpeed() { return _speed; }
 bool Snake::isThroughWall() {
@@ -348,7 +350,7 @@ void Snake::turnHead(Direction direction) {
 		return;
 	}
 
-	if(!(direction != Direction::down && direction != Direction::up && direction != Direction::left && direction != Direction::right))
+	if(!(direction != Direction::down && direction != Direction::up && direction != Direction::left && direction != Direction::right) || _direction == Direction::idle)
 		_direction = direction;
 }
 void Snake::move(int step) {

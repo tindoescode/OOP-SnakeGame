@@ -52,12 +52,12 @@ private:
 	unsigned int _lastRound;
 	
 	// Path to map (maybe contains 10 rounds/map)
-	std::vector<std::string> _maps;
+	std::vector<std::wstring> _maps;
 
 	// Current map attributes
 	int _width;
 	int _height;
-	std::string _mapPath;
+	std::wstring _mapPath;
 
 	// Position of the map on console screen
 	COORD _position;
@@ -90,7 +90,7 @@ private:
 	void drawBorder();
 	
 public:
-	SceneGame(const unsigned int playerNumber, const std::vector<std::string>& maps, SceneStateMachine& sceneStateMachine);
+	SceneGame(const unsigned int playerNumber, const std::vector<std::wstring>& maps, SceneStateMachine& sceneStateMachine);
 
 	void ShowTopTitle();
 
@@ -98,6 +98,9 @@ public:
 	void SetSwitchToScene(std::unordered_map<std::string, unsigned int> stateInf);
 	void SetPauseScene(std::shared_ptr<ScenePause> scene) { _pauseScene = scene; }
 	void SwitchTo(std::string mapName);
+
+	// Just for one-player mode
+	void initializeSavedData(COORD fruit, COORD snakeHead, std::vector<COORD> snakeSegments, unsigned int round, Direction dir);
 
 	// Callbacks
 	void OnCreate() override;
@@ -129,7 +132,7 @@ public:
 	int getWidth();
 	int getHeight();
 
-	std::vector<std::string> getMapPath() { return _maps; }
+	std::vector<std::wstring> getMapPath() { return _maps; }
 	std::shared_ptr<Fruit> getFruit() { return _fruit; }
 	std::shared_ptr<Snake> getSnake() { return _snakes[0]; }
 

@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "Menu.h"
 #include "SceneStateMachine.h"
+#include "Snake.h"
 
 class SceneLoadGame :
 	public Scene
@@ -35,5 +36,22 @@ private:
 
 	SceneStateMachine& _sceneStateMachine;
 	std::unordered_map<std::string, unsigned int> _stateInf;
+
+	// File list
+	std::vector<std::wstring> files;
+	
+	// Data loaded
+	std::vector<std::wstring> _maps;
+	COORD _fruit;
+	COORD _snakeHead;
+	std::vector<COORD> _snakeSegments;
+	unsigned int _currentRound;
+	Direction _direction;
+
+	COORD getFruit() { return _fruit; }
+	COORD getSnakeHead() { return _snakeHead; }
+	std::vector<COORD> getSnakeSegments() { return _snakeSegments; }
+	unsigned int getCurrentRound() { return _currentRound; }
+	Direction getDirection() { return _direction; }
 };
 
