@@ -558,14 +558,21 @@ void SceneGame::saveScore() {
 	if (_playerNumber > 1) return;
 
 	//
-	std::ifstream writer("ScoreBoard.txt", std::ios::in);
+	std::fstream f("ScoreBoard.txt", std::ios::in || std::ios::out);
 	std::string line;
 
 	int countline = 0;
+
 	std::vector<std::string>temp;
-	while (getline(writer, line)) {
-		temp.push_back(line);
+
+	for(int i = 0; i < 10; i++) 
+		temp.push_back("");
+
+	int i = 0;
+	while (getline(f, line)) {
+		temp[i] = line;
 	}
+
 	for (int i = 0; i < temp.size(); i++) {
 		if (atoi(temp[i].substr(temp[i].rfind(" ") + 1, line.size() - temp[9].rfind(" ") - 1).c_str()) < _snakes.front()->getPlayer()->getTotalScore())
 		{
@@ -585,12 +592,11 @@ void SceneGame::saveScore() {
 			break;
 		}
 	}
+	f.close();
 
-	writer.close();
-
-	std::ofstream reader("ScoreBoard.txt", std::ios::out);
-	for (int i = 0; i < 10; i++) {
-		reader << temp[i] << std::endl;
+	f.open("ScoreBoard.txt", std::ios::out);
+	for (int i = 0; i < temp.size(); i++) {
+		f << temp[i] << std::endl;
 	}
-	reader.close();
+	f.close();
 }

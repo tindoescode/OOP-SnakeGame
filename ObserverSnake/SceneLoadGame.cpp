@@ -42,13 +42,20 @@ void SceneLoadGame::OnCreate()
 	for (const auto& entry : std::filesystem::directory_iterator(savegamePath)) {
 		writer.push_back(entry.path().c_str());
 	}
+	writer.push_back(L"Back to main menu");
 
 	// show menu that allow player to choose saved game file.
 	gameOverMenu = new Menu(
 		writer,
 		std::bind(
 			[this](unsigned int listitem, std::vector<std::wstring> writer) {
-				// We have writer here
+				if (listitem == writer.size()) {
+					// Back to main menu
+					_sceneStateMachine.SwitchTo(0);
+				}
+				else {
+					//load	
+				}
 			},
 			std::placeholders::_1, writer
 		)
