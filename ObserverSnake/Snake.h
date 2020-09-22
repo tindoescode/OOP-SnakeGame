@@ -82,6 +82,8 @@ public:
 
 	Direction getDirection();
 
+	void setDirection(Direction direction);
+
 	void setColor(int color) { _color = color; }
 	void setCharacter(char character) { _character = character; }
 

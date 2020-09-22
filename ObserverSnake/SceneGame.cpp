@@ -251,23 +251,25 @@ void SceneGame::setOccupiedBlock(int x, int y, unsigned int occupied)
 
 void SceneGame::initializeSavedData(COORD fruit, COORD snakeHead, std::vector<COORD> snakeSegments, unsigned int round, Direction dir) {
 	// A semi OnCreate for loading game
+	objects.clear();
+	freeBlock.reset();
+
+	_playerNumber = 1;
 	_currentRound = round;
 	_mapPath = _maps[_currentRound - 1];
 	
+	// I just want to load the map, not snake or create random fruit
 	loadMap();
 
 	// Atempt to clear old moveable/fruit object
-	//_snakes[0]->clearBlock();
 	_snakes.clear();
-	_fruit->clearBlock();
+	deleteFruit(getFruit()->getX(), getFruit()->getY());
 
-	freeBlock.reset();
-	
-	//
+	// Assign new
 	_fruit = std::dynamic_pointer_cast<Fruit>(addObject(ObjectType::fruit, fruit.X, fruit.Y));
 	_snakes.push_back(std::dynamic_pointer_cast<Snake>(addObject(ObjectType::snake, snakeHead.X, snakeHead.Y)));
 	
-	_snakes[0]->turnHead(dir);
+	_snakes[0]->setDirection(dir);
 	_snakes[0]->enlonger(snakeSegments.size());
 	_snakes[0]->bindPlayer(_sceneStateMachine.getPlayer(0));
 

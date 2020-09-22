@@ -71,6 +71,8 @@ void SceneLoadGame::OnCreate()
 
 					// Map list
 					f >> n;
+					f.ignore(INT_MAX, '\n');
+
 					for (int i = 0; i < n; i++) {
 						getline(f, mapName);
 						_maps.push_back(mapName);
@@ -78,7 +80,7 @@ void SceneLoadGame::OnCreate()
 
 					// Skip \n
 					//f.seekg(2, std::ios::cur);
-					getline(f, mapName);
+					//getline(f, mapName);
 
 					// Round
 					f >> _currentRound;
@@ -124,7 +126,7 @@ void SceneLoadGame::OnCreate()
 						{ "PauseScene", pauseSceneID }
 					});
 					gameOverScene->SetSwitchToScene({
-						{ "SceneGame", gameSceneID1}
+						{ "SceneGame", gameSceneID1 }
 					});
 					_sceneStateMachine.SwitchTo(gameSceneID1);
 
