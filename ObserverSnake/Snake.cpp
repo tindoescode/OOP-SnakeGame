@@ -6,10 +6,31 @@
 #include "Rocket.h"
 #include "ThroughWall.h"
 #include "X2Point.h"
-#include <future>
+#include "Player.h"
+#include "Game.h"
+#include "SceneGame.h"
 
-double Snake::getSpeed() { return _speed; }
+Snake::Snake(int x, int y, std::shared_ptr<SceneGame> board, int color, char character) : Object(x, y) {
+	_direction = Direction::idle;
+	_dead = false;
+	_board = board;
+	_speed = 1.0;
+	_speedTime = 0;
+	_throughWallTime = 0.0;
+	_x2PointTime = 0.0;
 
+	_color = color;
+	_character = character;
+
+	// Initialize with a segment (assume it is snake's head)
+	auto segment = std::dynamic_pointer_cast<SnakeSegment>(_board->addObject(ObjectType::snake_segment, x, y));
+	segment->setColor(_color);
+	segment->setCharacter(_character);
+
+	segments.push_back(segment);
+}
+
+// Reset on next round
 void Snake::resetStatus() {
 	_direction = Direction::idle;
 	_throughWallTime = 0;
@@ -18,7 +39,12 @@ void Snake::resetStatus() {
 	_speedTime = 0;
 	_dead = false;
 }
+void Snake::setDead() {
+	_dead = true;
+}
 
+// Buff functions
+double Snake::getSpeed() { return _speed; }
 bool Snake::isThroughWall() {
 	if (_throughWallTime > 0) {
 		return true;
@@ -40,6 +66,11 @@ void Snake::setX2Point(double time)
 {
 	_x2PointTime = time;
 }
+bool Snake::isdead() {
+	return _dead;
+}
+
+// Timer callbacks
 void Snake::ThroughWallDecrease() {
 	if (_throughWallTime < 0) {
 		_throughWallTime = 0;
@@ -67,14 +98,63 @@ void Snake::X2PointDecrease()
 		_x2PointTime -= double(125) / 1000 / _speed;
 	}
 }
+
+// Skill
 void Snake::HandleSkillKey()
 {
-	if(_SkillKeyHandle) _SkillKeyHandle();
+	//TODO: the same thing to snake 1
+	for (int i = 0; i < 3; i++) {
+		if (GetAsyncKeyState((int)_keys[i].key)) {
+			if (!activeItem(i + 1)) {
+				Console::TextColor(ColorCode_DarkCyan);
+				Console::gotoXY(0, 0);
+				std::cout << "\t\t\t\t\t";
+				Console::gotoXY(0, 0);
+				std::cout << "You don't have any item on slot " << i + 1 << ".";
+			}
+		}
+	}
 }
-void Snake::setSkillKeyHandle(std::function<void()> func)
+void Snake::setSkillKey(std::vector<KeyDescription> keys)
 {
-	_SkillKeyHandle = func;
+	_keys = keys;
 }
+void Snake::drawSkillBox() {
+	short marginLeft = getPlayer()->getSkillUIMarginLeft();
+
+	Console::drawRect({ marginLeft, 10 }, { marginLeft + 4, 12 });
+	Console::drawRect({ marginLeft, 13 }, { marginLeft + 4, 15 });
+	Console::drawRect({ marginLeft, 16 }, { marginLeft + 4, 18 });
+
+	
+	Console::TextColor(ColorCode_Cyan);
+	Console::gotoXY(marginLeft - 3, 8);
+	std::cout << "Items";
+
+	Console::TextColor(ColorCode_Pink);
+	// Skill1
+	Console::gotoXY(marginLeft - 3, 12);
+	std::cout << _keys[0].keyName;
+
+	Console::gotoXY(marginLeft, 11);
+	std::cout << "Empty";
+
+	// Skill2
+	Console::gotoXY(marginLeft - 3, 15);
+	std::cout << _keys[1].keyName;
+
+	Console::gotoXY(marginLeft, 14);
+	std::cout << "Empty";
+
+	// Skill3
+	Console::gotoXY(marginLeft - 3, 18);
+	std::cout << _keys[2].keyName;
+
+	Console::gotoXY(marginLeft, 17);
+	std::cout << "Empty";
+}
+
+// Through wall functions
 bool Snake::dieInNextStep(int &step, const int &score) 
 {
 	if (_direction == Direction::idle) return false;
@@ -134,34 +214,12 @@ void Snake::setThroughWall(int time) {
 	_throughWallTime += time;
 }
 
-Snake::Snake(int x, int y, std::shared_ptr<SceneGame> board, int color, char character) : Object(x, y) {
-	_direction = Direction::idle;
-	_dead = false;
-	_board = board;
-	_speed = 1.0;
-	_speedTime = 0;
-	_throughWallTime = 0.0;
-	_x2PointTime = 0.0;
-
-	_color = color;
-	_character = character;
-
-	// Initialize with a segment (assume it is snake's head)
-	auto segment = std::dynamic_pointer_cast<SnakeSegment>(_board->addObject(ObjectType::snake_segment, x, y));
-	segment->setColor(_color);
-	segment->setCharacter(_character);
-
-	segments.push_back(segment);
-}
-
+// Set head pos
 void Snake::setPos(int x, int y) {
 	segments.front()->setPos(x, y);
 }
 
-void Snake::setDead() { 
-	_dead = true; 
-}
-
+// Collision
 GateCollisionType Snake::gateCollision(unsigned int score) {
 	if (score < _board->_currentRound * 100) return GateCollisionType::none;
 	for (auto i : _board->objects) {
@@ -173,6 +231,7 @@ GateCollisionType Snake::gateCollision(unsigned int score) {
 	}
 	return GateCollisionType::none;
 }
+
 // Check if in any specify coord that snake can get gate collision
 GateCollisionType Snake::gateCollision(COORD coord, unsigned int score) {
 	auto [X, Y] = coord;
@@ -197,7 +256,6 @@ bool Snake::bodyCollision() {
 	}
 	return false;
 }
-
 std::shared_ptr<Fruit> Snake::fruitCollision() {
 	for (auto i : _board->objects) {
 		if (std::dynamic_pointer_cast<Fruit>(i)) {
@@ -206,7 +264,6 @@ std::shared_ptr<Fruit> Snake::fruitCollision() {
 	}
 	return nullptr;
 }
-
 std::shared_ptr<Gift> Snake::giftCollision() {
 	for (auto i : _board->objects) {
 		if (std::dynamic_pointer_cast<Gift>(i)) {
@@ -215,7 +272,6 @@ std::shared_ptr<Gift> Snake::giftCollision() {
 	}
 	return nullptr;
 }
-
 std::shared_ptr<Wall> Snake::wallCollision() {
 	for (auto i : _board->objects) {
 		if (std::dynamic_pointer_cast<Wall>(i)) {
@@ -225,6 +281,7 @@ std::shared_ptr<Wall> Snake::wallCollision() {
 	return nullptr;
 }
 
+// Behavious
 void Snake::eatFruit(std::shared_ptr<Fruit> destinateFruit) {
 	// Remove fruit
 	destinateFruit->setPos(-1, -1); // this avoid destructor to clear new snake segment block
@@ -234,7 +291,6 @@ void Snake::eatFruit(std::shared_ptr<Fruit> destinateFruit) {
 	auto object = std::dynamic_pointer_cast<SnakeSegment>(_board->addObject(ObjectType::snake_segment, -1, -1));
 	segments.push_back(object);
 }
-
 bool Snake::getItem(std::shared_ptr<Gift> gift) {
 	int i = 1;
 
@@ -247,8 +303,12 @@ bool Snake::getItem(std::shared_ptr<Gift> gift) {
 	// found a slot
 	if (!_items[i]) {
 		int n = rand() % 3 + 1;
-		std::string itemNames[4] = { {""}, "Rocket 30s", "Through Wall 30s", "X2 Points 30s" };
-		COORD UISlotTextPosition[4] = { {-1, -1}, {91, 11}, {91, 14}, {91, 17} };
+		std::string itemNames[4] = { {""}, "Rocket", "Through Wall", "X2 Points" };
+		COORD UISlotTextPosition[4] = { {-1, -1}, 
+			{getPlayer()->getSkillUIMarginLeft(), 11}, 
+			{getPlayer()->getSkillUIMarginLeft(), 14}, 
+			{getPlayer()->getSkillUIMarginLeft(), 17} 
+		};
 
 		switch(n) {
 		case 1:
@@ -263,7 +323,9 @@ bool Snake::getItem(std::shared_ptr<Gift> gift) {
 		}
 
 		Console::gotoXY(0, 0);
+		std::cout << "\t\t\t\t\t\t";
 		Console::TextColor(ColorCode_Pink);
+		Console::gotoXY(0, 0);
 		std::cout << "You got a " << itemNames[n] << " on slot " << i << ".";
 
 		Console::gotoXY(UISlotTextPosition[i].X, UISlotTextPosition[i].Y);
@@ -289,7 +351,6 @@ void Snake::turnHead(Direction direction) {
 	if(!(direction != Direction::down && direction != Direction::up && direction != Direction::left && direction != Direction::right))
 		_direction = direction;
 }
-
 void Snake::move(int step) {
 	if (_direction == Direction::idle) return;
 	//new head
@@ -347,20 +408,22 @@ void Snake::move(int step) {
 	
 	segments.pop_back();
 }
-
 bool Snake::activeItem(int slot) {
 	if (!_items[slot]) return false;
 	
 	_items[slot]->operate(shared_from_this());
 	_items[slot].reset();
 
-	COORD UISlotTextPosition[4] = { {-1, -1}, {91, 11}, {91, 14}, {91, 17} };
+	COORD UISlotTextPosition[4] = { {-1, -1}, 
+		{getPlayer()->getSkillUIMarginLeft(), 11}, 
+		{getPlayer()->getSkillUIMarginLeft(), 14}, 
+		{getPlayer()->getSkillUIMarginLeft(), 17} 
+	};
 	Console::gotoXY(UISlotTextPosition[slot].X, UISlotTextPosition[slot].Y);
 	std::cout << "Empty            ";
 
 	return true;
 }
-
 void Snake::enlonger(int n)
 {
 	for (int i = 0; i < n; i++) {
@@ -368,14 +431,9 @@ void Snake::enlonger(int n)
 		segments.push_back(segment);
 	}
 }
-
 void Snake::paint() {
 	Console::TextColor(ColorCode_Green);
 
 	if(segments.front()->getX() != 0 && segments.front()->getY() != 0)
 		segments.front()->paint();
-}
-
-bool Snake::isdead() { 
-	return _dead; 
 }

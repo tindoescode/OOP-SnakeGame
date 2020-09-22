@@ -1,15 +1,21 @@
 #pragma once
 #include <deque>
-#include <functional>
+#include <vector>
 #include "SnakeSegment.h"
 #include "Gate.h"
 #include "Item.h"
+#include "Player.h"
 
 class SceneGame;
 class Fruit;
 class Wall;
 class SceneSaveGame;
 class Gift;
+
+struct KeyDescription {
+	char keyName;
+	Key key;
+};
 
 const int ITEM_MAXSLOT = 3;
 
@@ -37,14 +43,17 @@ private:
 	double _throughWallTime; 
 	double _x2PointTime;
 
-	std::function<void()> _SkillKeyHandle;
+	std::vector<KeyDescription> _keys;
 
 	int _color;
 	char _character;
 
+	// Binding
+	std::shared_ptr<Player> _player;
+
 public:
 	Snake(int x, int y, std::shared_ptr<SceneGame> board, int color = ColorCode_DarkGreen, char character = 'O');
-
+	
 	double getSpeed();
 	void resetStatus();
 	bool isThroughWall();
@@ -61,7 +70,9 @@ public:
 	void X2PointDecrease();
 
 	void HandleSkillKey();
-	void setSkillKeyHandle(std::function<void()> func);
+	void setSkillKey(std::vector<KeyDescription> keys);
+
+	void drawSkillBox();
 
 	// Check die, p/s: step is mutate is case of snake goes over border
 	bool dieInNextStep(int& step, const int& score);
@@ -93,5 +104,8 @@ public:
 
 	void paint();
 	bool isdead();
+
+	std::shared_ptr<Player> getPlayer() { return _player; };
+	void bindPlayer(std::shared_ptr<Player> player) { _player = player; };
 };
 

@@ -148,7 +148,6 @@
     <ClCompile Include="Gift.cpp" />
     <ClCompile Include="Rocket.cpp" />
     <ClCompile Include="Player.cpp" />
-    <ClCompile Include="SceneChooseMap.cpp" />
     <ClCompile Include="SceneGame.cpp" />
     <ClCompile Include="Console.cpp" />
     <ClCompile Include="Fruit.cpp" />
@@ -179,7 +178,6 @@
     <ClInclude Include="Gift.h" />
     <ClInclude Include="Rocket.h" />
     <ClInclude Include="Player.h" />
-    <ClInclude Include="SceneChooseMap.h" />
     <ClInclude Include="SceneGame.h" />
     <ClInclude Include="Console.h" />
     <ClInclude Include="Fruit.h" />

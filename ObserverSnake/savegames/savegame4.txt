@@ -1,3 +1,0 @@
-ClassicMap1.dat
-14 18
-56 13

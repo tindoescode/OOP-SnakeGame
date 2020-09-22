@@ -90,7 +90,7 @@ private:
 	void drawBorder();
 	
 public:
-	SceneGame(const int playerNumber, const std::vector<std::string>& maps, SceneStateMachine& sceneStateMachine);
+	SceneGame(const unsigned int playerNumber, const std::vector<std::string>& maps, SceneStateMachine& sceneStateMachine);
 
 	void ShowTopTitle();
 
@@ -129,11 +129,11 @@ public:
 	int getWidth();
 	int getHeight();
 
-	std::string getMapPath() { return _mapPath; }
+	std::vector<std::string> getMapPath() { return _maps; }
 	std::shared_ptr<Fruit> getFruit() { return _fruit; }
 	std::shared_ptr<Snake> getSnake() { return _snakes[0]; }
 
-	void registerPlayer(std::shared_ptr<Player> player, std::shared_ptr<Snake> snake); //TODO: controller for both
+	unsigned int getCurrentRound() { return _currentRound; }
 
 	void saveScore();
 };

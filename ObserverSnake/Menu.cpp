@@ -8,8 +8,8 @@ Menu::~Menu() {
 void Menu::Draw()
 {
 	menuOuterBorder();
-	Title();
 	menuInnerBorder();
+	Title();
 	for (int i = 0; i < heightBorder; i++)
 	{
 		Console::TextColor(color[i]);
@@ -36,7 +36,7 @@ Menu::Menu(const std::vector<std::wstring> items, std::function<void(unsigned in
 	color = new int[ _items.size() ];
 
 	// ?
-	for (int i = 0; i < _items.size(); i++)	color[i] = (unsigned int)MAUCHU;
+	for (int i = 0; i < _items.size(); i++)	color[i] = MAUCHU;
 	color[0] = MAUNEN;
 }
 
@@ -122,7 +122,7 @@ void Menu::Title() {
 
 void Menu::menuOuterBorder() {
 	Console::gotoXY(0, 0);
-	Console::TextColor(ColorCode_Yellow);
+	Console::TextColor(ColorCode_DarkYellow);
 
 	std::vector<std::string> title = {
 		"   _.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._	\n",
@@ -167,6 +167,7 @@ void Menu::menuOuterBorder() {
 		std::cout << i;
 	}
 
+	Console::TextColor(rand() % 10 + 1);
 	Console::gotoXY(80, j++);
 	std::cout << "Made by Bui Huynh Trung Nam";
 	Console::gotoXY(88, j++);
@@ -176,7 +177,7 @@ void Menu::menuOuterBorder() {
 }
 void Menu::menuInnerBorder() {
 	//top and bottom border
-	Console::TextColor(ColorCode_Cyan);
+	Console::TextColor(ColorCode_DarkGreen);
 	for (int i = SCREEN_WIDTH / 2 - lengthBorder / 2 - 2; i <= SCREEN_WIDTH / 2 + lengthBorder / 2 + 2; i++) {
 		Console::gotoXY(i, SCREEN_HEIGHT / 2 - heightBorder / 2 - 2);
 		std::cout << (char)205;

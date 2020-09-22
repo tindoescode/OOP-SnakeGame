@@ -1,6 +1,6 @@
 #include"Player.h"
 
-Player::Player() {
+Player::Player(int skillUIMarginLeft) : _skillUIMarginLeft(skillUIMarginLeft) {
 	currentScore = 0;
 	totalScore = 0;
 }
@@ -23,8 +23,8 @@ void Player::saveScore() {
 }
 
 void Player::showCurrentScore() {
-	Console::gotoXY(103, 3);
-	std::wcout << "Total Score: " << totalScore;
-	Console::gotoXY(103, 4);
-	std::wcout << "Your Score: " << currentScore;
+	Console::gotoXY(_skillUIMarginLeft - 4, 3);
+	std::cout << "Total Score: " << totalScore;
+	Console::gotoXY(_skillUIMarginLeft - 4, 4);
+	std::cout << "Your Score: " << currentScore;
 }

@@ -3,7 +3,6 @@
 
 SceneStateMachine::SceneStateMachine() : scenes(0), curScene(0), insertedSceneID(0), curSceneID(0) 
 { 
-    player = std::make_shared<Player>(); 
 }
 
 void SceneStateMachine::ProcessInput()
@@ -68,6 +67,11 @@ void SceneStateMachine::Remove(unsigned int id)
 
         scenes.erase(it);
     }
+}
+
+void SceneStateMachine::addPlayer(std::shared_ptr<Player> player)
+{
+    _players.push_back(player);
 }
 
 void SceneStateMachine::SwitchTo(unsigned int id)

@@ -32,6 +32,10 @@ public:
 	// Get current scene id
 	std::shared_ptr<Scene>& GetCurrentScene() { return curScene; }
 
+	// Player manager
+	void addPlayer(std::shared_ptr<Player> player);
+	std::shared_ptr<Player> getPlayer(int idx) { return _players[idx]; }
+
 private:
 	// Stores all of the scenes associated with this state machine.
 	std::unordered_map<unsigned int, std::shared_ptr<Scene>> scenes;
@@ -47,6 +51,6 @@ private:
 	int curSceneID;
 
 	//Player
-	std::shared_ptr<Player> player;
+	std::vector<std::shared_ptr<Player>> _players;
 };
 

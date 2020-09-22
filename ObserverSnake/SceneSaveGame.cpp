@@ -43,11 +43,6 @@ void SceneSaveGame::OnActivate()
 	savegamePath += "\\savegames";
 
 	std::filesystem::create_directory(savegamePath);
-
-	//Console::gotoXY(0, 0);
-	//Console::TextColor(ColorCode_Cyan);
-	//for (const auto& entry : std::filesystem::directory_iterator(savegamePath))
-	//	std::cout << entry.path() << std::endl; 
 	
 	unsigned int n = 0;
 
@@ -61,22 +56,38 @@ void SceneSaveGame::OnActivate()
 	std::wstring output = fileName + std::to_wstring(n) + L".txt";
 	std::ofstream writer(output, std::ios::out);
 
-	writer << _currentGameScene->getMapPath() << std::endl;
+	// Start writing
+	auto maps = _currentGameScene->getMapPath();
+
+	// Writing all maps path
+	writer << maps.size() << std::endl;
+
+	for (auto map : maps) {
+		writer << map << std::endl;
+	}
+	
+	// Writing round
+	writer << _currentGameScene->getCurrentRound();
+
+
+	// Saving fruit, snake
 	writer << _currentGameScene->getFruit()->getX() << " " << _currentGameScene->getFruit()->getY() << std::endl;
 
 	for (auto i : _currentGameScene->getSnake()->segments)
 	{
 		writer << i->getX() << " " << i->getY() << std::endl;
 	}
+
+	// Close stream
 	writer.close();
 
+	// Notify to player
 	Console::gotoXY(30,10);
 	Console::TextColor(ColorCode_Cyan);
 	std::wcout << L"Successfully save game to " << output << std::endl;
 
 	Sleep(3000);
 	system("cls");
-
 	SwitchTo("ContinueScene"); 
 }
 

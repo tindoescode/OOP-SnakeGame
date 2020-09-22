@@ -31,7 +31,7 @@ void ScenePause::SwitchTo(std::shared_ptr<Scene> scene)
 void ScenePause::OnCreate()
 {
 	pauseMenu = new Menu(
-		{ L"Continue", L"Save game", L"Load game", L"Return to main menu", L"Exit" },
+		{ L"Continue", L"Save game", L"Load game", L"Return to main menu" },
 		std::bind(
 			[this](unsigned int listitem) {
 				switch (listitem) {
