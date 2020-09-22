@@ -9,11 +9,11 @@ Gate::Gate(int x, int y) : Object(x, y) {
 void Gate::paint() {
 	Console::TextColor(ColorCode_Red);
 	Console::gotoXY(_x, _y - 1);
-	std::cout << char(220) << char(220) << char(220);
+	std::cout << char(201) << char(205) << char(188);
 	Console::gotoXY(_x, _y);
-	std::cout << char(219);
+	std::cout << char(247);
 	Console::gotoXY(_x, _y + 1);
-	std::cout << char(223) << char(223) << char(223);
+	std::cout << char(200) << char(205) << char(187);
 }
 
 int Gate::getPoint() {

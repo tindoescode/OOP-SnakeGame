@@ -92,6 +92,8 @@ private:
 public:
 	SceneGame(const int playerNumber, const std::vector<std::string>& maps, SceneStateMachine& sceneStateMachine);
 
+	void ShowTopTitle();
+
 	// Scene switching
 	void SetSwitchToScene(std::unordered_map<std::string, unsigned int> stateInf);
 	void SetPauseScene(std::shared_ptr<ScenePause> scene) { _pauseScene = scene; }

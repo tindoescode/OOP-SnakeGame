@@ -7,8 +7,9 @@ Menu::~Menu() {
 }
 void Menu::Draw()
 {
+	menuOuterBorder();
 	Title();
-	menuBorder();
+	menuInnerBorder();
 	for (int i = 0; i < heightBorder; i++)
 	{
 		Console::TextColor(color[i]);
@@ -57,7 +58,7 @@ void Menu::OnDeactivate()
 
 void Menu::Update(Status key) {
 	if ((int) key == 224) key = Status(_getch());
-	
+
 	switch (key)
 	{
 	case Status::up: {
@@ -98,22 +99,82 @@ void Menu::Title() {
 	Console::gotoXY(0, 0);
 	Console::TextColor(rand() % 10 + 1);
 
-	std::cout << "\
- 				  .-')        .-') _    ('-.    .-. .-')     ('-.   \n\
- 				  ( OO ).     ( OO ) )  ( OO ).-.\  ( OO )  _(  OO)  \n\
- 				  (_)---\\_),--./ ,--,'   / . --. /,--. ,--. (,------. \n\
- 				  /    _ | |   \\ |  |\\   | \\-.  \\ |  .'   /  |  .---' \n\
- 				  \\  :` `. |    \\|  | ).-'-'  |  ||      /,  |  |     \n\
- 				   '..`''.)|  .     |/  \\| |_.'  ||     ' _)(|  '--.  \n";
-	std::cout << "\
-				  .-._)   \\|  |\\    |    |  .-.  ||  .   \\   |  .--'  \n\
-				  \\       /|  | \\   |    |  | |  ||  |\\   \\  |  `---. \n\
-				  `-----' `--'  `--'    `--' `--'`--' '--'  `------' \n\
-	";
+	std::vector<std::string> title = {
+"   .-'''-. ,---.   .--.   ____    .--.   .--.      .-''-.   \n",
+"  / _     \\|    \\  |  | .'  __ `. |  | _/  /     .'_ _   \\  \n",
+" (`' )/`--'|  ,  \\ |  |/   '  \\  \\| (`' ) /     / ( ` )   ' \n",
+"(_ o _).   |  |\\_ \\|  ||___|  /  ||(_ ()_)     . (_ o _)  | \n",
+" (_,_). '. |  _( )_\\  |   _.-`   || (_,_)   __ |  (_,_)___| \n",
+".---.  \\  :| (_ o _)  |.'   _    ||  |\\ \\  |  |'  \\   .---. \n",
+"\\    `-'  ||  (_,_)\\  ||  _( )_  ||  | \\ `'   / \\  `-'    / \n",
+" \\       / |  |    |  |\\ (_ o _) /|  |  \\    /   \\       /  \n",
+"  `-...-'  '--'    '--' '.(_,_).' `--'   `'-'     `'-..-'   \n",
+	};
+
+	auto marginLeft = SCREEN_WIDTH / 2 - title[0].size() / 2;
+	int j = 0;
+	for (auto i : title) {
+		Console::gotoXY(marginLeft, j++);
+		std::cout << i;
+	}
+
 }
 
+void Menu::menuOuterBorder() {
+	Console::gotoXY(0, 0);
+	Console::TextColor(ColorCode_Yellow);
 
-void Menu::menuBorder() {
+	std::vector<std::string> title = {
+		"   _.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._.-=-._	\n",
+		".-'---      - ---     --     ---   -----   - --       ----  ----   -     ---`-.\n",
+		" )                                                                           (	\n",
+		"(                                                                             )\n",
+		" )                                                                           (	\n",
+		"(                                                                             )\n",
+		" )                                                                           (	\n",
+		"(                                                                             )\n",
+		" )                                                                           (	\n",
+		"(                                                                             )\n",
+		" )                                                                           (	\n",
+		"(                                                                             )\n",
+		" )                                                                           (	\n",
+		"(                                                                             )\n",
+		" )                                                                           (	\n",
+		"(                                                                             )\n",
+		" )                                                                           (	\n",
+		"(                                                                             )\n",
+		" )                                                                           (	\n",
+		"(                                                                             )\n",
+		" )                                                                           (	\n",
+		"(                                                                             )\n",
+		" )                                                                           (	\n",
+		"(                                                                             )\n",
+		" )                                                                           (	\n",
+		"(                                                                             )\n",
+		" )                                                                           (	\n",
+		"(___       _       _       _       _       _       _       _       _       ___)\n",
+		"    `-._.-' (___ _) (__ _ ) (_   _) (__  _) ( __ _) (__  _) (__ _ ) `-._.-'	\n",
+		"            `-._.-' (  ___) ( _  _) ( _ __) (_  __) (__ __) `-._.-'			\n",
+		"                    `-._.-' (__  _) (__  _) (_ _ _) `-._.-'					\n",
+		"                            `-._.-' (_ ___) `-._.-'							\n",
+		"                                    `-._.-'									\n",
+	};
+
+	int j = 0;
+	auto marginLeft = SCREEN_WIDTH / 2 - title[0].size() / 2;
+	for (auto i : title) {
+		Console::gotoXY(marginLeft, j++);
+		std::cout << i;
+	}
+
+	Console::gotoXY(80, j++);
+	std::cout << "Made by Bui Huynh Trung Nam";
+	Console::gotoXY(88, j++);
+	std::cout << "Ngo Truong Tuyen";
+	Console::gotoXY(88, j++);
+	std::cout << "Nguyen Trung Tin";
+}
+void Menu::menuInnerBorder() {
 	//top and bottom border
 	Console::TextColor(ColorCode_Cyan);
 	for (int i = SCREEN_WIDTH / 2 - lengthBorder / 2 - 2; i <= SCREEN_WIDTH / 2 + lengthBorder / 2 + 2; i++) {

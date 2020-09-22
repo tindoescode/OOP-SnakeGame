@@ -32,6 +32,16 @@
 #include <windows.h>
 
 enum class Key {
+	W = 119,
+	S = 115,
+	A = 97,
+	D = 100,
+
+	VKUP = 72,
+	VKDOWN = 80,
+	VKLEFT = 75,
+	VKRIGHT = 77,
+
 	N1 = 0x31,
 	N2 = 0x32,
 	N3 = 0x33,

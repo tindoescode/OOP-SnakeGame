@@ -35,8 +35,8 @@ public:
 
 	void Title();
 
-	//MenuBoder
-	void menuBorder();
+	void menuOuterBorder();
+	void menuInnerBorder();
 protected:
 	// Called when item selected
 	std::function<void(unsigned int listitem)> OnItemSelected;

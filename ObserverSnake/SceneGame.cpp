@@ -1,6 +1,40 @@
 #include "SceneGame.h"
 #include "ScenePause.h"
-#include<sstream>
+#include "Game.h"
+#include <sstream>
+#include <limits>
+
+SceneGame::SceneGame(const int playerNumber, const std::vector<std::string>& maps, SceneStateMachine& sceneStateMachine) : Scene(), _maps(maps), _width(100), _height(30), _fruit(nullptr), _sceneStateMachine(sceneStateMachine),
+_pauseScene(0), _position({ SCREEN_WIDTH / 6, SCREEN_HEIGHT / 4 + 1}), _currentRound(1), _gate(nullptr), _giftCount(0), _playerNumber(playerNumber)
+{
+	freeBlock.reset();
+	_lastRound = (unsigned int)maps.size();
+}
+
+void SceneGame::ShowTopTitle() {
+	Console::TextColor(ColorCode_Green);
+
+	std::vector<std::string> title = {
+"   .-'''-. ,---.   .--.   ____    .--.   .--.      .-''-.   \n",
+"  / _     \\|    \\  |  | .'  __ `. |  | _/  /     .'_ _   \\  \n",
+" (`' )/`--'|  ,  \\ |  |/   '  \\  \\| (`' ) /     / ( ` )   ' \n",
+"(_ o _).   |  |\\_ \\|  ||___|  /  ||(_ ()_)     . (_ o _)  | \n",
+" (_,_). '. |  _( )_\\  |   _.-`   || (_,_)   __ |  (_,_)___| \n",
+".---.  \\  :| (_ o _)  |.'   _    ||  |\\ \\  |  |'  \\   .---. \n",
+"\\    `-'  ||  (_,_)\\  ||  _( )_  ||  | \\ `'   / \\  `-'    / \n",
+" \\       / |  |    |  |\\ (_ o _) /|  |  \\    /   \\       /  \n",
+"  `-...-'  '--'    '--' '.(_,_).' `--'   `'-'     `'-..-'   \n",
+	};
+
+	auto marginLeft = SCREEN_WIDTH / 2 - title[0].size() / 2;
+	int j = 1;
+	for (auto i : title) {
+		Console::gotoXY(marginLeft, j++);
+		std::cout << i;
+	}
+
+}
+
 std::shared_ptr<Object> SceneGame::addObject(ObjectType type, int x, int y) {
 	std::shared_ptr<Object> object;
 
@@ -35,7 +69,7 @@ std::shared_ptr<Object> SceneGame::addObject(ObjectType type, int x, int y) {
 }
 
 void SceneGame::drawBorder() {
-	Console::TextColor(ColorCode_Cyan);
+	Console::TextColor(ColorCode_DarkYellow);
 
 	int x, y;
 	//it will be changed when we have more information 
@@ -106,12 +140,14 @@ void SceneGame::loadMap() {
 
 	std::string line;
 	int height = 0;
-	int maxWidth = 0;
+
+	// we want our map be center
+	f >> _width;
+	_position.X = SCREEN_WIDTH / 2 - _width / 2;
 
 	while (std::getline(f, line))
 	{
-		if (maxWidth < line.length()) maxWidth = unsigned int (line.length());
-		for (int i = 0; i < line.length(); i++)
+		for (int i = 0, j = min(_width, line.size()); i < j; i++)
 		{
 			if (line[i] == 'i') // wall
 			{
@@ -133,9 +169,8 @@ void SceneGame::loadMap() {
 	}
 
 	// set width, height
-	_width = maxWidth;
 	_height = height - 1;
-
+	
 	try {
 		if (!_snakes.size()) throw NoSnakeException();
 	}
@@ -243,13 +278,6 @@ void SceneGame::setOccupiedBlock(int x, int y, unsigned int occupied)
  	freeBlock.set(y * MAX_X + x, occupied);
 }
 
-SceneGame::SceneGame(const int playerNumber, const std::vector<std::string> &maps, SceneStateMachine& sceneStateMachine) : Scene(), _maps(maps), _width(100), _height(30), _fruit(nullptr), _sceneStateMachine(sceneStateMachine),
-_pauseScene(0), _position({ 10, 5 }), _currentRound(1), _gate(nullptr), _giftCount(0), _playerNumber(playerNumber)
-{
-	freeBlock.reset();	
-	_lastRound = (unsigned int)maps.size();
-}
-
 void SceneGame::OnCreate()
 {
 	for (auto snake : _snakes) {
@@ -268,8 +296,8 @@ void SceneGame::OnCreate()
 	if (_playerNumber >= 2) {
 		auto [X, Y] = getFreeBlock();
 		auto snake = std::dynamic_pointer_cast<Snake>(addObject(ObjectType::snake, X, Y));
-		snake->setColor(ColorCode_DarkRed);
-		snake->setCharacter('*');
+		snake->setColor(ColorCode_Pink);
+		snake->setCharacter(char(238));
 
 		_snakes.push_back(snake);
 	}
@@ -288,8 +316,7 @@ void SceneGame::OnDestroy()
 
 void SceneGame::OnActivate()
 {
-	std::cin.clear();
-	fflush(stdin);
+	ShowTopTitle();
 
 	Console::TextColor(ColorCode_DarkYellow);
 	Console::gotoXY(5, 0);
@@ -310,6 +337,8 @@ void SceneGame::OnDeactivate()
 
 void SceneGame::ProcessInput()
 {
+	fflush(stdin);
+
 	//Handle ESC Key
 	if (GetAsyncKeyState(VK_ESCAPE)) {
 		_pauseScene->SetContinueScene(_sceneStateMachine.GetCurrentScene());
@@ -325,40 +354,46 @@ void SceneGame::ProcessInput()
 	int snakeId = -1;
 
 	// Snake 0
-	if (GetAsyncKeyState(0x57)) { // W
-		direction = Direction::up;
-		snakeId = 0;
-	}
-	else if (GetAsyncKeyState(0x53)) { // S
-		direction = Direction::down;
-		snakeId = 0;
-	}
-	else if (GetAsyncKeyState(0x41)) { // A
-		direction = Direction::left;
-		snakeId = 0;
-	}
-	else if (GetAsyncKeyState(0x44)) { // D
-		direction = Direction::right;
-		snakeId = 0;
+	if (_kbhit()) {
+		switch (Key(_getch())) {
+		case Key::W:
+			direction = Direction::up;
+			snakeId = 0;
+			break;
+		case Key::S:
+			direction = Direction::down;
+			snakeId = 0;
+			break;
+		case Key::A:
+			direction = Direction::left;
+			snakeId = 0;
+			break;
+		case Key::D:
+			direction = Direction::right;
+			snakeId = 0;
+			break;
+		case Key(224):
+			switch (Key(_getch())) {
+			case Key::VKUP:
+				direction = Direction::up;
+				snakeId = 1;
+				break;
+			case Key::VKDOWN:
+				direction = Direction::down;
+				snakeId = 1;
+				break;
+			case Key::VKLEFT:
+				direction = Direction::left;
+				snakeId = 1;
+				break;
+			case Key::VKRIGHT:
+				direction = Direction::right;
+				snakeId = 1;
+				break;
+			}
+		}
 	}
 
-	// Snake 1
-	if (GetAsyncKeyState(VK_UP)) { // UP arrow
-		direction = Direction::up;
-		snakeId = 1;
-	}
-	else if (GetAsyncKeyState(VK_DOWN)) { // DOWN arrow
-		direction = Direction::down;
-		snakeId = 1;
-	}
-	else if (GetAsyncKeyState(VK_LEFT)) { // LEFT arrow
-		direction = Direction::left;
-		snakeId = 1;
-	}
-	else if (GetAsyncKeyState(VK_RIGHT)) { // RIGHT arrow
-		direction = Direction::right;
-		snakeId = 1;
-	}
 
 	if (_playerNumber < 2) {
 		snakeId = 0;
@@ -507,7 +542,7 @@ void SceneGame::LateUpdate()
 		}
 
 		//1% each 150ms spawn gift
-		if (rand() % 100 == 99 && _giftCount <= 2) { //MAX 2 gift at a time
+		if (rand() % 100 > 98 && _giftCount < 1) { //MAX 2 gift at a time
 			auto [X, Y] = getFreeBlock();
 
 			std::shared_ptr<Gift> gift = std::dynamic_pointer_cast<Gift>(addObject(ObjectType::gift, X, Y));
@@ -597,14 +632,13 @@ void SceneGame::saveScore() {
 	for (int i = 0; i < temp.size(); i++) {
 		if (atoi(temp[i].substr(temp[i].rfind(" ") + 1, line.size() - temp[9].rfind(" ") - 1).c_str()) < _sceneStateMachine.player->getTotalScore())
 		{
-			std::cin.clear();
-			fflush(stdin);
-
 			Console::TextColor(ColorCode_DarkRed);
 			Console::gotoXY(15, 15);
 			std::cout << "Your score is in top 10 !!! Please enter your name (< 10 characters):";
 			Console::gotoXY(15, 16);
 			std::cout << "Enter your name (< 10 characters):";
+
+			Console::gotoXY(15, 17);
 
 			getline(std::cin, line);
 
