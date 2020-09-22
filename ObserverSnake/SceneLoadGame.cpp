@@ -128,6 +128,8 @@ void SceneLoadGame::OnCreate()
 					gameOverScene->SetSwitchToScene({
 						{ "SceneGame", gameSceneID1 }
 					});
+					gameScene1->SetPauseScene(pauseScene);
+
 					_sceneStateMachine.SwitchTo(gameSceneID1);
 
 					// Remove scene when unused
