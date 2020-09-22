@@ -6,7 +6,7 @@ Game::Game() : running(true)
 	std::shared_ptr<SceneMainMenu> mainMenuScene = std::make_shared<SceneMainMenu>(sceneStateMachine);
 
 	// Add players profile
-	sceneStateMachine.addPlayer(std::make_shared<Player>(SCREEN_WIDTH / 10)); // UI on the 9/10 of screen width
+	sceneStateMachine.addPlayer(std::make_shared<Player>(SCREEN_WIDTH / 10 - 3)); // UI on the 9/10 of screen width
 	sceneStateMachine.addPlayer(std::make_shared<Player>(SCREEN_WIDTH / 10 * 9)); // like player 1 but 1/10 screen width
 
 	// Managing scene is hard, but manage its ID is a bit easier

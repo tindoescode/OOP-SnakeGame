@@ -298,6 +298,12 @@ void SceneGame::OnCreate()
 		snake->setSkin();
 	}
 
+	// In two player mode, snakes are different in color
+	if(_snakes.size() > 1) {
+		_snakes[1]->setColor(ColorCode_Red);
+		_snakes[1]->setCharacter(177);
+	}
+
 	// Initialize controller for each snake
 	loadSnakeKeyHandle();
 
@@ -429,12 +435,10 @@ void SceneGame::LateUpdate()
 		if (occupied && !snake->isStandingStill()) {
 			// Things can cause snake to dead
 			if (snake->bodyCollision() || snake->wallCollision() || snake->gateCollision(score) == GateCollisionType::border) {
-				// If it can go through wall, move more step
-				snake->setDead();
-
 				//get current score to calculate total score and reset current score = 0 if snake die
-				snake->getPlayer()->saveScore();
-				snake->getPlayer()->resetScore();
+				for (auto _snake : _snakes) {
+					_snake->setDead();
+				}
 
 				saveScore();
 			}
@@ -468,11 +472,10 @@ void SceneGame::LateUpdate()
 
 			}
 			else if (destinateGift = snake->giftCollision()) {
-				int i = 0;
 				if (!snake->getItem(destinateGift)) {
-					Console::gotoXY(0, 0);
-					Console::TextColor(ColorCode_Cyan);
-					std::cout << "You don't have any free slot to get gift.";
+					//Console::gotoXY(0, 0);
+					//Console::TextColor(ColorCode_Cyan);
+					//std::cout << "You don't have any free slot to get gift.";
 				}
 
 				_giftCount--;
@@ -515,9 +518,67 @@ void SceneGame::LateUpdate()
 		// Check dead
 		if (snake->isdead()) {
 			_currentRound = 1;
-			_snakes.clear();
-			OnCreate();
-			
+
+			const auto player1Score = _snakes[0]->getPlayer()->getCurrentScore();
+			const auto player2Score = _snakes[1]->getPlayer()->getCurrentScore();
+
+			for (auto _snake : _snakes) {
+				_snake->getPlayer()->saveScore();
+				_snake->getPlayer()->resetScore();
+			}
+
+			if (_playerNumber == 2) {
+				if (player1Score == player2Score) {
+					const auto marginLeft = SCREEN_WIDTH / 2;
+					Console::gotoXY(marginLeft, 15);
+
+					std::cout << "Ca 2 hue";
+				}
+				else if (player1Score > player2Score) {
+					Console::clrscr();
+					std::vector<std::wstring> textDraw = {
+L".______    __          ___   ____    ____  _______ .______          __     ____    __    ____  __  .__   __. ",
+L"|   _  \\  |  |        /   \\  \\   \\  /   / |   ____||   _  \\        /_ |    \\   \\  /  \\  /   / |  | |  \\ |  |\n ",
+L"|  |_)  | |  |       /  ^  \\  \\   \\/   /  |  |__   |  |_)  |        | |     \\   \\/    \\/   /  |  | |   \\|  | \n",
+L"|   ___/  |  |      /  /_\\  \\  \\_    _/   |   __|  |      /         | |      \\            /   |  | |  . `  | \n",
+L"|  |      |  `----./  _____  \\   |  |     |  |____ |  |\\  \\----.    | |       \\    /\\    /    |  | |  |\\   | \n",
+L"| _|      |_______/__/     \\__\\  |__|     |_______|| _| `._____|    |_|        \\__/  \\__/     |__| |__| \\__| ",
+					};
+					const auto marginLeft = SCREEN_WIDTH / 2 - 117 / 2;
+
+					int j = 10;
+					for (auto i : textDraw) {
+						Console::gotoXY(marginLeft, j++);
+						std::wcout << i;
+					}
+				}
+				else {
+					Console::clrscr();
+					std::vector<std::wstring> textDraw = {
+L".______    __          ___   ____    ____  _______ .______          ___      ____    __    ____  __  .__   __. \n",
+L"|   _  \\  |  |        /   \\  \\   \\  /   / |   ____||   _  \\        |__ \\     \\   \\  /  \\  /   / |  | |  \\ |  | \n",
+L"|  |_)  | |  |       /  ^  \\  \\   \\/   /  |  |__   |  |_)  |          ) |     \\   \\/    \\/   /  |  | |   \\|  | \n",
+L"|   ___/  |  |      /  /_\\  \\  \\_    _/   |   __|  |      /          / /       \\            /   |  | |  . `  | \n",
+L"|  |      |  `----./  _____  \\   |  |     |  |____ |  |\\  \\----.    / /_        \\    /\\    /    |  | |  |\\   | \n",
+L"| _|      |_______/__/     \\__\\  |__|     |_______|| _| `._____|   |____|        \\__/  \\__/     |__| |__| \\__| \n",
+					};
+
+					const auto marginLeft = SCREEN_WIDTH / 2 - 117 / 2;
+
+					int j = 10;
+					for (auto i : textDraw) {
+						Console::gotoXY(marginLeft, j++);
+						std::wcout << i;
+					}
+				}
+
+				_snakes.clear();
+				OnCreate();
+
+				Sleep(5000);
+			}
+
+
 			SwitchTo("SceneGameOver"); // o day no can Id, de t xem lam sao kiem Id cho no
 		}
 
@@ -545,7 +606,7 @@ void SceneGame::LateUpdate()
 	if (max > 1) {
 		PlaySound(L"sounds\\snake-move-fast-x1.wav", NULL, SND_ASYNC);
 	}
-	Sleep(static_cast<DWORD>((double)125 / max));
+	Sleep(static_cast<DWORD>((double)SNAKE_MOVE_SPEED / max));
 }
 
 COORD SceneGame::getFreeBlock() {

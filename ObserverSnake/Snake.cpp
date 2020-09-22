@@ -89,7 +89,7 @@ void Snake::ThroughWallDecrease() {
 		_throughWallTime = 0;
 	}
 	else if (_throughWallTime > 0) {
-		_throughWallTime -= double(125) / 1000 / _speed;
+		_throughWallTime -= double(SNAKE_MOVE_SPEED) / 1000 / _speed;
 	}
 }
 void Snake::SpeedTimeDecrease() 
@@ -99,7 +99,7 @@ void Snake::SpeedTimeDecrease()
 		_speedTime = 0;
 	}
 	else if(_speedTime > 0) {
-		_speedTime -= double(125) / 1000 / _speed;
+		_speedTime -= double(SNAKE_MOVE_SPEED) / 1000 / _speed;
 	}
 }
 void Snake::X2PointDecrease()
@@ -108,7 +108,7 @@ void Snake::X2PointDecrease()
 		_x2PointTime = 0;
 	}
 	else if (_x2PointTime > 0) {
-		_x2PointTime -= double(125) / 1000 / _speed;
+		_x2PointTime -= double(SNAKE_MOVE_SPEED) / 1000 / _speed;
 	}
 }
 
@@ -342,11 +342,11 @@ bool Snake::getItem(std::shared_ptr<Gift> gift) {
 			break;
 		}
 
-		Console::gotoXY(0, 0);
-		std::cout << "\t\t\t\t\t\t";
-		Console::TextColor(ColorCode_Pink);
-		Console::gotoXY(0, 0);
-		std::cout << "You got a " << itemNames[n] << " on slot " << i << ".";
+		//Console::gotoXY(0, 0);
+		//std::cout << "\t\t\t\t\t\t\t\t\t\t\t";
+		//Console::TextColor(ColorCode_Pink);
+		//Console::gotoXY(0, 0);
+		//std::cout << "You got a " << itemNames[n] << " on slot " << i << ".";
 
 		Console::gotoXY(UISlotTextPosition[i].X, UISlotTextPosition[i].Y);
 		std::cout << itemNames[n];
@@ -371,7 +371,7 @@ void Snake::turnHead(Direction direction) {
 	if (!(direction != Direction::down && direction != Direction::up && direction != Direction::left && direction != Direction::right))
 	{
 		_direction = direction;
-		PlaySound(L"sounds\\eatFood.wav", NULL, SND_ASYNC);
+		PlaySound(L"sounds\\snake-move.wav", NULL, SND_ASYNC);
 	}
 }
 void Snake::move(int step) {
@@ -443,7 +443,7 @@ bool Snake::activeItem(int slot) {
 		{getPlayer()->getSkillUIMarginLeft(), 17} 
 	};
 	Console::gotoXY(UISlotTextPosition[slot].X, UISlotTextPosition[slot].Y);
-	std::cout << "Empty            ";
+	std::cout << "Empty        ";
 
 	return true;
 }

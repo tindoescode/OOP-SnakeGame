@@ -17,6 +17,7 @@ struct KeyDescription {
 	Key key;
 };
 
+const int SNAKE_MOVE_SPEED = 125;
 const int ITEM_MAXSLOT = 3;
 
 enum class Direction {

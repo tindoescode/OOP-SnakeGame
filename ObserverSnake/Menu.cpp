@@ -41,8 +41,6 @@ Menu::Menu(const std::vector<std::wstring> items, std::function<void(unsigned in
 }
 
 void Menu::ProcessInput() {
-	Console::ClearConsoleInputBuffer();
-
 	int key = _getch();
 
 	Update(Status(key));
@@ -56,6 +54,7 @@ void Menu::OnActivate()
 
 void Menu::OnDeactivate()
 {
+	Console::ClearConsoleInputBuffer();
 	system("cls");
 }
 
