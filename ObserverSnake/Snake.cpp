@@ -37,7 +37,7 @@ void Snake::setSkin() {
 		Skin skin = player->getSnakeSkin();
 
 		setColor(skin.color);
-		setCharacter(skin.character);
+		setCharacter((wchar_t) skin.character);
 	}
 }
 // Reset on next round
@@ -121,7 +121,7 @@ void Snake::HandleSkillKey()
 			if (!activeItem(i + 1)) {
 				Console::TextColor(ColorCode_DarkCyan);
 				Console::gotoXY(0, 0);
-				std::cout << "\t\t\t\t\t";
+				std::cout << "                                                               ";
 				Console::gotoXY(0, 0);
 				std::cout << "You don't have any item on slot " << i + 1 << ".";
 			}

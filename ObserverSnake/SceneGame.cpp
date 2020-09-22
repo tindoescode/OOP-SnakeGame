@@ -485,7 +485,7 @@ void SceneGame::LateUpdate()
 				_currentRound++;
 
 				if (_currentRound > _lastRound) {
-					Console::gotoXY(0, 0);
+					Console::gotoXY(0, 1);
 					std::cout << "Congratulations, you won.";
 
 					Sleep(1500);
