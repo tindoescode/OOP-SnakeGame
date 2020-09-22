@@ -574,8 +574,24 @@ L"| _|      |_______/__/     \\__\\  |__|     |_______|| _| `._____|   |____|   
 
 			_snakes.clear();
 			OnCreate();
-
-			Sleep(5000);
+			Console::clrscr();
+			Console::TextColor(ColorCode_Cyan);
+			std::vector<std::string> loadingText = {
+				" _       ___    ____  ___    ____  ____    ____             \n",
+				"| |     /   \  /    ||   \  |    ||    \  /    |            \n",
+				"| |    |     ||  o  ||    \  |  | |  _  ||   __|            \n",
+				"| |___ |  O  ||     ||  D  | |  | |  |  ||  |  |            \n",
+				"|     ||     ||  _  ||     | |  | |  |  ||  |_ | __  __  __ \n",
+				"|     ||     ||  |  ||     | |  | |  |  ||     ||  ||  ||  |\n",
+				"|_____| \___/ |__|__||_____||____||__|__||___,_||__||__||__|\n",
+			};
+			int marginLeft = SCREEN_WIDTH / 2 - (int)loadingText[0].size() / 2;
+			int j = 10;
+			for (auto i : loadingText) {
+				Console::gotoXY(marginLeft, j++);
+				std::cout << i;
+			}
+			Sleep(1000);
 
 			SwitchTo("SceneGameOver"); // o day no can Id, de t xem lam sao kiem Id cho no
 		}
