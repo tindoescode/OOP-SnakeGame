@@ -30,6 +30,13 @@ Snake::Snake(int x, int y, std::shared_ptr<SceneGame> board, int color, char cha
 	segments.push_back(segment);
 }
 
+void Snake::setSkin() {
+	std::shared_ptr<Player> player;
+
+	if (player = getPlayer()) {
+		player->getSnakeSkin();
+	}
+}
 // Reset on next round
 void Snake::resetStatus() {
 	_direction = Direction::idle;

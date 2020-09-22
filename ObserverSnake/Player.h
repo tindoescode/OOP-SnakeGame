@@ -1,6 +1,14 @@
 #pragma once
 #include <iostream>
 #include"Console.h"
+
+
+struct Skin {
+	char character;
+	int color;
+	int price;
+};
+
 class Player {
 private:
 	unsigned int currentScore;	//arr use to save current score of 4 maps
@@ -9,6 +17,9 @@ private:
 	// required
 	int _skillUIMarginLeft;
 
+	//
+	Skin _snakeSkin;
+	
 public:
 	Player(int skillUIMarginLeft);
 	void resetScore();
@@ -18,6 +29,10 @@ public:
 	void saveScore();
 	void showCurrentScore();
 
+	Skin& getSnakeSkin();
+
 	int getSkillUIMarginLeft() { return _skillUIMarginLeft; };
+
+	void setSnakeSkin(Skin skin) { _snakeSkin = skin; }
 };
 

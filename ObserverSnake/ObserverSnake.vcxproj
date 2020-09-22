@@ -206,9 +206,6 @@
     <None Include="ModernMap1.dat" />
     <None Include="ModernMap2.dat" />
   </ItemGroup>
-  <ItemGroup>
-    <Library Include="..\..\..\..\..\..\Program Files (x86)\Windows Kits\10\Lib\10.0.18362.0\um\x64\winml.lib" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

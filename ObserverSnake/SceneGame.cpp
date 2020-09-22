@@ -294,6 +294,10 @@ void SceneGame::OnCreate()
 	if(_snakes.size() >= 1) _snakes[0]->bindPlayer(_sceneStateMachine.getPlayer(0));
 	if(_snakes.size() >= 2) _snakes[1]->bindPlayer(_sceneStateMachine.getPlayer(1));
 
+	for (auto snake : _snakes) {
+		snake->setSkin();
+	}
+
 	// Initialize controller for each snake
 	loadSnakeKeyHandle();
 

@@ -1,4 +1,4 @@
-#include "SceneStateMachine.h"
+﻿#include "SceneStateMachine.h"
 #include "Menu.h"
 #include <functional>
 #include"SceneShop.h"
@@ -22,34 +22,35 @@ void SceneShop::SwitchTo(std::string mapName)
 void SceneShop::OnCreate()
 {
 	mainMenu = new Menu(
-		{ L"10 Score: Snake's Color is Red", 
-		L"20 Score: Snake's Color is Blue", 
-		L"30 Score: Snake's Color is Cyan", 
-		L"20 Score: Snake's Speed x2",
-		L"20 Score: Snake's Speed x3",
-		L"Back to ChooseMapMenu" },
+		{
+			L"Free(default):   OOOOOOOOOOOOO",
+			L"100 Score:       $$$$$$$$$$$$$", 
+			L"200 Score:       ▓▓▓▓▓▓▓▓▓▓▓▓▓", 
+			L"300 Score:       @#$%^&*(#$%^&", 
+			L"200 Score:       @@@@@@@@@@@@@",
+			L"200 Score:       ~~~~~~~~~~~~~",
+			L"Back to main menu" 
+		},
 		std::bind(
 			[this](unsigned int listitem) {
 				switch (listitem) {
-				case 0: {
+				case 0: 
+					_sceneStateMachine.getPlayer(0)->setSnakeSkin({ 'O', ColorCode_DarkGreen, 0 });
 					break;
-				}
-				case 1: {
+				case 1: 
+					
 					break;
-				}
-				case 2: {
+				case 2: 
 					break;
-				}
-				case 3: {
+				case 3: 
 					break;
-				}
-				case 4: {
+				case 4: 
 					break;
-				}
-				case 5: {
+				case 5:
+					break;
+				case 6:
 					SwitchTo("MainMenuScene");
 					break;
-				}
 				}
 			},
 			std::placeholders::_1

@@ -3,6 +3,7 @@
 Player::Player(int skillUIMarginLeft) : _skillUIMarginLeft(skillUIMarginLeft) {
 	currentScore = 0;
 	totalScore = 0;
+	_snakeSkin = { 'O', ColorCode_DarkGreen, 0 };
 }
 void Player::resetScore() {
 	currentScore = 0;
@@ -27,4 +28,8 @@ void Player::showCurrentScore() {
 	std::cout << "Total Score: " << totalScore;
 	Console::gotoXY(_skillUIMarginLeft - 4, 4);
 	std::cout << "Your Score: " << currentScore;
+}
+
+Skin& Player::getSnakeSkin() {
+	return _snakeSkin;
 }

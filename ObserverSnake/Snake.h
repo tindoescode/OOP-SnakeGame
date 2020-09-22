@@ -53,6 +53,8 @@ private:
 
 public:
 	Snake(int x, int y, std::shared_ptr<SceneGame> board, int color = ColorCode_DarkGreen, char character = 'O');
+
+	void setSkin();
 	
 	double getSpeed();
 	void resetStatus();
