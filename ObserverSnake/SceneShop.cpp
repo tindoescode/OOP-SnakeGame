@@ -68,7 +68,7 @@ void SceneShop::OnCreate()
 
 					_sceneStateMachine.getPlayer(0)->setTotalScore(_sceneStateMachine.getPlayer(0)->getTotalScore() - skins[listitem].price);
 				}
-				Sleep(5000);
+				Sleep(2000);
 				SwitchTo("MainMenuScene");
 
 			},
