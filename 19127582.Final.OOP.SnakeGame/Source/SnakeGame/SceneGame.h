@@ -139,4 +139,5 @@ public:
 	unsigned int getCurrentRound() { return _currentRound; }
 
 	void saveScore();
+	std::string getName();
 };

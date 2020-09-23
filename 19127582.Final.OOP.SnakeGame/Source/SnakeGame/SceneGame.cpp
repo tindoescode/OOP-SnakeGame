@@ -677,37 +677,49 @@ void SceneGame::saveScore() {
 	std::fstream f("ScoreBoard.txt", std::ios::in);
 	std::string line;
 
-
+	std::stringstream input;
 	std::vector<std::string>temp;
 
-	for (int i = 0; i < 10; i++)
-		temp.push_back("");
 
-
-	for (int i = 0; i < 10; i++)
-	{
-		getline(f, line);
-		temp[i] = line;
+	if (_snakes.front()->getPlayer()->getCurrentScore() <= 0)	return;
+	temp.push_back("");
+	while (getline(f, line)) {
+		temp.push_back(line);
 	}
+	if (temp.size() == 1) {
+		f.close();
+		line = getName();
 
-	for (int i = 0; i < temp.size(); i++) {
-		if (atoi(temp[i].substr(temp[i].rfind(" ") + 1, line.size() - temp[i].rfind(" ")).c_str()) < _snakes.front()->getPlayer()->getCurrentScore() / 2)
-		{
-			Console::ClearConsoleInputBuffer();
-			Console::TextColor(ColorCode_DarkYellow);
-			Console::gotoXY(40, 15);
-			std::cout << "Your score is in top 10 !!!";
-			Console::gotoXY(40, 16);
-			std::cout << "Enter your name (< 10 characters):";
-			Console::gotoXY(40, 17);
+		input << line << " " << _currentRound << " " << _snakes.front()->getPlayer()->getCurrentScore();
 
-			getline(std::cin, line);
+		f.open("ScoreBoard.txt", std::ios::out);
+		f << input.str() << std::endl;
+		f.close();
+		return;
+	}
+	for (int i = 0; i < temp.size() - 1; i++)	temp[i] = temp[i + 1];
+	temp.pop_back();
+	if (temp.size() < 10) {
 
-			std::stringstream input;
-			input << i + 1 << "." << line << " " << _lastRound << " " << _snakes.front()->getPlayer()->getCurrentScore() / 2;
-			for (int j = 9; j < i; j--) {
-				temp[j] = temp[j - 1];
+		line = getName();
+		input << line << " " << _currentRound << " " << _snakes.front()->getPlayer()->getCurrentScore();
+
+		temp.push_back(input.str());
+		for (int i = 0; i < temp.size() - 1; i++) {
+			for (int j = i + 1; j < temp.size(); j++) {
+				if (atoi(temp[i].substr(temp[i].rfind(" ") + 1, line.size() - temp[i].rfind(" ")).c_str()) < atoi(temp[j].substr(temp[j].rfind(" ") + 1, line.size() - temp[j].rfind(" ")).c_str()))
+					swap(temp[i], temp[j]);
 			}
+		}
+	}
+	else for (int i = 0; i < temp.size(); i++) {
+		if (atoi(temp[i].substr(temp[i].rfind(" ") + 1, line.size() - temp[i].rfind(" ")).c_str()) < _snakes.front()->getPlayer()->getCurrentScore())
+		{
+			line = getName();
+
+			input << line << " " << _currentRound << " " << _snakes.front()->getPlayer()->getCurrentScore();
+			for (int j = temp.size() - 1; j < i; j--) 	temp[j] = temp[j - 1];
+
 			temp[i] = input.str();
 			break;
 		}
@@ -719,4 +731,18 @@ void SceneGame::saveScore() {
 		f << temp[i] << std::endl;
 	}
 	f.close();
+}
+
+std::string SceneGame::getName() {
+	std::string line;
+	Console::ClearConsoleInputBuffer();
+	Console::TextColor(ColorCode_DarkYellow);
+	Console::gotoXY(40, 15);
+	std::cout << "Your score is in top 10 !!!";
+	Console::gotoXY(40, 16);
+	std::cout << "Enter your name (< 10 characters and no space):";
+	Console::gotoXY(40, 17);
+
+	getline(std::cin, line);
+	return line;
 }

@@ -51,7 +51,7 @@ void SceneScoreBoard::OnActivate() {
 		std::string temp = line.substr(0, line.find(" "));
 		Console::gotoXY(startPositionName, countline + 5);
 		Console::TextColor(ColorCode_Pink);
-		std::cout << temp;
+		std::cout << countline + 1 << "." << temp;
 
 		//round
 		temp = line.substr(line.find(" ") + 1, line.rfind(" ") - line.find(" ") - 1);
