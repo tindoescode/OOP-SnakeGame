@@ -319,6 +319,8 @@ void SceneGame::OnDestroy()
 void SceneGame::OnActivate()
 {
 	// UI
+	Console::ClearConsoleInputBuffer();
+
 	ShowTopTitle();
 	drawBorder();
 	drawSkillBox(); // for each snake
